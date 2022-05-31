@@ -27,6 +27,7 @@ android {
         }
     }
     namespace 'org.firstinspires.ftc.teamcode'
+    buildToolsVersion '30.0.3'
 }
 
 dependencies {
