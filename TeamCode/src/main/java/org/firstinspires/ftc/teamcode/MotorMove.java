@@ -6,16 +6,17 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
+import org.firstinspires.ftc.teamcode.recourses14872.HardwarePush;
+
 @Autonomous(name = "motor1")
 public class MotorMove extends OpMode {
-    DcMotor intake;
-    DcMotor arm;
+
 
     @Override
     public void init() {
 
-        intake = hardwareMap.get(DcMotor.class,"intake");
-        arm = hardwareMap.get(DcMotor.class,"arm");
+        HardwarePush map = new HardwarePush();
+        map.init(hardwareMap);
     }
 
     @Override
