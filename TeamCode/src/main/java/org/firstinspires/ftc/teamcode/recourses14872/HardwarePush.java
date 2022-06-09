@@ -50,18 +50,21 @@ public class HardwarePush {
     }
 
     public void mecanum() {
-
-        final Vector joystickVector = new Vector(gamepad1.left_stick_x, gamepad1.left_stick_y);
-        final float robotAngle = (float) Math.toRadians(-getAngle());
-        final Vector rotated = joystickVector.rotate(robotAngle);
-        drive(rotated.y, rotated.x, gamepad1.right_trigger - gamepad1.left_trigger);
+        double x1 = gamepad1.left_stick_x;
+        double y1 = -gamepad1.left_stick_y;
+        double r = Math.pow(x1 , 2) + Math.pow(y1 , 2);
+        double beta = getAngle() + Math.toRadians(90);
+        double x2 = r * Math.cos(beta);
+        double y2 = r * Math.sin(beta);
+        double rotation = gamepad1.right_trigger - gamepad1.left_trigger;
+        drive(y2 , x2 , rotation);
     }
 
-    public void drive(float y, float x, float r) {
-        final float lfPower = y + x + r;
-        final float rfPower = y - x + r;
-        final float lbPower = y - x - r;
-        final float rbPower = y + x - r;
+    public void drive(double y, double x, double r) {
+        final double lfPower = y + x + r;
+        final double rfPower = y - x + r;
+        final double lbPower = y - x - r;
+        final double rbPower = y + x - r;
 
         lf.setPower(lfPower);
         rf.setPower(rfPower);
@@ -70,12 +73,12 @@ public class HardwarePush {
     }
 
 
-    public float getAngle(){
+    public double getAngle(){
         return wrap(imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle);
     }
 
-    public float wrap(float angle){
-        final float wrapped = angle % 360;
+    public double wrap(double angle){
+        final double wrapped = angle % 360;
         if (wrapped > 180) {
             return wrapped - 360;
         } else if (wrapped < -180) {
