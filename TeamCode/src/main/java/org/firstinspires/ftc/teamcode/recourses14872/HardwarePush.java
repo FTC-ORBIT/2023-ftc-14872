@@ -52,8 +52,9 @@ public class HardwarePush {
     public void mecanum() {
         double x1 = gamepad1.left_stick_x;
         double y1 = -gamepad1.left_stick_y;
-        double r = Math.pow(x1 , 2) + Math.pow(y1 , 2);
-        double beta = getAngle() + Math.toRadians(90);
+        double r = Math.sqrt(Math.pow(x1 , 2) + Math.pow(y1 , 2));
+        double beta = getAngle() + Math.acos(2 * Math.pow(r, 2) - Math.pow(Math.sqrt(Math.pow((x1 - Math.sin(0)), 2) + Math.sqrt(Math.pow((y1 - Math.cos(0)), 2))), 2) / Math.pow(r,2) * 2);
+
         double x2 = r * Math.cos(beta);
         double y2 = r * Math.sin(beta);
         double rotation = gamepad1.right_trigger - gamepad1.left_trigger;
