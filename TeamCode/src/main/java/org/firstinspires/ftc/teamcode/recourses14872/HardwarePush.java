@@ -23,25 +23,34 @@ public class HardwarePush {
     private DcMotor rb;
     private final OpMode opMode;
     public BNO055IMU imu;
+     double offset = 0;
 
-    public  HardwarePush(final OpMode opMode){
+    public HardwarePush(final OpMode opMode) {
         this.opMode = opMode;
     }
 
-    public void init(){
+    public void init() {
         lf = opMode.hardwareMap.get(DcMotor.class, "lf");
+        lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         rf = opMode.hardwareMap.get(DcMotor.class, "rf");
+        rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         lb = opMode.hardwareMap.get(DcMotor.class, "lb");
+        lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         rb = opMode.hardwareMap.get(DcMotor.class, "rb");
+        rb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         lf.setDirection(DcMotorSimple.Direction.REVERSE);
         lb.setDirection(DcMotorSimple.Direction.REVERSE);
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit           = BNO055IMU.AngleUnit.RADIANS;
-        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.calibrationDataFile = "BNO055IMUCalibration.json";
-        parameters.loggingEnabled      = true;
-        parameters.loggingTag          = "IMU";
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
         imu = opMode.hardwareMap.get(BNO055IMU.class, "imu");
@@ -49,41 +58,60 @@ public class HardwarePush {
 
     }
 
-    public void mecanum() {
-        double x1 = gamepad1.left_stick_x;
-        double y1 = -gamepad1.left_stick_y;
-        double r = Math.sqrt(Math.pow(x1 , 2) + Math.pow(y1 , 2));
-        double beta = getAngle() + Math.acos(2 * Math.pow(r, 2) - Math.pow(Math.sqrt(Math.pow((x1 - Math.sin(0)), 2) + Math.sqrt(Math.pow((y1 - Math.cos(0)), 2))), 2) / Math.pow(r,2) * 2);
-
-        double x2 = r * Math.cos(beta);
-        double y2 = r * Math.sin(beta);
-        double rotation = gamepad1.right_trigger - gamepad1.left_trigger;
-        drive(y2 , x2 , rotation);
+    public void mecanum() { //we can do extends OpMode for doing it simple
+        double x1 = opMode.gamepad1.left_stick_x;
+        double y1 = -opMode.gamepad1.left_stick_y;
+        double x2 = -y1 * Math.sin(-getAngle()) + x1 * Math.cos(-getAngle());
+        double y2 = y1 * Math.cos(-getAngle()) + x1 * Math.sin(-getAngle());
+        double rotation = opMode.gamepad1.right_trigger - opMode.gamepad1.left_trigger;
+        drive(y2, x2, rotation);
+        if (opMode.gamepad1.dpad_up) gyroReset();
     }
+
+    private void gyroReset() {
+        offset = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle;
+    }
+
 
     public void drive(double y, double x, double r) {
         final double lfPower = y + x + r;
-        final double rfPower = y - x + r;
-        final double lbPower = y - x - r;
+        final double rfPower = y - x - r;
+        final double lbPower = y - x + r;
         final double rbPower = y + x - r;
+        final double highestPower =
+                Math.max(
+                        Math.abs(lfPower), Math.max(
+                                Math.abs(rfPower), Math.max(
+                                        Math.abs(lbPower), Math.max(
+                                                Math.abs(rbPower), 1)
+                                )
+                        )
+                );
 
-        lf.setPower(lfPower);
-        rf.setPower(rfPower);
-        rb.setPower(rbPower);
-        lb.setPower(lbPower);
+        if (highestPower > 1) {
+            lf.setPower(lfPower / highestPower);
+            rf.setPower(rfPower / highestPower);
+            rb.setPower(rbPower / highestPower);
+            lb.setPower(lbPower / highestPower);
+        } else {
+            lf.setPower(lfPower);
+            rf.setPower(rfPower);
+            rb.setPower(rbPower);
+            lb.setPower(lbPower);
+        }
     }
 
 
-    public double getAngle(){
-        return wrap(imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle);
+    public double getAngle() {
+        return wrap(imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle - offset);
     }
 
-    public double wrap(double angle){
-        final double wrapped = angle % 360;
-        if (wrapped > 180) {
-            return wrapped - 360;
-        } else if (wrapped < -180) {
-            return wrapped + 360;
+    public double wrap(double angle) {
+        final double wrapped = angle % (2 * Math.PI);
+        if (wrapped > Math.PI) {
+            return wrapped - (2 * Math.PI);
+        } else if (wrapped < -Math.PI) {
+            return wrapped + (Math.PI * 2);
         } else {
             return wrapped;
         }
