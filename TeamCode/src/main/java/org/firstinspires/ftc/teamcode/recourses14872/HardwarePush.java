@@ -23,7 +23,8 @@ public class HardwarePush {
     private DcMotor rb;
     private final OpMode opMode;
     public BNO055IMU imu;
-     double offset = 0;
+    double offset = 0;
+
 
     public HardwarePush(final OpMode opMode) {
         this.opMode = opMode;
@@ -58,7 +59,7 @@ public class HardwarePush {
 
     }
 
-    public void mecanum() { //we can do extends OpMode for doing it simple
+    public void mecanum() {
         double x1 = opMode.gamepad1.left_stick_x;
         double y1 = -opMode.gamepad1.left_stick_y;
         double x2 = -y1 * Math.sin(-getAngle()) + x1 * Math.cos(-getAngle());
