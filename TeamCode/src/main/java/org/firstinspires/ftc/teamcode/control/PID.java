@@ -1,16 +1,17 @@
-package org.firstinspires.ftc.teamcode.recourses14872;
+package org.firstinspires.ftc.teamcode.control;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
+@Config
 public class PID {
     private static final ElapsedTime timer = new ElapsedTime();
-    public double kP = 0;
-    public double kI = 0;
-    public double kD = 0;
-    public double kF = 0;
-    public double iZone = 0;
+    public static double kP = 0;
+    public static double kI = 0;
+    public static double kD = 0;
+    public static double kF = 0;
+    public static double iZone = 0;
 
-    public double wanted = 0;
+    public static double wanted = 0;
 
     private double integral = 0;
 

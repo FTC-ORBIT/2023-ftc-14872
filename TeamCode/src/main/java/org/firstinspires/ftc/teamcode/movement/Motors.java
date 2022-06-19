@@ -1,65 +1,24 @@
-package org.firstinspires.ftc.teamcode.recourses14872;
+package org.firstinspires.ftc.teamcode.movement;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.teamcode.rescourses.HardwarePush;
 
-public class HardwarePush {
+public class Motors extends HardwarePush {
 
-    private DcMotor lf;
-    private DcMotor rf;
-    private DcMotor lb;
-    private DcMotor rb;
-    private final OpMode opMode;
-    public BNO055IMU imu;
-    double offset = 0;
+    static double offset = 0;
 
-
-    public HardwarePush(final OpMode opMode) {
-        this.opMode = opMode;
+    public Motors(OpMode opMode) {
+        super(opMode);
     }
 
-    public void init() {
-        lf = opMode.hardwareMap.get(DcMotor.class, "lf");
-        lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        rf = opMode.hardwareMap.get(DcMotor.class, "rf");
-        rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        lb = opMode.hardwareMap.get(DcMotor.class, "lb");
-        lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        rb = opMode.hardwareMap.get(DcMotor.class, "rb");
-        rb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        lf.setDirection(DcMotorSimple.Direction.REVERSE);
-        lb.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
-        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.calibrationDataFile = "BNO055IMUCalibration.json";
-        parameters.loggingEnabled = true;
-        parameters.loggingTag = "IMU";
-        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
-
-        imu = opMode.hardwareMap.get(BNO055IMU.class, "imu");
-        imu.initialize(parameters);
-
-    }
-
-    public void mecanum() {
+    public void fieldCentric() {
         double x1 = opMode.gamepad1.left_stick_x;
         double y1 = -opMode.gamepad1.left_stick_y;
         double x2 = -y1 * Math.sin(-getAngle()) + x1 * Math.cos(-getAngle());
@@ -74,7 +33,7 @@ public class HardwarePush {
     }
 
 
-    public void drive(double y, double x, double r) {
+    private void drive(double y, double x, double r) {
         final double lfPower = y + x + r;
         final double rfPower = y - x - r;
         final double lbPower = y - x + r;
@@ -107,7 +66,7 @@ public class HardwarePush {
         return wrap(imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle - offset);
     }
 
-    public double wrap(double angle) {
+    private double wrap(double angle) {
         final double wrapped = angle % (2 * Math.PI);
         if (wrapped > Math.PI) {
             return wrapped - (2 * Math.PI);
