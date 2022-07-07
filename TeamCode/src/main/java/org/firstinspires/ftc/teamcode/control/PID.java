@@ -1,8 +1,7 @@
 package org.firstinspires.ftc.teamcode.control;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.util.ElapsedTime;
-@Config
+
 public class PID {
     private static final ElapsedTime timer = new ElapsedTime();
     public static double kP = 0;

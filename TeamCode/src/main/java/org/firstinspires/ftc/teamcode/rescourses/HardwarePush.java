@@ -16,6 +16,7 @@ public class HardwarePush {
     public static DcMotor rf;
     public static DcMotor lb;
     public static DcMotor rb;
+    public static DcMotor motor; //Temporary motor for PID practice
     public final OpMode opMode;
     public BNO055IMU imu;
 
