@@ -7,8 +7,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.control.PID;
 import org.firstinspires.ftc.teamcode.movement.Motors;
-import org.firstinspires.ftc.teamcode.rescourses.HardwarePush;
-import org.firstinspires.ftc.teamcode.rescourses.MotorConstants;
 
 @TeleOp(name = "TeleOp14872")
 public class TeleOp14872 extends OpMode {
@@ -36,8 +34,8 @@ public class TeleOp14872 extends OpMode {
         motors.fieldCentric();
 
         //PID testing
-        PID pid = new PID(MotorConstants.kP,MotorConstants.kI,MotorConstants.kD,MotorConstants.kF,MotorConstants.iZone);
-        pid.setWanted(MotorConstants.wanted);
+        /*PID pid = new PID(1,0,0,0,0);
+        pid.start(50);
 
         //Calculating the speed of the motor
         double pos = motors.motor.getCurrentPosition();
@@ -61,9 +59,9 @@ public class TeleOp14872 extends OpMode {
         //Updating telemetry packet data
         packet.put("Motor Speed", speed );
         packet.put("Motor Position", pos);
-        packet.put("Wanted", MotorConstants.wanted);
+        packet.put("Wanted", 50);
         packet.put("Gyro", motors.getAngle());
-        packet.put("Time", time);
+        packet.put("Time", time);*/
 
     }
 }
