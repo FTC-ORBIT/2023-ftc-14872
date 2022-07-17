@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.rescourses;
+package org.firstinspires.ftc.teamcode.res;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
@@ -6,17 +6,12 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-
 public class HardwarePush {
 
     public static DcMotor lf;
     public static DcMotor rf;
     public static DcMotor lb;
     public static DcMotor rb;
-    public static DcMotor motor; //Temporary motor for PID practice
     public final OpMode opMode;
     public BNO055IMU imu;
 

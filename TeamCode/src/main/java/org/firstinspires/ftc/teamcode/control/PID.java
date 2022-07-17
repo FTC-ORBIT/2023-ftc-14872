@@ -1,25 +1,26 @@
 package org.firstinspires.ftc.teamcode.control;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class PID {
-    private ElapsedTime timer;
-    public double kP = 0;
-    public double kI = 0;
-    public double kD = 0;
-    public double kF = 0;
-    public double iZone = 0;
+    private static final ElapsedTime timer = new ElapsedTime();
+    private double kP;
+    private double kI;
+    private double kD;
+    private double iZone;
+    private double kF;
 
     public double wanted = 0;
 
     private double integral = 0;
 
-    private double prevError;
-    private double prevTime;
-    private double prevDerivative;
+    private double prevError = 0;
+    private double prevTime = 0;
+    private double prevDerivative = 0;
 
-    public PID(final double kP, final double kI, final double kD, final double kF, final double iZone) {
+    public PID(double kP,double kI, double kD, double kF, double iZone) {
         this.kP = kP;
         this.kI = kI;
         this.kD = kD;
@@ -27,18 +28,15 @@ public class PID {
         this.iZone = iZone;
     }
 
-    public void start(final double wanted) {
+
+    public void setWanted(final double wanted) {
         this.wanted = wanted;
-        timer = new ElapsedTime();
-        prevDerivative = 0;
-        prevError = 0;
-        prevTime = 0;
-        integral = 0;
     }
 
-    public double update(final double current) {
+    public double update(double current) {
         final double currentError = wanted - current;
-        final double deltaTime = timer.milliseconds() - prevTime;
+        final double currentTime = timer.milliseconds();
+        final double deltaTime = currentTime - prevTime;
 
         if (Math.abs(currentError) < iZone) {
             if (Math.signum(currentError) != Math.signum(prevError)) {
@@ -51,9 +49,8 @@ public class PID {
         final double derivative = deltaTime == 0 ? prevDerivative : (currentError - prevError) / deltaTime;
 
         prevError = currentError;
-        prevTime = timer.milliseconds();
+        prevTime = currentTime;
         prevDerivative = derivative;
-
         return kP * currentError + kI * integral + kD * derivative + kF * wanted;
     }
 }

@@ -1,13 +1,12 @@
 package org.firstinspires.ftc.teamcode.movement;
 
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.teamcode.rescourses.HardwarePush;
+import org.firstinspires.ftc.teamcode.res.HardwarePush;
 
 public class Motors extends HardwarePush {
 
@@ -18,14 +17,15 @@ public class Motors extends HardwarePush {
     }
 
 
-    public void fieldCentric() {
+    private double[] fieldCentric() {
         double x1 = opMode.gamepad1.left_stick_x;
         double y1 = -opMode.gamepad1.left_stick_y;
         double x2 = -y1 * Math.sin(-getAngle()) + x1 * Math.cos(-getAngle());
         double y2 = y1 * Math.cos(-getAngle()) + x1 * Math.sin(-getAngle());
         double rotation = opMode.gamepad1.right_trigger - opMode.gamepad1.left_trigger;
-        drive(y2, x2, rotation);
         if (opMode.gamepad1.dpad_up) gyroReset();
+
+        return new double[]{x2, y2, rotation};
     }
 
     private void gyroReset() {
@@ -33,7 +33,13 @@ public class Motors extends HardwarePush {
     }
 
 
-    private void drive(double y, double x, double r) {
+    public void drive() {
+
+
+        double[] values = fieldCentric();
+
+        double x = values[0], y = values[1], r = values[2];
+
         final double lfPower = y + x + r;
         final double rfPower = y - x - r;
         final double lbPower = y - x + r;
