@@ -12,6 +12,7 @@ public class HardwarePush {
     public static DcMotor rf;
     public static DcMotor lb;
     public static DcMotor rb;
+    public static DcMotor collection;
     public final OpMode opMode;
     public BNO055IMU imu;
 
@@ -19,6 +20,10 @@ public class HardwarePush {
 
 
     public void init() {
+
+        collection = opMode.hardwareMap.get(DcMotor.class, "collection");
+        collection.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
         lf = opMode.hardwareMap.get(DcMotor.class, "lf");
         lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 

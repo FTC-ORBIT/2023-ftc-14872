@@ -21,29 +21,24 @@ public class TeleOp14872 extends OpMode {
     double prevSpeed = 0;
 
     @Override
-    public void init() {
-        motors.init();
-    }
+    public void init() {motors.init();}
 
 
     @Override
     public void loop() {
 
-        pid.setWanted(PIDC.wanted);
-        //Sending telemetry packet to the dashboard
+        motors.drive();
+
+        /*pid.setWanted(PIDC.wanted);
+
         FtcDashboard.getInstance().sendTelemetryPacket(packet);
 
-        //Updating the power of the motors according to the field centric drive
-        //motors.drive();
-        //PID testing
-
-        //Calculating the speed of the motor
-        double pos = HardwarePush.lf.getCurrentPosition();
+        double pos = HardwarePush.collection.getCurrentPosition();
         double time = System.currentTimeMillis();
         double speed = prevTime == 0 ? prevSpeed : ((pos - prevPos) / (time - prevTime));
 
         //Updating motor speed
-        HardwarePush.lf.setPower(pid.update(speed));
+        HardwarePush.collection.setPower(pid.update(HardwarePush.collection.getPower()));
 
         //Setting previous values
         prevTime = time;
@@ -52,16 +47,11 @@ public class TeleOp14872 extends OpMode {
 
         //Updating telemetry data
         telemetry.addData("Motor Speed", speed);
-        telemetry.addData("Motor Position", pos);
-        telemetry.addData("Gyro", motors.getAngle());
 
         //Updating telemetry packet data
         packet.put("Motor Speed", speed);
-        packet.put("Motor Position", pos);
         packet.put("Wanted", pid.wanted);
-        packet.put("Gyro", motors.getAngle());
-        packet.put("Power", pid.update(speed));
+        packet.put("Power", Math.abs(pid.update(speed)));*/
 
     }
 }
-

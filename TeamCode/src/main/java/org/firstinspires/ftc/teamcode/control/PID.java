@@ -18,7 +18,6 @@ public class PID {
 
     private double prevError = 0;
     private double prevTime = 0;
-    private double prevDerivative = 0;
 
     public PID(double kP,double kI, double kD, double kF, double iZone) {
         this.kP = kP;
@@ -38,19 +37,18 @@ public class PID {
         final double currentTime = timer.milliseconds();
         final double deltaTime = currentTime - prevTime;
 
-        if (Math.abs(currentError) < iZone) {
-            if (Math.signum(currentError) != Math.signum(prevError)) {
-                integral = 0;
-            } else {
-                integral += currentError * deltaTime;
-            }
+        if (Math.signum(currentError) != Math.signum(prevError)){
+            integral = 0;
+        }else if (Math.abs(currentError) < iZone){
+            integral = integral + current * deltaTime;
         }
 
-        final double derivative = deltaTime == 0 ? prevDerivative : (currentError - prevError) / deltaTime;
+        double derivative = (current -  prevError) / deltaTime;
 
         prevError = currentError;
-        prevTime = currentTime;
-        prevDerivative = derivative;
-        return kP * currentError + kI * integral + kD * derivative + kF * wanted;
+        prevTime = deltaTime;
+
+        return currentError * kP + kF * wanted + derivative * kD + integral * kI;
+
     }
 }
