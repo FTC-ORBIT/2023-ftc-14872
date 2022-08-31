@@ -4,13 +4,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class PID {
+public abstract class PID {
     private static final ElapsedTime timer = new ElapsedTime();
-    private double kP;
-    private double kI;
-    private double kD;
-    private double iZone;
-    private double kF;
+    private final double kP;
+    private final double kI;
+    private final double kD;
+    private final double iZone;
+    private final double kF;
 
     public double wanted = 0;
 
@@ -19,20 +19,38 @@ public class PID {
     private double prevError = 0;
     private double prevTime = 0;
 
-    public PID(double kP,double kI, double kD, double kF, double iZone) {
+    /**
+     * all of the pid values
+     * @param kP multiples the proportional value
+     * @param kI multiples the integral value
+     * @param kD multiples the differential value
+     * @param kF multiples the wanted value
+     * @param iZone the zone of values where i is used
+     * @param wanted the wanted value
+     */
+    public PID(double kP,double kI, double kD, double kF, double iZone, double wanted) {
         this.kP = kP;
         this.kI = kI;
         this.kD = kD;
         this.kF = kF;
         this.iZone = iZone;
+        this.wanted = wanted;
     }
 
-
+    /**
+     * the setter of wanted
+     * @param wanted the updated wanted value
+     */
     public void setWanted(final double wanted) {
         this.wanted = wanted;
     }
 
-    public double update(double current) {
+    /**
+     * calculates the controller output with the given parameters
+     * @param current the current value
+     * @return returns the controller output
+     */
+    public double controllerOutput(double current) {
         final double currentError = wanted - current;
         final double currentTime = timer.milliseconds();
         final double deltaTime = currentTime - prevTime;
@@ -49,6 +67,10 @@ public class PID {
         prevTime = deltaTime;
 
         return currentError * kP + kF * wanted + derivative * kD + integral * kI;
-
     }
+
+    /**
+     * executes your controlled actions using pid
+     */
+    abstract void runPID();
 }

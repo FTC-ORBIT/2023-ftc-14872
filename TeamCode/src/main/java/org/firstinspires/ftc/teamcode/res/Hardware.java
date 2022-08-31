@@ -6,19 +6,22 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-public class HardwarePush {
+public class Hardware {
 
-    public static DcMotor lf;
-    public static DcMotor rf;
-    public static DcMotor lb;
-    public static DcMotor rb;
-    public static DcMotor collection;
+    public DcMotor lf;
+    public DcMotor rf;
+    public DcMotor lb;
+    public DcMotor rb;
+    public DcMotor collection;
     public final OpMode opMode;
     public BNO055IMU imu;
 
-    public HardwarePush(final OpMode opMode) {this.opMode = opMode;}
+    public Hardware(final OpMode opMode) {this.opMode = opMode;}
 
 
+    /**
+     * Initializes the hardware
+     */
     public void init() {
 
         collection = opMode.hardwareMap.get(DcMotor.class, "collection");
