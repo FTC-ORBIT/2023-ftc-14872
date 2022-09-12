@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.control;
+package org.firstinspires.ftc.teamcode.imageprocessing;
 
 import android.location.Location;
 
@@ -11,13 +11,13 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-public class rodDetector extends OpenCvPipeline {
+public class RodDetector extends OpenCvPipeline {
     //creates a telemetry
     Telemetry telemetry;
     //creates a mat object
     Mat mat = new Mat();
     //sets the telemetry
-    public rodDetector(Telemetry t) {
+    public RodDetector(Telemetry t) {
         telemetry = t;
     }
     final Rect LEFT_AREA = new Rect(
