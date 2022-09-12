@@ -1,20 +1,23 @@
 package org.firstinspires.ftc.teamcode.movement;
 
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.teamcode.control.PID;
 import org.firstinspires.ftc.teamcode.res.Hardware;
 
-public class Motors {
+public class Movement {
 
     static double offset = 0;
     private final Hardware hardware;
     private final OpMode opMode;
 
-    public Motors(Hardware hardware) {
+    public Movement(Hardware hardware) {
         this.hardware = hardware;
         opMode = hardware.opMode;
     }
@@ -43,11 +46,8 @@ public class Motors {
     }
 
 
-    /**
-     * enables joystick drive control on the robot
-     */
-    public void drive() {
-        double[] values = fieldCentric();
+
+    public void drive(double[] values) {
 
         double x = values[0], y = values[1], r = values[2];
 
@@ -98,5 +98,13 @@ public class Motors {
         }
     }
 
-
+    public void turn(double angle, TelemetryPacket packet) {
+        PID turnPID = new PID(0.5, 0, 0, 0, 0, wrap(angle));
+        while(getAngle() < wrap(angle)) {
+            drive(new double[]{0, 0, turnPID.update(getAngle())});
+            packet.put("timer", turnPID.timer);
+            packet.put("gyro", getAngle());
+            FtcDashboard.getInstance().sendTelemetryPacket(packet);
+        }
+    }
 }

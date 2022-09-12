@@ -4,15 +4,15 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public abstract class PID {
-    private static final ElapsedTime timer = new ElapsedTime();
+public class PID {
+    public final ElapsedTime timer = new ElapsedTime();
     private final double kP;
     private final double kI;
     private final double kD;
     private final double iZone;
     private final double kF;
 
-    public double wanted = 0;
+    private double wanted = 0;
 
     private double integral = 0;
 
@@ -35,6 +35,7 @@ public abstract class PID {
         this.kF = kF;
         this.iZone = iZone;
         this.wanted = wanted;
+        timer.reset();
     }
 
     /**
@@ -50,7 +51,7 @@ public abstract class PID {
      * @param current the current value
      * @return returns the controller output
      */
-    public double controllerOutput(double current) {
+    public double update(double current) {
         final double currentError = wanted - current;
         final double currentTime = timer.milliseconds();
         final double deltaTime = currentTime - prevTime;
@@ -69,8 +70,4 @@ public abstract class PID {
         return currentError * kP + kF * wanted + derivative * kD + integral * kI;
     }
 
-    /**
-     * executes your controlled actions using pid
-     */
-    abstract void runPID();
 }
