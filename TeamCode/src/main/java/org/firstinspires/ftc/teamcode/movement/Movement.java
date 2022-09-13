@@ -27,7 +27,7 @@ public class Movement {
      * does all of the field centric calculations
      * @return the corrected Joystick values
      */
-    private double[] fieldCentric() {
+    public double[] fieldCentric() {
         double x1 = opMode.gamepad1.left_stick_x;
         double y1 = -opMode.gamepad1.left_stick_y;
         double x2 = -y1 * Math.sin(-getAngle()) + x1 * Math.cos(-getAngle());

@@ -35,7 +35,6 @@ public class PID {
         this.kF = kF;
         this.iZone = iZone;
         this.wanted = wanted;
-        timer.reset();
     }
 
     /**
@@ -59,13 +58,13 @@ public class PID {
         if (Math.signum(currentError) != Math.signum(prevError)){
             integral = 0;
         }else if (Math.abs(currentError) < iZone){
-            integral = integral + current * deltaTime;
+            integral = integral + currentError * deltaTime;
         }
 
-        double derivative = (current -  prevError) / deltaTime;
+        double derivative = (currentError -  prevError) / deltaTime;
 
         prevError = currentError;
-        prevTime = deltaTime;
+        prevTime = currentTime;
 
         return currentError * kP + kF * wanted + derivative * kD + integral * kI;
     }
