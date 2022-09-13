@@ -22,8 +22,8 @@ public class RodDetector extends OpenCvPipeline {
     }
     final Rect LEFT_AREA = new Rect(
             //two points to the square to be in
-            new Point(),
-            new Point());
+            new Point(60,35),
+            new Point(120,75));
     final Rect RIGHT_AREA = new Rect(
             //two points to the square to be in
             new Point(),
@@ -68,7 +68,7 @@ public class RodDetector extends OpenCvPipeline {
         if ((rodRight && rodLeft) == true) { RodIn = rodIn.MIDDLE; telemetry.addData("rodLocation: ", "middle"); }
         //rod not found
         if (rodRight && rodLeft == false) { RodIn = rodIn.NOT_FOUND; telemetry.addData("rodLocation: ", "not found");}
-        //rod is at the right side or the lift side
+        //rod is at the right side or the left side
         if (rodRight) { RodIn = rodIn.LEFT; telemetry.addData("rodLocation: ", "left");}else{ RodIn = rodIn.RIGHT; telemetry.addData("rodLocation: ", "right");}
 
         //updates the telemetry stats
