@@ -26,8 +26,8 @@ public class RodDetector extends OpenCvPipeline {
             new Point(120,75));
     final Rect RIGHT_AREA = new Rect(
             //two points to the square to be in
-            new Point(),
-            new Point());
+            new Point(140,35),
+            new Point(200,75));
     //0.4 = 40% yellow (the rod is yellow so at list 40%)
     double rodFoundIn = 0.4;
     //creates an enum class with a of the location that the rod can be in
