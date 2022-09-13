@@ -14,7 +14,7 @@ public class Autonomous14872 extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        WebcamName webcamName = hardwareMap.get(WebcamName.class, "NAME_OF_CAMERA_IN_CONFIG_FILE");
+        WebcamName webcamName = hardwareMap.get(WebcamName.class, "camera");
         camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
         RodDetector detector = new RodDetector(telemetry);
         camera.setPipeline(detector);
