@@ -14,7 +14,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
 public class RodDetector extends OpenCvPipeline {
     //creates a telemetry
     Telemetry telemetry;
-    //creates a mat object
+    //creates a material object
     Mat mat = new Mat();
     //sets the telemetry
     public RodDetector(Telemetry t) {

@@ -13,14 +13,21 @@ public class Autonomous14872 extends LinearOpMode {
     OpenCvCamera camera;
     @Override
     public void runOpMode() throws InterruptedException {
+        //initiates the camera
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        //gets the camera name from the int in the driver station
         WebcamName webcamName = hardwareMap.get(WebcamName.class, "camera");
+        //to get the webcam view
         camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
+        //creates an object to the telemetry from the file rod detector
         RodDetector detector = new RodDetector(telemetry);
+        //sets the pipeline
         camera.setPipeline(detector);
+        //opening the camera
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
             @Override
+            //live streaming
             public void onOpened()
             {
                 camera.startStreaming(360,240,OpenCvCameraRotation.UPRIGHT);
