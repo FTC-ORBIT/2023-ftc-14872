@@ -28,8 +28,8 @@ public class RodDetector extends OpenCvPipeline {
             //two points to the square to be in
             new Point(140,35),
             new Point(200,75));
-    //0.4 = 40% yellow (the rod is yellow so at list 40%)
-    double rodFoundIn = 0.4;
+    //0.4 = 40% yellow (the rod is yellow attlist 40%)
+    double rodFoundIn = 0.42;
     //creates an enum class with a of the location that the rod can be in
     public enum rodIn { RIGHT, LEFT, MIDDLE, NOT_FOUND}
     private rodIn RodIn;
@@ -48,7 +48,7 @@ public class RodDetector extends OpenCvPipeline {
 
         //the percentage of the sides the val is 0  because there is 1 channel
         double rightPercentage = Core.sumElems(right).val[0] /RIGHT_AREA.area() / 255 ;
-        double leftPercentage = Core.sumElems(right).val[0] / LEFT_AREA.area() / 255 ;
+        double leftPercentage = Core.sumElems(left).val[0] / LEFT_AREA.area() / 255 ;
 
         //release the right and left mats
         right.release();
@@ -81,8 +81,8 @@ public class RodDetector extends OpenCvPipeline {
         Scalar colorFound = new Scalar(0 ,255 ,0);
         Scalar colorNotFound = new Scalar(255,0,0);
         //setting the colors
-        Imgproc.rectangle(mat, RIGHT_AREA, RodIn == rodIn.RIGHT ? colorFound:colorNotFound);
-        Imgproc.rectangle(mat, LEFT_AREA, RodIn == rodIn.LEFT ? colorFound:colorNotFound);
+        Imgproc.rectangle(mat, RIGHT_AREA, RodIn == rodIn.RIGHT ? colorNotFound:colorFound);
+        Imgproc.rectangle(mat, LEFT_AREA, RodIn == rodIn.LEFT ? colorNotFound:colorFound);
         //returning mat
         return mat;
     }

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -9,6 +11,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
+@Autonomous(name = "Autonomous14872")
 public class Autonomous14872 extends LinearOpMode {
     OpenCvCamera camera;
     @Override
@@ -30,7 +33,7 @@ public class Autonomous14872 extends LinearOpMode {
             //live streaming
             public void onOpened()
             {
-                camera.startStreaming(360,240,OpenCvCameraRotation.UPRIGHT);
+                camera.startStreaming(320,240,OpenCvCameraRotation.UPRIGHT);
             }
             @Override
             public void onError(int errorCode)
@@ -40,11 +43,13 @@ public class Autonomous14872 extends LinearOpMode {
                  */
             }
         });
+
+        waitForStart();
+
+        while (opModeIsActive()){
+            FtcDashboard.getInstance().startCameraStream(camera,60);
+        }
+
     }
 
-    @Override
-    public void waitForStart() {
-        super.waitForStart();
-        camera.stopStreaming();
-    }
 }
