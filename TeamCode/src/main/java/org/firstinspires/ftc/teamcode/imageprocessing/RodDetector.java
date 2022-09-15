@@ -29,7 +29,7 @@ public class RodDetector extends OpenCvPipeline {
             new Point(140,35),
             new Point(200,75));
     //0.4 = 40% yellow (the rod is yellow attlist 40%)
-    double rodFoundIn = 0.42;
+    double rodFoundIn = 0.4;
     //creates an enum class with a of the location that the rod can be in
     public enum rodIn { RIGHT, LEFT, MIDDLE, NOT_FOUND}
     private rodIn RodIn;
@@ -38,7 +38,7 @@ public class RodDetector extends OpenCvPipeline {
     public Mat processFrame(Mat input) {
         //set the filter and filter color censoring
         Imgproc.cvtColor(input, mat, Imgproc.COLOR_RGB2HSV);
-        Scalar lowHSV = new Scalar(23 , 50 ,70);
+        Scalar lowHSV = new Scalar(0 , 55 , 100);
         Scalar highHSV = new Scalar(32, 255, 255);
         Core.inRange(mat, lowHSV, highHSV, mat);
 
@@ -65,9 +65,9 @@ public class RodDetector extends OpenCvPipeline {
         //checks if the rod is in the middle or at 1 of the sides
 
         //rod is at the middle:
-        if ((rodRight && rodLeft) == true) { RodIn = rodIn.MIDDLE; telemetry.addData("rodLocation: ", "middle"); }
+        if ((rodRight && rodLeft)) { RodIn = rodIn.MIDDLE; telemetry.addData("rodLocation: ", "middle"); }
         //rod not found
-        if (rodRight && rodLeft == false) { RodIn = rodIn.NOT_FOUND; telemetry.addData("rodLocation: ", "not found");}
+        if (!rodRight && !rodLeft) { RodIn = rodIn.NOT_FOUND; telemetry.addData("rodLocation: ", "not found");}
         //rod is at the right side or the left side
         if (rodRight) { RodIn = rodIn.LEFT; telemetry.addData("rodLocation: ", "left");}else{ RodIn = rodIn.RIGHT; telemetry.addData("rodLocation: ", "right");}
 
