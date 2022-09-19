@@ -26,13 +26,13 @@ public class RodDetector extends OpenCvPipeline {
         telemetry = t;
     }
     final Rect LEFT_AREA = new Rect(
-            //two points to the square to be in
-            new Point(60,35),
-            new Point(120,75));
+            //two points to the square to be in 60,35 //// 120,75
+            new Point(30,30),
+            new Point(165,210));
     final Rect RIGHT_AREA = new Rect(
             //two points to the square to be in
-            new Point(140,35),
-            new Point(200,75));
+            new Point(135,30),
+            new Point(290,210));
     //0.4 = 40% yellow (the rod is yellow attlist 40%)
     double rodFoundIn = 0.4;
     //creates an enum class with a of the location that the rod can be in
