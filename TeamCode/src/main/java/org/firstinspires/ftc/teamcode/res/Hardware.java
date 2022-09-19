@@ -23,10 +23,6 @@ public class Hardware {
      * Initializes the hardware
      */
     public void init() {
-
-        collection = opMode.hardwareMap.get(DcMotor.class, "collection");
-        collection.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-
         lf = opMode.hardwareMap.get(DcMotor.class, "lf");
         lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
