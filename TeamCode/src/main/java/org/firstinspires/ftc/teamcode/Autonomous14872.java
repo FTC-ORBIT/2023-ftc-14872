@@ -49,7 +49,17 @@ public class Autonomous14872 extends LinearOpMode {
         while (opModeIsActive()){
             FtcDashboard.getInstance().startCameraStream(camera,60);
         }
-
+        switch (detector.getRodIn()) {
+            case LEFT:
+                //while left
+            break;
+            case RIGHT:
+                //while right
+            break;
+            case MIDDLE:
+                //while middle
+            break;
+        }
     }
 
 }
