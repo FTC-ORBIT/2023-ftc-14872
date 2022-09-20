@@ -45,6 +45,9 @@ public class Movement {
         offset = hardware.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle;
     }
 
+    public float getRobotVelocity(){
+
+    }
 
 
     public void drive(double[] values) {
@@ -106,5 +109,28 @@ public class Movement {
             packet.put("gyro", getAngle());
             FtcDashboard.getInstance().sendTelemetryPacket(packet);
         }
+    }
+
+    /**
+     * drives to any place orients itself according to angle and distance
+     * @param cm distance to drive
+     * @param angle angle to rotate to in radians
+     * @param maxPower top speed for driving
+     * @param minPower minimum speed for driving
+     */
+    public void moveAndRotate(double cm, double angle, double maxPower, double minPower){
+        PID rotationPID = new PID(0, 0, 0, 0, 0, angle);
+        PID drivePID = new PID(0, 0 , 0, 0, 0, cm);
+
+
+        /**
+         *
+         * loop:
+         * calculate the error of the angle using the gyro's angle
+         * float timeToTarget = cm/speed
+         * rotationSpeed = calculate the speed of the rotation (angle-gyrorotation /timeToTarget)
+         * rotate(rotationSpeed)
+         * calls the drive function
+         */
     }
 }

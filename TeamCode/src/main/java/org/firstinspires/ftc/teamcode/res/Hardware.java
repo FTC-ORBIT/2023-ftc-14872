@@ -12,7 +12,6 @@ public class Hardware {
     public DcMotor rf;
     public DcMotor lb;
     public DcMotor rb;
-    public DcMotor collection;
     public final OpMode opMode;
     public BNO055IMU imu;
 
