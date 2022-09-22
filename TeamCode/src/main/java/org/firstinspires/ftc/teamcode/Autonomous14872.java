@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.imageprocessing.RodDetector;
+import org.firstinspires.ftc.teamcode.imageprocessing.contours;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -23,9 +24,11 @@ public class Autonomous14872 extends LinearOpMode {
         //to get the webcam view
         camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
         //creates an object to the telemetry from the file rod detector
-        RodDetector detector = new RodDetector(telemetry);
+        //RodDetector detector = new RodDetector(telemetry);
+        contours contours = new contours(telemetry);
         //sets the pipeline
-        camera.setPipeline(detector);
+        //camera.setPipeline(detector);
+        camera.setPipeline(contours);
         //opening the camera
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
@@ -49,6 +52,7 @@ public class Autonomous14872 extends LinearOpMode {
         while (opModeIsActive()){
             FtcDashboard.getInstance().startCameraStream(camera,60);
         }
+        /*
         switch (detector.getRodIn()) {
             case LEFT:
                 //while left
@@ -60,6 +64,7 @@ public class Autonomous14872 extends LinearOpMode {
                 //while middle
             break;
         }
+         */
     }
 
 }

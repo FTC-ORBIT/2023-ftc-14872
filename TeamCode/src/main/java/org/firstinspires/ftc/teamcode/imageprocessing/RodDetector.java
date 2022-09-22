@@ -5,11 +5,15 @@ import androidx.annotation.ColorLong;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RodDetector extends OpenCvPipeline {
     //creates a telemetry
@@ -102,7 +106,14 @@ public class RodDetector extends OpenCvPipeline {
 }
 /*
 class contours extends OpenCvPipeline {
-
+    //creates a telemetry
+    Telemetry telemetry;
+    //creates a material object
+    Mat mat = new Mat();
+    //sets the telemetry
+    public contours(Telemetry t) {
+        telemetry = t;
+    }
     @Override
     public Mat processFrame(Mat input) {
         Mat mat = new Mat();
@@ -110,7 +121,7 @@ class contours extends OpenCvPipeline {
         //binary = black & white image (the object is white)
         //in this code we are turning the color yellow to white and else to black
         Imgproc.cvtColor(input, mat, Imgproc.COLOR_RGB2HSV);
-        Scalar lowHSV = new Scalar(0 , 55 , 100);
+        Scalar lowHSV = new Scalar(18 , 55 , 100);
         Scalar highHSV = new Scalar(32, 255, 255);
         Core.inRange(mat, lowHSV, highHSV, mat);
         //finding the contours
@@ -121,7 +132,7 @@ class contours extends OpenCvPipeline {
         Scalar color = new Scalar(0, 0, 255);
         Imgproc.drawContours(input, contours, -1, color, 2, Imgproc.LINE_8, hierarchey, 2, new Point() ) ;
 
-        return null;
+        return mat;
     }
 }
 */
