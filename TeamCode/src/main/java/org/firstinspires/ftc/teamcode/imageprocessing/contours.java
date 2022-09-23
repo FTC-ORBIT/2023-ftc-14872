@@ -43,9 +43,9 @@ public class contours extends OpenCvPipeline {
         Imgproc.findContours(mat, contours, hierarchy , Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
         //draw contours
         Imgproc.drawContours(input, contours, -1, new Scalar(255, 0, 0));
-        //found all the requirements for the square
+        //framing all the requirements for the square
         MatOfPoint2f[] contoursPoly  = new MatOfPoint2f[contours.size()];
-        //exports all of the contour var to create a square
+        //exports all of the contour vars to create a square (from the live pic)
         Rect[] boundRect = new Rect[contours.size()];
         Point[] centers = new Point[contours.size()];
         float[][] radius = new float[contours.size()][1];

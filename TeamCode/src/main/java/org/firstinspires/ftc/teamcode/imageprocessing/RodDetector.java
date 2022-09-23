@@ -130,9 +130,9 @@ class contours extends OpenCvPipeline {
         Mat hierarchey = new Mat();
         Imgproc.findContours(input, contours, hierarchey , Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE );
         Scalar color = new Scalar(0, 0, 255);
-        Imgproc.drawContours(input, contours, -1, color, 2, Imgproc.LINE_8, hierarchey, 2, new Point() ) ;
+        Imgproc.drawContours(input, contours, -1, color) ;
 
-        return mat;
+        return input;
     }
 }
 */

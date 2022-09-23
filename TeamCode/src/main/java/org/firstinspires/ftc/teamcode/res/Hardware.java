@@ -1,10 +1,20 @@
 package org.firstinspires.ftc.teamcode.res;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.imageprocessing.contours;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 
 public class Hardware {
 
@@ -53,5 +63,35 @@ public class Hardware {
         imu = opMode.hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
 
+    }
+    public static OpenCvCamera camera;
+    public static void webcamReg() {
+        //initiates the camera
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        //gets the camera name from the int in the driver station
+        WebcamName webcamName = hardwareMap.get(WebcamName.class, "camera");
+        //to get the webcam view
+        camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
+        //creates an object to the telemetry from the file rod detector
+        //RodDetector detector = new RodDetector(telemetry);
+        contours contours = new contours(telemetry);
+        //sets the pipeline
+        //camera.setPipeline(detector);
+        camera.setPipeline(contours);
+        //opening the camera
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+        {
+            @Override
+            //live streaming
+            public void onOpened()
+            {
+                camera.startStreaming(320,240, OpenCvCameraRotation.UPRIGHT);
+            }
+            @Override
+            public void onError(int errorCode)
+            {
+                //This will be called if the camera could not be opened
+            }
+        });
     }
 }
