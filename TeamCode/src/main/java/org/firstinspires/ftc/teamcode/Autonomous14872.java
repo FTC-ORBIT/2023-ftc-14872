@@ -19,8 +19,11 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
 public class Autonomous14872 extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
+        //calling the function that we created
         Hardware.webcamReg();
+        //waitforstart func
         waitForStart();
+        //FTC dashboard to work
         while (opModeIsActive()){ FtcDashboard.getInstance().startCameraStream(camera,60); }
     }
 }
