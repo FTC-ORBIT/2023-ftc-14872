@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.control.PID;
 import org.firstinspires.ftc.teamcode.res.Hardware;
 
-public class Movement {
+public class Movement implements Runnable {
 
     static double offset = 0;
     private final Hardware hardware;
@@ -20,11 +20,13 @@ public class Movement {
     public Movement(Hardware hardware) {
         this.hardware = hardware;
         opMode = hardware.opMode;
+        Thread background = new Thread(this);
     }
 
 
     /**
      * does all of the field centric calculations
+     *
      * @return the corrected Joystick values
      */
     public double[] fieldCentric() {
@@ -43,10 +45,6 @@ public class Movement {
      */
     private void gyroReset() {
         offset = hardware.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle;
-    }
-
-    public float getRobotVelocity(){
-
     }
 
 
@@ -84,6 +82,7 @@ public class Movement {
     /**
      * getter for the gyro angle in radians.
      * from -Pi - Pi
+     *
      * @return gyro angle
      */
     public double getAngle() {
@@ -103,7 +102,7 @@ public class Movement {
 
     public void turn(double angle, TelemetryPacket packet) {
         PID turnPID = new PID(0.5, 0, 0, 0, 0, wrap(angle));
-        while(getAngle() < wrap(angle)) {
+        while (getAngle() < wrap(angle)) {
             drive(new double[]{0, 0, turnPID.update(getAngle())});
             packet.put("timer", turnPID.timer);
             packet.put("gyro", getAngle());
@@ -113,14 +112,15 @@ public class Movement {
 
     /**
      * drives to any place orients itself according to angle and distance
-     * @param cm distance to drive
-     * @param angle angle to rotate to in radians
+     *
+     * @param cm       distance to drive
+     * @param angle    angle to rotate to in radians
      * @param maxPower top speed for driving
      * @param minPower minimum speed for driving
      */
-    public void moveAndRotate(double cm, double angle, double maxPower, double minPower){
+    public void moveAndRotate(double cm, double angle, double maxPower, double minPower) {
         PID rotationPID = new PID(0, 0, 0, 0, 0, angle);
-        PID drivePID = new PID(0, 0 , 0, 0, 0, cm);
+        PID drivePID = new PID(0, 0, 0, 0, 0, cm);
 
 
         /**
@@ -132,5 +132,10 @@ public class Movement {
          * rotate(rotationSpeed)
          * calls the drive function
          */
+    }
+
+    @Override
+    public void run() {
+
     }
 }
