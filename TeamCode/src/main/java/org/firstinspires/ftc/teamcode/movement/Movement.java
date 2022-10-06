@@ -4,12 +4,18 @@ package org.firstinspires.ftc.teamcode.movement;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.control.PID;
 import org.firstinspires.ftc.teamcode.res.Hardware;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Timer;
+import java.util.Vector;
 
 public class Movement implements Runnable {
 
@@ -21,6 +27,7 @@ public class Movement implements Runnable {
         this.hardware = hardware;
         opMode = hardware.opMode;
         Thread background = new Thread(this);
+        background.start();
     }
 
 
@@ -134,8 +141,32 @@ public class Movement implements Runnable {
          */
     }
 
+    public double[] wheelVelocities;
+    public ArrayList<Double> velocityVector;
+    //the distance between the center of the robot and wheels
+    public double robotR = 0;
+
     @Override
     public void run() {
+        ElapsedTime timer = new ElapsedTime();
+        double deltaTime;
+        double currentTime;
+        double prevTime = 0;
+        double[] wheelsPosition;
+        double[] prevWheelsPosition = {hardware.lf.getCurrentPosition(), hardware.lb.getCurrentPosition(), hardware.rf.getCurrentPosition(), hardware.rb.getCurrentPosition()};
+        while (true){
+            wheelsPosition = new double[]{hardware.lf.getCurrentPosition(), hardware.lb.getCurrentPosition(), hardware.rf.getCurrentPosition(), hardware.rb.getCurrentPosition()};
+            currentTime = timer.seconds();
+            deltaTime = currentTime - prevTime;
+            for (int i = 0; i < 4; i++) {
+                wheelVelocities[i] = ((wheelsPosition[i] - prevWheelsPosition[i]) * timer.seconds());
+            }
+            velocityVector.add((wheelVelocities[2] + wheelVelocities[1] - wheelVelocities[0] - wheelVelocities[3]) / 4 * deltaTime);
+            velocityVector.add((wheelVelocities[2] + wheelVelocities[1] + wheelVelocities[0] + wheelVelocities[3]) / 4 * deltaTime);
+            velocityVector.add((wheelVelocities[2] + wheelVelocities[0] - wheelVelocities[1] - wheelVelocities[3]) / 2 * deltaTime);
 
+            prevWheelsPosition = wheelsPosition;
+            prevTime = currentTime;
+        }
     }
 }
