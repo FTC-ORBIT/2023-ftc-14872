@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.teamcode.res.Hardware.camera;
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -17,10 +18,37 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
 
 @Autonomous(name = "Autonomous14872")
 public class Autonomous14872 extends LinearOpMode {
+    OpenCvCamera camera;
     @Override
     public void runOpMode() throws InterruptedException {
         //calling the function that we created
-        Hardware.webcamReg();
+        //initiates the camera
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        //gets the camera name from the int in the driver station
+        WebcamName webcamName = hardwareMap.get(WebcamName.class, "camera");
+        //to get the webcam view
+        camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
+        //creates an object to the telemetry from the file rod detector
+        //RodDetector detector = new RodDetector(telemetry);
+        contours contours = new contours(telemetry);
+        //sets the pipeline
+        //camera.setPipeline(detector);
+        camera.setPipeline(contours);
+        //opening the camera
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+        {
+            @Override
+            //live streaming
+            public void onOpened()
+            {
+                camera.startStreaming(320,240, OpenCvCameraRotation.UPRIGHT);
+            }
+            @Override
+            public void onError(int errorCode)
+            {
+                //This will be called if the camera could not be opened
+            }
+        });
         //waitforstart func
         waitForStart();
         //FTC dashboard to work
