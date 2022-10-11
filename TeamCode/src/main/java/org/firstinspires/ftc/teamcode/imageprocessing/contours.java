@@ -63,6 +63,21 @@ public class contours extends OpenCvPipeline {
             Scalar color = new Scalar(255,255,255);
             Imgproc.rectangle(input, boundRect[i].tl(), boundRect[i].br(), color, 2);
         }
+
+        //find the largest contour prototype (by the size of the contour)
+        /*
+        double maxVal = 0;
+        int maxValIdx = 0;
+        for (int i = 0; i < contours.size(); i++) {
+            double contourArea = Imgproc.contourArea(contours.get(i));
+            if (maxVal < contourArea) {
+                maxVal = contourArea;
+                maxValIdx = i;
+            }
+        }
+        Imgproc.drawContours(input, contours, maxValIdx, new Scalar(0,255,0), 5);
+        */
+
         return input;
     }
 }
