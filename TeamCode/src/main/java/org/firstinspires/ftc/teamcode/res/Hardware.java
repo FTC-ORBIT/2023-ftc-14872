@@ -64,8 +64,4 @@ public class Hardware {
         imu.initialize(parameters);
 
     }
-
-    public static void webcamReg() {
-
-    }
 }
