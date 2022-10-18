@@ -51,25 +51,24 @@ public class contours extends OpenCvPipeline {
         Rect[] boundRect = new Rect[contours.size()];
         Point[] centers = new Point[contours.size()];
         float[][] radius = new float[contours.size()][1];
-        //searching for the right radius and center vector values
-        // (it turning the shape into many polygons and searching for the center and radius vectors) we will apply it later
+
+        double maxVal = 0;
+        int maxValIdx = 0;
         for (int i = 0; i < contours.size(); i++) {
+            //searching for the right radius and center vector values
+            // (it turning the shape into many polygons and searching for the center and radius vectors) we will apply it later
             contoursPoly[i] = new MatOfPoint2f();
             Imgproc.approxPolyDP(new MatOfPoint2f(contours.get(i).toArray()), contoursPoly[i], 3, true);
             boundRect[i] = Imgproc.boundingRect(new MatOfPoint(contoursPoly[i].toArray()));
             centers[i] = new Point();
             Imgproc.minEnclosingCircle(contoursPoly[i], centers[i], radius[i]);
-        }
-        //drawing the actual square (it will show in white)
-        for (int i = 0; i < contours.size(); i++) {
+
+            //drawing the actual square (it will show in white)
             Scalar color = new Scalar(255,255,255);
             Imgproc.rectangle(input, boundRect[i].tl(), boundRect[i].br(), color, 2);
             Imgproc.circle(input, centers[i], (int) radius[i][0], color, 2);
-        }
-        //find the largest contour prototype (by the size of the contour)
-        double maxVal = 0;
-        int maxValIdx = 0;
-        for (int i = 0; i < contours.size(); i++) {
+
+            //find the largest contour prototype (by the size of the contour)
             double contourArea = Imgproc.contourArea(contours.get(i));
             if (maxVal < contourArea) {
                 maxVal = contourArea;
