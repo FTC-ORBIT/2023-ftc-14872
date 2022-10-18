@@ -22,6 +22,9 @@ public class Movement implements Runnable {
     static double offset = 0;
     private final Hardware hardware;
     private final OpMode opMode;
+    public ArrayList<Double> velocityVector;
+    //the distance between the center of the robot and wheels
+
 
     public Movement(Hardware hardware) {
         this.hardware = hardware;
@@ -141,13 +144,10 @@ public class Movement implements Runnable {
          */
     }
 
-    public double[] wheelVelocities;
-    public ArrayList<Double> velocityVector;
-    //the distance between the center of the robot and wheels
-    public double robotR = 0;
 
     @Override
     public void run() {
+        double[] wheelVelocities = new double[4];
         ElapsedTime timer = new ElapsedTime();
         double deltaTime;
         double currentTime;
@@ -159,11 +159,11 @@ public class Movement implements Runnable {
             currentTime = timer.seconds();
             deltaTime = currentTime - prevTime;
             for (int i = 0; i < 4; i++) {
-                wheelVelocities[i] = ((wheelsPosition[i] - prevWheelsPosition[i]) * timer.seconds());
+                wheelVelocities[i] = ((wheelsPosition[i] - prevWheelsPosition[i]) / deltaTime);
             }
-            velocityVector.add((wheelVelocities[2] + wheelVelocities[1] - wheelVelocities[0] - wheelVelocities[3]) / 4 * deltaTime);
-            velocityVector.add((wheelVelocities[2] + wheelVelocities[1] + wheelVelocities[0] + wheelVelocities[3]) / 4 * deltaTime);
-            velocityVector.add((wheelVelocities[2] + wheelVelocities[0] - wheelVelocities[1] - wheelVelocities[3]) / 2 * deltaTime);
+            velocityVector.add((wheelVelocities[2] + wheelVelocities[1] - wheelVelocities[0] - wheelVelocities[3]) / 4);
+            velocityVector.add((wheelVelocities[2] + wheelVelocities[1] + wheelVelocities[0] + wheelVelocities[3]) / 4);
+            velocityVector.add((wheelVelocities[2] + wheelVelocities[0] - wheelVelocities[1] - wheelVelocities[3]) / (2 * robotR));
 
             prevWheelsPosition = wheelsPosition;
             prevTime = currentTime;
