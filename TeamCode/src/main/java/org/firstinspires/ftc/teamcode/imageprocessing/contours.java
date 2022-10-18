@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.imageprocessing;
 
+import com.google.ftcresearch.tfod.util.ImageUtils;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -44,7 +46,7 @@ public class contours extends OpenCvPipeline {
         //draw contours
         Imgproc.drawContours(input, contours, -1, new Scalar(255, 0, 0));
         //framing all the requirements for the square
-        MatOfPoint2f[] contoursPoly  = new MatOfPoint2f[contours.size()];
+        MatOfPoint2f[] contoursPoly = new MatOfPoint2f[contours.size()];
         //exports all of the contour vars to create a square (from the live pic)
         Rect[] boundRect = new Rect[contours.size()];
         Point[] centers = new Point[contours.size()];
@@ -62,10 +64,9 @@ public class contours extends OpenCvPipeline {
         for (int i = 0; i < contours.size(); i++) {
             Scalar color = new Scalar(255,255,255);
             Imgproc.rectangle(input, boundRect[i].tl(), boundRect[i].br(), color, 2);
+            Imgproc.circle(input, centers[i], (int) radius[i][0], color, 2);
         }
-
         //find the largest contour prototype (by the size of the contour)
-        /*
         double maxVal = 0;
         int maxValIdx = 0;
         for (int i = 0; i < contours.size(); i++) {
@@ -75,9 +76,9 @@ public class contours extends OpenCvPipeline {
                 maxValIdx = i;
             }
         }
+        Point biggestCenter = centers[maxValIdx];
+        Imgproc.circle(input, biggestCenter, 5, new Scalar(255,255,255), -1);
         Imgproc.drawContours(input, contours, maxValIdx, new Scalar(0,255,0), 5);
-        */
-
         return input;
     }
 }
