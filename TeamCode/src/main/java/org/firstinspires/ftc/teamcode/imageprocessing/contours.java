@@ -48,17 +48,24 @@ public class contours extends OpenCvPipeline {
         //framing all the requirements for the square
         MatOfPoint2f[] contoursPoly = new MatOfPoint2f[contours.size()];
         //exports all of the contour vars to create a square (from the live pic)
-        Point contourCtr = new Point();
         Rect[] boundRect = new Rect[contours.size()];
+        Point[] centers = new Point[contours.size()];
         float[][] radius = new float[contours.size()][1];
+        //searching for the right radius and center vector values
+        // (it turning the shape into many polygons and searching for the center and radius vectors) we will apply it later
+
         double maxVal = 0;
         int maxValIdx = 0;
-        //drawing the actual square (it will show in white)
         for (int i = 0; i < contours.size(); i++) {
-            Scalar color = new Scalar(255,255,255);
+            //searching for the right radius and center vector values
+            // (it turning the shape into many polygons and searching for the center and radius vectors) we will apply it later
             contoursPoly[i] = new MatOfPoint2f();
             Imgproc.approxPolyDP(new MatOfPoint2f(contours.get(i).toArray()), contoursPoly[i], 3, true);
             boundRect[i] = Imgproc.boundingRect(new MatOfPoint(contoursPoly[i].toArray()));
+            centers[i] = new Point();
+            Imgproc.minEnclosingCircle(contoursPoly[i], centers[i], radius[i]);
+            //drawing the actual square (it will show in white)
+            Scalar color = new Scalar(255,255,255);
             Imgproc.rectangle(input, boundRect[i].tl(), boundRect[i].br(), color, 2);
             //find the largest contour prototype (by the size of the contour)
             double contourArea = Imgproc.contourArea(contours.get(i));
@@ -67,9 +74,8 @@ public class contours extends OpenCvPipeline {
                 maxValIdx = i;
             }
         }
-
-        Imgproc.minEnclosingCircle(contoursPoly[maxValIdx], contourCtr, radius[maxValIdx]);
-        Imgproc.circle(input, contourCtr, 5, new Scalar(255,255,255), -1);
+        Point biggestCenter = centers[maxValIdx];
+        Imgproc.circle(input, biggestCenter, 5, new Scalar(255,255,255), -1);
         Imgproc.drawContours(input, contours, maxValIdx, new Scalar(0,255,0), 5);
         return input;
     }
