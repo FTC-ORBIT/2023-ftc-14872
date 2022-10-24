@@ -9,7 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
-public class OrbitGyro {
+public class Gyro {
     private static float gyroOffset = 0;
     private static float prevHeading = 0;
     private static float heading = 0;

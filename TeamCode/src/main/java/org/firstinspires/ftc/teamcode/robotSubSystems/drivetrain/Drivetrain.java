@@ -1,12 +1,11 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain;
 
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
-import org.firstinspires.ftc.teamcode.res.OrbitGyro;
+import org.firstinspires.ftc.teamcode.res.Gyro;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 import org.firstinspires.ftc.teamcode.utils.Vector;
 
@@ -27,13 +26,15 @@ public class Drivetrain {
             motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
     }
-
-    public static void operate(final Vector velocity_W) {
-        final float robotAngle = (float) Math.toRadians(OrbitGyro.getAngle());
-        final Vector velocity_FieldCS_W = velocity_W.rotate(-robotAngle);
+    public static void operate(Vector velocity_W) {
+        final float robotAngle = (float) Math.toRadians(Gyro.getAngle());
+        Vector velocity_FieldCS_W;
         if (!GlobalData.isAutonomous){
             //field centric
-            drive(new Vector(-velocity_FieldCS_W.y * Math.sin(OrbitGyro.getAngle()) + velocity_FieldCS_W.x * Math.cos(OrbitGyro.getAngle()), velocity_FieldCS_W.y * Math.cos(OrbitGyro.getAngle()) + velocity_FieldCS_W.x * Math.sin(OrbitGyro.getAngle()), velocity_FieldCS_W.r));
+            //TODO: check if you need to insert the inverse angle into rotation function
+            velocity_FieldCS_W = velocity_W.rotate(-robotAngle);
+        } else {
+            velocity_FieldCS_W = velocity_W;
         }
         drive(velocity_FieldCS_W);
     }

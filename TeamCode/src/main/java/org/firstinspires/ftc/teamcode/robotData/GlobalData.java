@@ -6,7 +6,7 @@ public class GlobalData {
     //public static RobotState robotState = RobotState.TRAVEL;
     public static boolean isAutonomous = true;
 
-    public static float currentTime = 0;
-    public static float lastTime = 0;
-    public static float deltaTime = 0;
+    public static double currentTime = 0;
+    public static double lastTime = 0;
+    public static double deltaTime = 0;
 }

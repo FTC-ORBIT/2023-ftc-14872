@@ -3,9 +3,9 @@ package org.firstinspires.ftc.teamcode.control;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 
 public class PID {
-    public final ElapsedTime timer = new ElapsedTime();
     private final double kP;
     private final double kI;
     private final double kD;
@@ -52,19 +52,16 @@ public class PID {
      */
     public double update(double current) {
         final double currentError = wanted - current;
-        final double currentTime = timer.milliseconds();
-        final double deltaTime = currentTime - prevTime;
 
         if (Math.signum(currentError) != Math.signum(prevError)){
             integral = 0;
         }else if (Math.abs(currentError) < iZone){
-            integral = integral + currentError * deltaTime;
+            integral = integral + currentError * GlobalData.deltaTime;
         }
 
-        double derivative = (currentError -  prevError) / deltaTime;
+        double derivative = (currentError -  prevError) / GlobalData.deltaTime;
 
         prevError = currentError;
-        prevTime = currentTime;
 
         return currentError * kP + kF * wanted + derivative * kD + integral * kI;
     }
