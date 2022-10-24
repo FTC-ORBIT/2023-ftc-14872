@@ -4,54 +4,54 @@ import org.firstinspires.ftc.teamcode.robotData.Constants;
 
 public final class MathFuncs {
 
-    public static float deadBand(final float val, final float xAtZero, final float xAtOne) {
-        final float returnVal = (Math.abs(val) - xAtZero) / (xAtOne - xAtZero);
+    public static double deadBand(final double val, final double xAtZero, final double xAtOne) {
+        final double returnVal = (Math.abs(val) - xAtZero) / (xAtOne - xAtZero);
         return range(0, 1, returnVal) * Math.signum(val);
     }
 
-    public static float pointAndSlopeLinear(final Vector point, final float slope, final float value) {
+    public static double pointAndSlopeLinear(final Vector point, final double slope, final double value) {
         return slope * (value - point.x) + point.y;
     }
 
-    public static float twoPointsLinear(final Vector pointA, final Vector pointB, final float value) {
+    public static double twoPointsLinear(final Vector pointA, final Vector pointB, final double value) {
         return (pointA.x == pointB.x) ? Constants.INF
                 : pointAndSlopeLinear(pointA, (pointA.y - pointB.y) / (pointA.x - pointB.x), value);
     }
 
-    public static float deadBand(final Vector point, final float slope, final float minVal, final float maxVal,
-            final float value) {
+    public static double deadBand(final Vector point, final double slope, final double minVal, final double maxVal,
+            final double value) {
         return range(minVal, maxVal, pointAndSlopeLinear(point, slope, value));
     }
 
-    public static float deadBand(final Vector a, final Vector b, final float value) {
-        final float maxValue = Math.max(a.y, b.y);
-        final float minValue = Math.min(a.y, b.y);
+    public static double deadBand(final Vector a, final Vector b, final double value) {
+        final double maxValue = Math.max(a.y, b.y);
+        final double minValue = Math.min(a.y, b.y);
         return range(minValue, maxValue, twoPointsLinear(a, b, value));
     }
 
-    public static float range(final float lowerBound, final float upperBound, final float value) {
+    public static double range(final double lowerBound, final double upperBound, final double value) {
         return Math.min(Math.max(lowerBound, value), upperBound);
     }
 
-    public static float limit(final float bound, final float value) {
+    public static double limit(final double bound, final double value) {
         return range(-Math.abs(bound), Math.abs(bound), value);
     }
 
-    public static boolean inRange(final float value, final float lowerBound, final float upperBound) {
+    public static boolean inRange(final double value, final double lowerBound, final double upperBound) {
         return value <= upperBound && value >= lowerBound;
     }
 
-    public static boolean inTolerance(final float value, final float wantedValue, final float tolerance) {
+    public static boolean inTolerance(final double value, final double wantedValue, final double tolerance) {
         return inRange(value, wantedValue - tolerance, wantedValue + tolerance);
     }
 
-    public static float relativeDifference(final float value, final float reference) {
+    public static double relativeDifference(final double value, final double reference) {
         return Math.abs((value - reference) / reference);
     }
 
     private static int[] factorials = { 1, 1, 2, 6 };
 
-    public static float hypotenuse(final float a, final float b) {
-        return (float) Math.sqrt(a * a + b * b);
+    public static double hypotenuse(final double a, final double b) {
+        return (double) Math.sqrt(a * a + b * b);
     }
 }
