@@ -17,14 +17,13 @@ public class Autonomous14872 extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         //initiates the camera
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        //gets the camera name from the int in the driver station
+        //camera name from init in the Driver Station
         WebcamName webcamName = hardwareMap.get(WebcamName.class, "camera");
-        //to get the webcam view
+        //camera monitor view
         camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
-        //creates an object to the telemetry from the file rod detector
+        //creates an object to show the camera view in the Telemetry area
         contours contours = new contours(telemetry);
         //sets the pipeline
-        //camera.setPipeline(detector);
         camera.setPipeline(contours);
         //opening the camera
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
@@ -38,12 +37,11 @@ public class Autonomous14872 extends LinearOpMode {
             @Override
             public void onError(int errorCode)
             {
-                //This will be called if the camera could not be opened
+                //it will be run if the camera could not be opened
             }
         });
-        //waitforstart func
         waitForStart();
-        //FTC dashboard to work
+        //Start streaming to FTC Dashboard
         while (opModeIsActive()){ FtcDashboard.getInstance().startCameraStream(camera,60); }
     }
 }
