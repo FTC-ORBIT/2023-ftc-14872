@@ -12,7 +12,6 @@ public class Hardware {
     public DcMotor rf;
     public DcMotor lb;
     public DcMotor rb;
-    public DcMotor collection;
     public final OpMode opMode;
     public BNO055IMU imu;
 
@@ -23,10 +22,6 @@ public class Hardware {
      * Initializes the hardware
      */
     public void init() {
-
-        collection = opMode.hardwareMap.get(DcMotor.class, "collection");
-        collection.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-
         lf = opMode.hardwareMap.get(DcMotor.class, "lf");
         lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 

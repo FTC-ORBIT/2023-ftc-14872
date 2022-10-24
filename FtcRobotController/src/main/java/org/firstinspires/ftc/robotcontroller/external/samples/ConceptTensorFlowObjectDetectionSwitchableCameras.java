@@ -68,6 +68,7 @@ public class ConceptTensorFlowObjectDetectionSwitchableCameras extends LinearOpM
             "1 Bolt",
             "2 Bulb",
             "3 Panel"
+
     };
 
     /*
@@ -126,6 +127,7 @@ public class ConceptTensorFlowObjectDetectionSwitchableCameras extends LinearOpM
             // should be set to the value of the images used to create the TensorFlow Object Detection model
             // (typically 16/9).
             tfod.setZoom(1.0, 16.0/9.0);
+
         }
 
         /** Wait for the game to begin */
@@ -151,6 +153,7 @@ public class ConceptTensorFlowObjectDetectionSwitchableCameras extends LinearOpM
                         telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100 );
                         telemetry.addData("- Position (Row/Col)","%.0f / %.0f", row, col);
                         telemetry.addData("- Size (Width/Height)","%.0f / %.0f", width, height);
+
                     }
                     telemetry.update();
                 }
@@ -198,6 +201,7 @@ public class ConceptTensorFlowObjectDetectionSwitchableCameras extends LinearOpM
         // Use loadModelFromFile() if you have downloaded a custom team model to the Robot Controller's FLASH.
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
         // tfod.loadModelFromFile(TFOD_MODEL_FILE, LABELS);
+
     }
 
     private void doCameraSwitching() {

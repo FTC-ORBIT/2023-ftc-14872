@@ -139,6 +139,7 @@ public class ConceptVuforiaFieldNavigationWebcam extends LinearOpMode {
         // sets are stored in the 'assets' part of our application.
         targets = this.vuforia.loadTrackablesFromAsset("PowerPlay");
 
+
         // For convenience, gather together all the trackable objects in one easily-iterable collection */
         List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
         allTrackables.addAll(targets);
@@ -166,6 +167,7 @@ public class ConceptVuforiaFieldNavigationWebcam extends LinearOpMode {
         identifyTarget(1, "Red Rear Wall",        halfField,  -oneAndHalfTile, mmTargetHeight, 90, 0, -90);
         identifyTarget(2, "Blue Audience Wall",  -halfField,   oneAndHalfTile, mmTargetHeight, 90, 0,  90);
         identifyTarget(3, "Blue Rear Wall",       halfField,   oneAndHalfTile, mmTargetHeight, 90, 0, -90);
+
 
         /*
          * Create a transformation matrix describing where the camera is on the robot.
