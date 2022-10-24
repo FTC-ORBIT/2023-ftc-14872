@@ -4,12 +4,19 @@ import org.firstinspires.ftc.teamcode.robotData.Constants;
 
 public final class Vector {
 
-    public float x;
-    public float y;
+    public double x;
+    public double y;
+    public double r;
 
-    public Vector(final float x, final float y) {
+    public Vector(final double x, final double y) {
         this.x = x;
         this.y = y;
+    }
+
+    public Vector(final double x, final double y, final double r) {
+        this.x = x;
+        this.y = y;
+        this.r = r;
     }
 
     public static Vector zero() {
@@ -18,19 +25,19 @@ public final class Vector {
 
     public static Vector INF() { return new Vector(Constants.INF, Constants.INF); } // returns INF Vector
 
-    public float norm() {
-        return (float) Math.sqrt(x * x + y * y);
+    public double norm() {
+        return (double) Math.sqrt(x * x + y * y);
     }
 
-    public float getAngle() {
+    public double getAngle() {
         if (x == 0 && y == 0) {
             return 0;
         } else {
-            return (float) Math.atan2(y, x);
+            return (double) Math.atan2(y, x);
         }
     }
 
-    public Vector scale(final float scalingFactor) {
+    public Vector scale(final double scalingFactor) {
         return new Vector(x * scalingFactor, y * scalingFactor);
     }
 
@@ -42,24 +49,24 @@ public final class Vector {
         }
     }
     // returns maagal hyehida
-    public static Vector unit(final float angle) {
-        return new Vector((float) Math.cos(angle) , (float) Math.sin(angle));
+    public static Vector unit(final double angle) {
+        return new Vector((double) Math.cos(angle) , (double) Math.sin(angle));
     }
 
-    public static Vector fromAngleAndRadius(final float theta, final float radius) {
-        final float vectorX = (float) Math.cos(theta) * radius;
-        final float vectorY = (float) Math.sin(theta) * radius;
+    public static Vector fromAngleAndRadius(final double theta, final double radius) {
+        final double vectorX = (double) Math.cos(theta) * radius;
+        final double vectorY = (double) Math.sin(theta) * radius;
         return new Vector(vectorX, vectorY);
     }
 
-    public float dotProduct(final Vector other) { return x * other.x + y * other.y;}
+    public double dotProduct(final Vector other) { return x * other.x + y * other.y;}
 
-    public Vector rotate(final float theta) {
-        final float sinTheta = (float) Math.sin(theta);
-        final float cosTheta = (float) Math.cos(theta);
+    public Vector rotate(final double theta) {
+        final double sinTheta = (double) Math.sin(theta);
+        final double cosTheta = (double) Math.cos(theta);
 
-        final float newX = x * cosTheta - y * sinTheta;
-        final float newY = x * sinTheta + y * cosTheta;
+        final double newX = x * cosTheta - y * sinTheta;
+        final double newY = x * sinTheta + y * cosTheta;
 
         return new Vector(newX, newY);
     }
@@ -71,7 +78,6 @@ public final class Vector {
             return new Vector(y, -x);
         }
     }
-    //TODO :to unterstand
 
     public Vector abs() {
         return new Vector(Math.abs(x), Math.abs(y));
@@ -85,13 +91,13 @@ public final class Vector {
         return new Vector(x - other.x, y - other.y);
     }
 
-    public float project(final float angle) {
+    public double project(final double angle) {
         final Vector unitVector = unit(angle);
         return dotProduct(unitVector);
     }
 
-    public float project(final Vector other) {
-        final float otherNorm = other.norm();
+    public double project(final Vector other) {
+        final double otherNorm = other.norm();
         return otherNorm != 0 ? dotProduct(other) / otherNorm : this.norm();
     }
 
@@ -111,7 +117,7 @@ public final class Vector {
         return new Vector(Math.min(a.x, b.x), Math.min(a.y, b.y));
     }
 
-    public static Vector sameXY(final float value) {
+    public static Vector sameXY(final double value) {
         return new Vector(value, value);
     }
 
@@ -124,13 +130,13 @@ public final class Vector {
         return x == other.x && y == other.y;
     }
 
-    public static float angleDifference(final Vector a, final Vector b) {
-        final float normA = a.norm();
-        final float normB = b.norm();
+    public static double angleDifference(final Vector a, final Vector b) {
+        final double normA = a.norm();
+        final double normB = b.norm();
 
         if (normA == 0 || normB == 0)
             return 0;
 
-        return (float) Math.acos(a.dotProduct(b) / (normA * normB));
+        return (double) Math.acos(a.dotProduct(b) / (normA * normB));
     }
 }

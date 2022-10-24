@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public class Hardware {
 
+    //TODO: delete class and move all functions to relevant classes
+
     public DcMotor lf;
     public DcMotor rf;
     public DcMotor lb;
