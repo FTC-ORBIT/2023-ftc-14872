@@ -15,10 +15,11 @@ public class Elevator {
     public void operate(int level){
         double elevatorWanted = level * 10;
         ElevatorConstants.setElevatorLevelPID.setWanted(elevatorWanted);
+
         while (Math.abs(elevatorMotor.getCurrentPosition()) < elevatorWanted) {
             elevatorMotor.setPower(ElevatorConstants.setElevatorLevelPID.update(elevatorMotor.getCurrentPosition()));
         }
-
+        stop();
         ElevatorConstants.level = level;
     }
 
