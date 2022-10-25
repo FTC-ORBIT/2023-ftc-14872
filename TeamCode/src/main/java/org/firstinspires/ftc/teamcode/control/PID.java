@@ -26,15 +26,13 @@ public class PID {
      * @param kD multiples the differential value
      * @param kF multiples the wanted value
      * @param iZone the zone of values where i is used
-     * @param wanted the wanted value
      */
-    public PID(double kP,double kI, double kD, double kF, double iZone, double wanted) {
+    public PID(double kP,double kI, double kD, double kF, double iZone) {
         this.kP = kP;
         this.kI = kI;
         this.kD = kD;
         this.kF = kF;
         this.iZone = iZone;
-        this.wanted = wanted;
     }
 
     /**

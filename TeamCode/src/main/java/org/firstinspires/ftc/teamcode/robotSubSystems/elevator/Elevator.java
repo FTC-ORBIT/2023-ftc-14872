@@ -1,27 +1,33 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.elevator;
 
-
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+
 public class Elevator {
-    private static DcMotor elevatorMotor = null;
-    private int level = 0;
+    private static DcMotor elevatorMotor = null ;
 
     public static void init(HardwareMap hardwareMap){
         elevatorMotor = hardwareMap.get(DcMotor.class, "elevatorMotor");
+        elevatorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-    public void moveElevatorToLevel(int level){
+    public void operate(int level){
+        double elevatorWanted = level * 10;
+        ElevatorConstants.setElevatorLevelPID.setWanted(elevatorWanted);
+        while (Math.abs(elevatorMotor.getCurrentPosition()) < elevatorWanted) {
+            elevatorMotor.setPower(ElevatorConstants.setElevatorLevelPID.update(elevatorMotor.getCurrentPosition()));
+        }
 
-        this.level = level;
+        ElevatorConstants.level = level;
     }
 
     public void stop(){
-
+        elevatorMotor.setPower(0);
     }
 
+
     public int getLevel() {
-        return level;
+        return ElevatorConstants.level;
     }
 }
