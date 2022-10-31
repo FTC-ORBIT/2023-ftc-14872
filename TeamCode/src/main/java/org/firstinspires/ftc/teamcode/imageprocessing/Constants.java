@@ -13,7 +13,7 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-public class constants {
+public class Constants {
     //HSV constants
     public static Scalar lowHSV = new Scalar(18 , 100 , 100);
     public static Scalar highHSV = new Scalar(34, 255, 255);

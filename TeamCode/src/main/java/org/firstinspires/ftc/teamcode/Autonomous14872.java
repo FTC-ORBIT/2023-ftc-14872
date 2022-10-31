@@ -5,7 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.imageprocessing.contours;
+import org.firstinspires.ftc.teamcode.imageprocessing.Pipeline;
+import org.firstinspires.ftc.teamcode.imageprocessing.RodFinder;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -22,9 +23,9 @@ public class Autonomous14872 extends LinearOpMode {
         //camera monitor view
         camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
         //creates an object to show the camera view in the Telemetry area
-        contours contours = new contours(telemetry);
+        Pipeline pipeline = new Pipeline();
         //sets the pipeline
-        camera.setPipeline(contours);
+        camera.setPipeline(pipeline);
         //opening the camera
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
