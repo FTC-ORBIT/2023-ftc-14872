@@ -15,9 +15,12 @@ public class Pipeline extends OpenCvPipeline {
         Imgproc.cvtColor(input, material, Constants.binary);
         //blur (to remove noise)
         Imgproc.blur(material, material, Constants.BlurRadius);
+        RodFinder.findRod();
 
         return material;
     }
+
+    public static Mat getClonedMat(){return material.clone();}
 
     public static Mat getMat(){return material;}
 }
