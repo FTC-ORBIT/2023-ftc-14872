@@ -17,8 +17,10 @@ public class TeleOp14872 extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        Drivetrain drivetrain = new Drivetrain();
+
         Gyro.init(hardwareMap);
-        Drivetrain.init(hardwareMap);
+        drivetrain.init(hardwareMap);
 
         GlobalData.isAutonomous = false;
 
@@ -26,7 +28,7 @@ public class TeleOp14872 extends LinearOpMode {
 
         while (!isStopRequested()){
             GlobalData.currentTime = timer.milliseconds();
-            Drivetrain.operate(new Vector(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.left_trigger - gamepad1.right_trigger));
+            drivetrain.operate(new Vector(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.left_trigger - gamepad1.right_trigger));
 
             GlobalData.deltaTime = GlobalData.currentTime - GlobalData.lastTime;
 

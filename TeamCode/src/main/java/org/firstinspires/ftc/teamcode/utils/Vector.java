@@ -19,6 +19,10 @@ public final class Vector {
         this.r = r;
     }
 
+    public double getDistanceInCm(){
+        return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+    }
+
     public static Vector zero() {
         return new Vector(0, 0);
     } //returns Vector zero
@@ -26,7 +30,7 @@ public final class Vector {
     public static Vector INF() { return new Vector(Constants.INF, Constants.INF); } // returns INF Vector
 
     public double norm() {
-        return (double) Math.sqrt(x * x + y * y);
+        return Math.sqrt(x * x + y * y);
     }
 
     public double getAngle() {

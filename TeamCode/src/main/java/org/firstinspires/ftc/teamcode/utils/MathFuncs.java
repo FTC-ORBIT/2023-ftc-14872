@@ -52,6 +52,13 @@ public final class MathFuncs {
     private static int[] factorials = { 1, 1, 2, 6 };
 
     public static double hypotenuse(final double a, final double b) {
-        return (double) Math.sqrt(a * a + b * b);
+        return Math.sqrt(a * a + b * b);
+    }
+
+    public static Vector calcPointOnUnitCircle(double angle) {
+        return new Vector(Math.cos(angle) , Math.sin(angle));
+    }
+    public static double calcAngleOnUnitCircle(Vector vector){
+        return Math.atan2(vector.x, vector.y);
     }
 }

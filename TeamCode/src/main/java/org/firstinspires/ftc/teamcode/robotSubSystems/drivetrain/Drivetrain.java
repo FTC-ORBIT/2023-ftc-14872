@@ -5,18 +5,19 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
+import org.firstinspires.ftc.teamcode.control.PID;
 import org.firstinspires.ftc.teamcode.res.Gyro;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
+import org.firstinspires.ftc.teamcode.utils.Angle;
+import org.firstinspires.ftc.teamcode.utils.MathFuncs;
 import org.firstinspires.ftc.teamcode.utils.Vector;
 
 public class Drivetrain {
 
-    private static final DcMotor[] motors = new DcMotor[4];
+    private final DcMotor[] motors = new DcMotor[4];
+    public Vector lastVelocity = getVelocity_FieldCS();
 
-    private static Vector pose2D = new Vector(0,0);
-    public static Vector lastVelocity = getVelocity_FieldCS();
-
-    public static void init(HardwareMap hardwareMap) {
+    public void init(HardwareMap hardwareMap) {
         //if (GlobalData.isAutonomous) drive = new SampleMecanumDrive(hardwareMap);
         motors[0] = hardwareMap.get(DcMotor.class, "lf");
         motors[1] = hardwareMap.get(DcMotor.class, "rf");
@@ -27,31 +28,26 @@ public class Drivetrain {
             motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
     }
-    public static void operate(Vector velocity_W) {
-        final float robotAngle = (float) Math.toRadians(Gyro.getAngle());
-        Vector velocity_FieldCS_W;
-        if (!GlobalData.isAutonomous){
-            //field centric
-            //TODO: check if you need to insert the inverse angle into rotation function
-            velocity_FieldCS_W = velocity_W.rotate(-robotAngle);
-        } else {
-            velocity_FieldCS_W = velocity_W;
-        }
-        drive(velocity_FieldCS_W);
-    }
-    private static float[] wheelsPrevPosCm = new float[4];
-    private static float[] wheelsCurrentSpeedCm = new float[4];
-    public static Vector getVelocity_FieldCS() {
-        for (int i = 0; i < 4; i++){
-            wheelsCurrentSpeedCm[i] = ((motors[i].getCurrentPosition() / DrivetrainConstants.ticksPerRev) * DrivetrainConstants.cmPerWheelRev - wheelsPrevPosCm[i]) * (float) GlobalData.deltaTime;
-            wheelsPrevPosCm[i] = motors[i].getCurrentPosition();
-        }
-        pose2D.x = (wheelsCurrentSpeedCm[2] + wheelsCurrentSpeedCm[1] - wheelsCurrentSpeedCm[0] - wheelsCurrentSpeedCm[3]) / 4;
-        pose2D.y = (wheelsCurrentSpeedCm[2] + wheelsCurrentSpeedCm[1] + wheelsCurrentSpeedCm[0] + wheelsCurrentSpeedCm[3]) / 4;
-        return pose2D;
+    public void operate(Vector velocity_W) {
+        final double robotAngle = Math.toRadians(Gyro.getAngle());
+        //TODO: check if you need to insert the inverse angle into rotation function
+        drive(velocity_W.rotate(-robotAngle));
     }
 
-    public static Vector getAcceleration() {
+    private double[] wheelsPrevPosCm = new double[4];
+    private double[] wheelsCurrentSpeedCm = new double[4];
+    public Vector getVelocity_FieldCS() {
+        for (int i = 0; i < 4; i++){
+            wheelsCurrentSpeedCm[i] = ((motors[i].getCurrentPosition() / DrivetrainConstants.ticksPerRev) * DrivetrainConstants.cmPerWheelRev - wheelsPrevPosCm[i]) / GlobalData.deltaTime;
+            wheelsPrevPosCm[i] = motors[i].getCurrentPosition();
+        }
+        Vector velocityField = new Vector(0,0);
+        velocityField.x = (wheelsCurrentSpeedCm[2] + wheelsCurrentSpeedCm[1] - wheelsCurrentSpeedCm[0] - wheelsCurrentSpeedCm[3]) / 4;
+        velocityField.y = (wheelsCurrentSpeedCm[2] + wheelsCurrentSpeedCm[1] + wheelsCurrentSpeedCm[0] + wheelsCurrentSpeedCm[3]) / 4;
+        return velocityField;
+    }
+
+    public Vector getAcceleration() {
         Vector currentVelocity = getVelocity_FieldCS();
 
         Vector deltaVelocity = currentVelocity.subtract(lastVelocity);
@@ -61,13 +57,13 @@ public class Drivetrain {
         return acceleration;
     }
 
-    public static void stop() {
+    public void stop() {
         for (DcMotor motor : motors) {
             motor.setPower(0);
         }
     }
 
-    public static void drive(Vector drive) {
+    private void drive(Vector drive) {
         final double lfPower = drive.y + drive.x + drive.r;
         final double rfPower = drive.y - drive.x - drive.r;
         final double lbPower = drive.y - drive.x + drive.r;
@@ -81,5 +77,18 @@ public class Drivetrain {
         motors[1].setPower((rfPower / highestPower));
         motors[2].setPower((lbPower / highestPower));
         motors[3].setPower((rbPower / highestPower));
+    }
+    private final PID anglePID = new PID(0, 0, 0, 0, 0, 0);
+    //TODO: add speed parameter and control
+    public void driveToPoint(Vector vector, double wantedAngleAtArrival, double speed) {
+
+        Vector normalizedVector = vector.unit();
+        double vectorAngle = vector.getAngle();
+        anglePID.setWanted(wantedAngleAtArrival);
+
+        while (true){
+            normalizedVector.r = anglePID.update(Angle.wrapAnglePlusMinusPI(Gyro.getAngle()));
+            operate(normalizedVector.scale(speed));
+        }
     }
 }
