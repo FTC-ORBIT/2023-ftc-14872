@@ -13,7 +13,7 @@ public class Drivetrain {
 
     private static final DcMotor[] motors = new DcMotor[4];
 
-    private static Vector pose2D;
+    private static Vector pose2D = new Vector(0,0);
     public static Vector lastVelocity = getVelocity_FieldCS();
 
     public static void init(HardwareMap hardwareMap) {
@@ -39,8 +39,8 @@ public class Drivetrain {
         }
         drive(velocity_FieldCS_W);
     }
-    private static float[] wheelsPrevPosCm = {0, 0, 0, 0};
-    private static float[] wheelsCurrentSpeedCm = {0, 0, 0, 0};
+    private static float[] wheelsPrevPosCm = new float[4];
+    private static float[] wheelsCurrentSpeedCm = new float[4];
     public static Vector getVelocity_FieldCS() {
         for (int i = 0; i < 4; i++){
             wheelsCurrentSpeedCm[i] = ((motors[i].getCurrentPosition() / DrivetrainConstants.ticksPerRev) * DrivetrainConstants.cmPerWheelRev - wheelsPrevPosCm[i]) * (float) GlobalData.deltaTime;
