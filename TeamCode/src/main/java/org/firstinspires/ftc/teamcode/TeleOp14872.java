@@ -31,6 +31,7 @@ public class TeleOp14872 extends LinearOpMode {
             GlobalData.deltaTime = GlobalData.currentTime - GlobalData.lastTime;
 
             GlobalData.lastTime = GlobalData.currentTime;
+
             telemetry.update();
         }
     }
