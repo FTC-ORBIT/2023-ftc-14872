@@ -6,17 +6,10 @@ public final class Vector {
 
     public double x;
     public double y;
-    public double r;
 
     public Vector(final double x, final double y) {
         this.x = x;
         this.y = y;
-    }
-
-    public Vector(final double x, final double y, final double r) {
-        this.x = x;
-        this.y = y;
-        this.r = r;
     }
 
     public double getDistanceInCm(){

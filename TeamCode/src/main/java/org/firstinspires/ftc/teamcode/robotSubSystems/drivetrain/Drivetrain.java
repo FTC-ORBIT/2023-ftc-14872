@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain;
 
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
@@ -14,8 +15,8 @@ import org.firstinspires.ftc.teamcode.utils.Vector;
 
 public class Drivetrain {
 
-    private final DcMotor[] motors = new DcMotor[4];
-    public Vector lastVelocity = getVelocity_FieldCS();
+    public final DcMotor[] motors = new DcMotor[4];
+    //public Vector lastVelocity = getVelocity_FieldCS();
 
     public void init(HardwareMap hardwareMap) {
         //if (GlobalData.isAutonomous) drive = new SampleMecanumDrive(hardwareMap);
@@ -28,12 +29,14 @@ public class Drivetrain {
             motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
     }
-    public void operate(Vector velocity_W) {
+    public void operate(Vector velocity_W, double rotation) {
         final double robotAngle = Math.toRadians(Gyro.getAngle());
         //TODO: check if you need to insert the inverse angle into rotation function
-        drive(velocity_W.rotate(-robotAngle));
+        drive(velocity_W.rotate(robotAngle), rotation);
     }
 
+    //TODO: make usable
+    /*
     private double[] wheelsPrevPosCm = new double[4];
     private double[] wheelsCurrentSpeedCm = new double[4];
     public Vector getVelocity_FieldCS() {
@@ -56,19 +59,19 @@ public class Drivetrain {
         lastVelocity = currentVelocity;
         return acceleration;
     }
-
+    */
     public void stop() {
         for (DcMotor motor : motors) {
             motor.setPower(0);
         }
     }
 
-    private void drive(Vector drive) {
-        final double lfPower = drive.y + drive.x + drive.r;
-        final double rfPower = drive.y - drive.x - drive.r;
-        final double lbPower = drive.y - drive.x + drive.r;
-        final double rbPower = drive.y + drive.x - drive.r;
-        double highestPower = 1;
+    private void drive(Vector drive, double rotation) {
+        final double lfPower = drive.y + drive.x + rotation;
+        final double rfPower = -drive.y + drive.x + rotation;
+        final double lbPower = drive.y - drive.x + rotation;
+        final double rbPower = -drive.y - drive.x + rotation;
+        double highestPower = 0.8;
         final double max = Math.max(Math.abs(lfPower),
                 Math.max(Math.abs(lbPower), Math.max(Math.abs(rfPower), Math.abs(rbPower))));
         if (max > 1)
@@ -87,8 +90,7 @@ public class Drivetrain {
         anglePID.setWanted(wantedAngleAtArrival);
 
         while (true){
-            normalizedVector.r = anglePID.update(Angle.wrapAnglePlusMinusPI(Gyro.getAngle()));
-            operate(normalizedVector.scale(speed));
+            operate(normalizedVector.scale(speed), anglePID.update(Angle.wrapAnglePlusMinusPI(Gyro.getAngle())));
         }
     }
 }
