@@ -105,6 +105,7 @@ public class ConceptVuforiaDriveToTargetWebcam extends LinearOpMode
         // Start tracking targets in the background
         targetsPowerPlay.activate();
 
+
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
@@ -133,6 +134,7 @@ public class ConceptVuforiaDriveToTargetWebcam extends LinearOpMode
             // Look for first visible target, and save its pose.
             targetFound = false;
             for (VuforiaTrackable trackable : targetsPowerPlay)
+
             {
                 if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible())
                 {

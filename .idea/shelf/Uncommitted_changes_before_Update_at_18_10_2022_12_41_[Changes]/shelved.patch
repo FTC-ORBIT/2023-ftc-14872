@@ -1,0 +1,40 @@
+Index: TeamCode/src/main/java/org/firstinspires/ftc/teamcode/imageprocessing/contours.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.firstinspires.ftc.teamcode.imageprocessing;\r\n\r\nimport org.firstinspires.ftc.robotcore.external.Telemetry;\r\nimport org.opencv.core.Core;\r\nimport org.opencv.core.Mat;\r\nimport org.opencv.core.MatOfPoint;\r\nimport org.opencv.core.MatOfPoint2f;\r\nimport org.opencv.core.Point;\r\nimport org.opencv.core.Rect;\r\nimport org.opencv.core.Scalar;\r\nimport org.opencv.core.Size;\r\nimport org.opencv.imgproc.Imgproc;\r\nimport org.openftc.easyopencv.OpenCvPipeline;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\npublic class contours extends OpenCvPipeline {\r\n    //creates a telemetry\r\n    Telemetry telemetry;\r\n    //creates a material object\r\n    Mat mat = new Mat();\r\n    //sets the telemetry\r\n    public contours(Telemetry t) {\r\n        telemetry = t;\r\n    }\r\n    @Override\r\n    public Mat processFrame(Mat input) {\r\n        Mat mat = new Mat();\r\n        //turning image to binary image with the right settings\r\n        //binary = black & white image (the object is white)\r\n        //in this code we are turning the color yellow to white and else to black\r\n        Imgproc.cvtColor(input, mat, Imgproc.COLOR_RGB2HSV);\r\n        //blur (to remove noise)\r\n        Imgproc.blur(input, input, new Size(3, 3));\r\n        Scalar lowHSV = new Scalar(18 , 55 , 100);\r\n        Scalar highHSV = new Scalar(32, 255, 255);\r\n        Core.inRange(mat, lowHSV, highHSV, mat);\r\n        //list of contour points\r\n        List<MatOfPoint> contours = new ArrayList<>();\r\n        Mat hierarchy = new Mat();\r\n        //finding contours with a function from the openCV library\r\n        Imgproc.findContours(mat, contours, hierarchy , Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);\r\n        //draw contours\r\n        Imgproc.drawContours(input, contours, -1, new Scalar(255, 0, 0));\r\n        //framing all the requirements for the square\r\n        MatOfPoint2f[] contoursPoly  = new MatOfPoint2f[contours.size()];\r\n        //exports all of the contour vars to create a square (from the live pic)\r\n        Rect[] boundRect = new Rect[contours.size()];\r\n        Point[] centers = new Point[contours.size()];\r\n        float[][] radius = new float[contours.size()][1];\r\n        //searching for the right radius and center vector values\r\n        // (it turning the shape into many polygons and searching for the center and radius vectors) we will apply it later\r\n        for (int i = 0; i < contours.size(); i++) {\r\n            contoursPoly[i] = new MatOfPoint2f();\r\n            Imgproc.approxPolyDP(new MatOfPoint2f(contours.get(i).toArray()), contoursPoly[i], 3, true);\r\n            boundRect[i] = Imgproc.boundingRect(new MatOfPoint(contoursPoly[i].toArray()));\r\n            centers[i] = new Point();\r\n            Imgproc.minEnclosingCircle(contoursPoly[i], centers[i], radius[i]);\r\n        }\r\n        //drawing the actual square (it will show in white)\r\n        for (int i = 0; i < contours.size(); i++) {\r\n            Scalar color = new Scalar(255,255,255);\r\n            Imgproc.rectangle(input, boundRect[i].tl(), boundRect[i].br(), color, 2);\r\n        }\r\n\r\n        //find the largest contour prototype (by the size of the contour)\r\n        /*\r\n        double maxVal = 0;\r\n        int maxValIdx = 0;\r\n        for (int i = 0; i < contours.size(); i++) {\r\n            double contourArea = Imgproc.contourArea(contours.get(i));\r\n            if (maxVal < contourArea) {\r\n                maxVal = contourArea;\r\n                maxValIdx = i;\r\n            }\r\n        }\r\n        Imgproc.drawContours(input, contours, maxValIdx, new Scalar(0,255,0), 5);\r\n        */\r\n\r\n        return input;\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/imageprocessing/contours.java b/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/imageprocessing/contours.java
+--- a/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/imageprocessing/contours.java	(revision 83fb8ebc0e166e860fc394bf1e472f8b7c17809a)
++++ b/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/imageprocessing/contours.java	(date 1666086112157)
+@@ -44,7 +44,7 @@
+         //draw contours
+         Imgproc.drawContours(input, contours, -1, new Scalar(255, 0, 0));
+         //framing all the requirements for the square
+-        MatOfPoint2f[] contoursPoly  = new MatOfPoint2f[contours.size()];
++        MatOfPoint2f[] contoursPoly = new MatOfPoint2f[contours.size()];
+         //exports all of the contour vars to create a square (from the live pic)
+         Rect[] boundRect = new Rect[contours.size()];
+         Point[] centers = new Point[contours.size()];
+@@ -63,9 +63,8 @@
+             Scalar color = new Scalar(255,255,255);
+             Imgproc.rectangle(input, boundRect[i].tl(), boundRect[i].br(), color, 2);
+         }
+-
+         //find the largest contour prototype (by the size of the contour)
+-        /*
++
+         double maxVal = 0;
+         int maxValIdx = 0;
+         for (int i = 0; i < contours.size(); i++) {
+@@ -75,8 +74,8 @@
+                 maxValIdx = i;
+             }
+         }
++
+         Imgproc.drawContours(input, contours, maxValIdx, new Scalar(0,255,0), 5);
+-        */
+ 
+         return input;
+     }

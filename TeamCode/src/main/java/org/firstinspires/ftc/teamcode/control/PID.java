@@ -3,16 +3,16 @@ package org.firstinspires.ftc.teamcode.control;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 
-public abstract class PID {
-    private static final ElapsedTime timer = new ElapsedTime();
+public class PID {
     private final double kP;
     private final double kI;
     private final double kD;
     private final double iZone;
     private final double kF;
 
-    public double wanted = 0;
+    private double wanted = 0;
 
     private double integral = 0;
 
@@ -50,27 +50,20 @@ public abstract class PID {
      * @param current the current value
      * @return returns the controller output
      */
-    public double controllerOutput(double current) {
+    public double update(double current) {
         final double currentError = wanted - current;
-        final double currentTime = timer.milliseconds();
-        final double deltaTime = currentTime - prevTime;
 
         if (Math.signum(currentError) != Math.signum(prevError)){
             integral = 0;
         }else if (Math.abs(currentError) < iZone){
-            integral = integral + current * deltaTime;
+            integral = integral + currentError * GlobalData.deltaTime;
         }
 
-        double derivative = (current -  prevError) / deltaTime;
+        double derivative = (currentError -  prevError) / GlobalData.deltaTime;
 
         prevError = currentError;
-        prevTime = deltaTime;
 
         return currentError * kP + kF * wanted + derivative * kD + integral * kI;
     }
 
-    /**
-     * executes your controlled actions using pid
-     */
-    abstract void runPID();
 }
