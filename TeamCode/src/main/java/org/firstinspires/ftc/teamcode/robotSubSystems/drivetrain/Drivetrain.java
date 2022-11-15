@@ -81,16 +81,13 @@ public class Drivetrain {
         motors[2].setPower((lbPower / highestPower));
         motors[3].setPower((rbPower / highestPower));
     }
-    private final PID anglePID = new PID(0, 0, 0, 0, 0, 0);
     //TODO: add speed parameter and control
-    public void driveToPoint(Vector vector, double wantedAngleAtArrival, double speed) {
+    public void turn(double wantedAngle, double kp, double kd) {
+        PID anglePID = new PID(kp, 0, kd, 0, 0);
+        anglePID.setWanted(wantedAngle);
 
-        Vector normalizedVector = vector.unit();
-        double vectorAngle = vector.getAngle();
-        anglePID.setWanted(wantedAngleAtArrival);
-
-        while (true){
-            operate(normalizedVector.scale(speed), anglePID.update(Angle.wrapAnglePlusMinusPI(Gyro.getAngle())));
+        while (Math.abs(Gyro.getAngle()) < wantedAngle){
+            operate(Vector.zero(), anglePID.update(Gyro.getAngle()));
         }
     }
 }

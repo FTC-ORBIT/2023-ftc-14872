@@ -6,11 +6,11 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 
 public class PID {
-    private final double kP;
-    private final double kI;
-    private final double kD;
-    private final double iZone;
-    private final double kF;
+    private double kP;
+    private double kI;
+    private double kD;
+    private double iZone;
+    private double kF;
 
     private double wanted = 0;
 
@@ -26,15 +26,13 @@ public class PID {
      * @param kD multiples the differential value
      * @param kF multiples the wanted value
      * @param iZone the zone of values where i is used
-     * @param wanted the wanted value
      */
-    public PID(double kP,double kI, double kD, double kF, double iZone, double wanted) {
+    public PID(double kP,double kI, double kD, double kF, double iZone) {
         this.kP = kP;
         this.kI = kI;
         this.kD = kD;
         this.kF = kF;
         this.iZone = iZone;
-        this.wanted = wanted;
     }
 
     /**
@@ -56,10 +54,10 @@ public class PID {
         if (Math.signum(currentError) != Math.signum(prevError)){
             integral = 0;
         }else if (Math.abs(currentError) < iZone){
-            integral = integral + currentError * GlobalData.deltaTime;
+            integral = integral + currentError * GlobalData.epsilon;
         }
 
-        double derivative = (currentError -  prevError) / GlobalData.deltaTime;
+        double derivative = (currentError -  prevError) / GlobalData.epsilon;
 
         prevError = currentError;
 

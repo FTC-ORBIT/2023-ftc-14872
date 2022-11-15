@@ -21,12 +21,14 @@ public class TeleOp14872 extends LinearOpMode {
 
         Gyro.init(hardwareMap);
         drivetrain.init(hardwareMap);
-        GlobalData.isAutonomous = false;
+        //GlobalData.isAutonomous = false;
+        GlobalData.isAutonomous = true;
+
 
 
         waitForStart();
-
-        while (!isStopRequested()){
+        drivetrain.turn(90, 1,0);
+        /*while (!isStopRequested()){
             GlobalData.currentTime = timer.milliseconds();
             GlobalData.deltaTime = GlobalData.currentTime - GlobalData.lastTime;
 
@@ -36,6 +38,6 @@ public class TeleOp14872 extends LinearOpMode {
             GlobalData.lastTime = GlobalData.currentTime;
 
             telemetry.update();
-        }
+        }*/
     }
 }

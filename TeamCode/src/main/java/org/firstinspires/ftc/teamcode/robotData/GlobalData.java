@@ -9,4 +9,5 @@ public class GlobalData {
     public static double currentTime = 0;
     public static double lastTime = 0;
     public static double deltaTime = 0;
+    public static double epsilon = Double.MIN_VALUE;
 }
