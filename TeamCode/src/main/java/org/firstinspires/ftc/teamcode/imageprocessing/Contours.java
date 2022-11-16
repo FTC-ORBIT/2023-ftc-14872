@@ -68,18 +68,4 @@ public class Contours {
         Imgproc.circle(Pipeline.getMat(), center, 10, Constants.Red);
         return center;
     }
-
-    public static double getPixWidth(){
-        //creates an object
-        Contours objects = new Contours();
-        //create a contourPlay MatOfPoint3f array (not list) and a boundRect array
-        MatOfPoint2f[] contourPoly = new MatOfPoint2f[objects.contoursSize];
-        Rect[] boundRect = new Rect[objects.contoursSize];
-        //getting the largest contour corners (tl = top left & br = below right )
-        Imgproc.approxPolyDP(new MatOfPoint2f(objects.contours.get(objects.maxValIdxClone).toArray()),contourPoly[objects.maxValIdxClone],3,true);
-        boundRect[objects.maxValIdxClone] = Imgproc.boundingRect(new MatOfPoint(contourPoly[objects.maxValIdxClone]));
-        //calculating the contour width
-        double width = boundRect[objects.maxValIdxClone].br().y - boundRect[objects.maxValIdxClone].tl().y;
-        return width;
-    }
 }

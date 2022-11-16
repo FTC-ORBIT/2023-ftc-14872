@@ -21,4 +21,7 @@ public class Constants {
     public static Size BlurRadius = new Size(3,3);
     //camera
     public static OpenCvCamera camera;
+    //camera focal length can be 2072 too (needs a check)
+    public static double focalLength = 2080;
+    public static double realPoleWidth = 0;
 }
