@@ -18,7 +18,7 @@ public class Contours {
     //contours.size()
     int contoursSize;
     //just read the name
-    int maxValIdxClone;
+    public static int maxValIdxClone;
 
     public static List<MatOfPoint> getContour(Mat mat, Scalar lowHSV, Scalar highHSV){
         //creates an object
@@ -52,7 +52,7 @@ public class Contours {
             }
         }
         //setting up the cloned variable
-        objects.maxValIdxClone = maxValIdx;
+        maxValIdxClone = maxValIdx;
         return contours.get(maxValIdx);
     }
 

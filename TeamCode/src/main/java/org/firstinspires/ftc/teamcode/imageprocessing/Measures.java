@@ -6,17 +6,17 @@ import org.opencv.core.Rect;
 import org.opencv.imgproc.Imgproc;
 
 public class Measures {
-    public static double getPixWidth(){
+    public static double getPixWidth(MatOfPoint contour,int maxValIdx){
         //creates an object of Contours
         Contours objects = new Contours();
         //create a contourPlay MatOfPoint3f array (not list) and a boundRect array
-        MatOfPoint2f[] contourPoly = new MatOfPoint2f[objects.contoursSize];
-        Rect[] boundRect = new Rect[objects.contoursSize];
+        MatOfPoint2f contourPoly = new MatOfPoint2f();
+        Rect boundRect;
         //getting the largest contour corners (tl = top left & br = below right )
-        Imgproc.approxPolyDP(new MatOfPoint2f(objects.contours.get(objects.maxValIdxClone).toArray()),contourPoly[objects.maxValIdxClone],3,true);
-        boundRect[objects.maxValIdxClone] = Imgproc.boundingRect(new MatOfPoint(contourPoly[objects.maxValIdxClone]));
+        Imgproc.approxPolyDP(new MatOfPoint2f(contour.toArray()),contourPoly,3,true);
+        boundRect = Imgproc.boundingRect(new MatOfPoint(contourPoly));
         //calculating the contour width
-        double pixWidth = boundRect[objects.maxValIdxClone].br().y - boundRect[objects.maxValIdxClone].tl().y;
+        double pixWidth = boundRect.br().y - boundRect.tl().y;
         return pixWidth;
     }
     //i think its 9 pixels/mm

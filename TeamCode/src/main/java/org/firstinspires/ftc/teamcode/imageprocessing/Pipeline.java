@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.imageprocessing;
 
 import org.opencv.core.Mat;
+import org.opencv.core.Point;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
@@ -17,6 +18,8 @@ public class Pipeline extends OpenCvPipeline {
         //blur (to remove noise)
         Imgproc.blur(material, material, Constants.BlurRadius);
         //Calling findRodCenter function from the RodFinder class
+        String s = String.valueOf(Measures.distFromObj(Measures.getPixWidth(Contours.getBiggestContour(Contours.getContour(Pipeline.getClonedMat(), Constants.lowHSV, Constants.highHSV)),Contours.maxValIdxClone)));
+        Imgproc.putText(input,s,new Point(0,0),4,4,Constants.Green);
         RodDetector.findRodCenter();
         return material;
     }
