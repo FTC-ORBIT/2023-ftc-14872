@@ -21,23 +21,27 @@ public class TeleOp14872 extends LinearOpMode {
 
         Gyro.init(hardwareMap);
         drivetrain.init(hardwareMap);
-        //GlobalData.isAutonomous = false;
-        GlobalData.isAutonomous = true;
+        GlobalData.isAutonomous = false;
 
 
 
         waitForStart();
-        drivetrain.turn(90, 1,0);
-        /*while (!isStopRequested()){
+
+        while (!isStopRequested()){
+
+
             GlobalData.currentTime = timer.milliseconds();
             GlobalData.deltaTime = GlobalData.currentTime - GlobalData.lastTime;
 
             if(gamepad1.right_bumper) {Gyro.resetGyro();}
-            drivetrain.operate(new Vector(gamepad1.left_stick_x, gamepad1.left_stick_y), gamepad1.left_trigger - gamepad1.right_trigger);
+            drivetrain.operate(new Vector(gamepad1.left_stick_x, -gamepad1.left_stick_y), gamepad1.right_trigger - gamepad1.left_trigger);
 
             GlobalData.lastTime = GlobalData.currentTime;
 
+            telemetry.addData("x value", gamepad1.left_stick_x);
+            telemetry.addData("y value", gamepad1.left_stick_y);
+            telemetry.addData("rotation value", gamepad1.right_trigger - gamepad1.left_trigger);
             telemetry.update();
-        }*/
+        }
     }
 }

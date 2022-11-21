@@ -31,8 +31,7 @@ public class Drivetrain {
     }
     public void operate(Vector velocity_W, double rotation) {
         final double robotAngle = Math.toRadians(Gyro.getAngle());
-        //TODO: check if you need to insert the inverse angle into rotation function
-        drive(velocity_W.rotate(robotAngle), rotation);
+        drive(velocity_W.rotate(-robotAngle), rotation);
     }
 
     //TODO: make usable
@@ -68,18 +67,15 @@ public class Drivetrain {
 
     private void drive(Vector drive, double rotation) {
         final double lfPower = drive.y + drive.x + rotation;
-        final double rfPower = -drive.y + drive.x + rotation;
+        final double rfPower = drive.y - drive.x - rotation;
         final double lbPower = drive.y - drive.x + rotation;
-        final double rbPower = -drive.y - drive.x + rotation;
-        double highestPower = 0.8;
-        final double max = Math.max(Math.abs(lfPower),
-                Math.max(Math.abs(lbPower), Math.max(Math.abs(rfPower), Math.abs(rbPower))));
-        if (max > 1)
-            highestPower = max;
-        motors[0].setPower((lfPower / highestPower));
-        motors[1].setPower((rfPower / highestPower));
-        motors[2].setPower((lbPower / highestPower));
-        motors[3].setPower((rbPower / highestPower));
+        final double rbPower = drive.y + drive.x - rotation;
+        final double max = Math.max(1,Math.max(Math.abs(lfPower),
+                Math.max(Math.abs(lbPower), Math.max(Math.abs(rfPower), Math.abs(rbPower)))));
+        motors[0].setPower((lfPower / max));
+        motors[1].setPower((rfPower / max));
+        motors[2].setPower((lbPower / max));
+        motors[3].setPower((rbPower / max));
     }
     //TODO: add speed parameter and control
     public void turn(double wantedAngle, double kp, double kd) {
