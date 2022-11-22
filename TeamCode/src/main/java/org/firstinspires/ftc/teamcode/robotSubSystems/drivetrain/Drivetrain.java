@@ -77,13 +77,29 @@ public class Drivetrain {
         motors[2].setPower((lbPower / max));
         motors[3].setPower((rbPower / max));
     }
-    //TODO: add speed parameter and control
+
     public void turn(double wantedAngle, double kp, double kd) {
         PID anglePID = new PID(kp, 0, kd, 0, 0);
         anglePID.setWanted(wantedAngle);
 
         while (Math.abs(Gyro.getAngle()) < wantedAngle){
             operate(Vector.zero(), anglePID.update(Gyro.getAngle()));
+        }
+    }
+
+    public double avrgWheelPosInCM() {
+        double sum = 0;
+        for(DcMotor motor : motors) {
+            sum += motor.getCurrentPosition();
+        }
+        return (sum / motors.length) * DrivetrainConstants.ticksToCM;
+    }
+
+    public void goTo(Vector xY) {
+        double maxXY = Math.max(Math.max(xY.x,xY.y),1);
+        double dist = Math.sqrt(Math.pow(xY.x,2) + Math.pow(xY.y,2));
+        while() {
+            operate(xY.scale(1/maxXY),0);
         }
     }
 }

@@ -32,7 +32,6 @@ public class TeleOp14872 extends LinearOpMode {
 
             GlobalData.currentTime = timer.milliseconds();
             GlobalData.deltaTime = GlobalData.currentTime - GlobalData.lastTime;
-
             if(gamepad1.right_bumper) {Gyro.resetGyro();}
             drivetrain.operate(new Vector(gamepad1.left_stick_x, -gamepad1.left_stick_y), gamepad1.right_trigger - gamepad1.left_trigger);
 
