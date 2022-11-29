@@ -6,9 +6,11 @@ public class RodDetector {
         //Calls the getCenter function from the Contours class (to find the biggest contour's center)
         Contours.getCenter(
                 //Calls the getBiggestContour function from the Contours class (to find the biggest contour)
-                Contours.getBiggestContour(
+                Contours.contourPolyList(
+                    Contours.getBiggestContour(
                         //Calls the getContour function from the Contours class and assigning its values
-                        Contours.getContour(Pipeline.getClonedMat(), Constants.lowHSV, Constants.highHSV)
+                            Contours.getContour(Pipeline.getClonedMat(), Constants.lowHSV, Constants.highHSV)
+                    )
                 )
         );
     }

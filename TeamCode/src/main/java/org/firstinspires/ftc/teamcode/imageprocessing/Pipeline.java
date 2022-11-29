@@ -5,6 +5,8 @@ import org.opencv.core.Point;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
+import java.io.PipedWriter;
+
 public class Pipeline extends OpenCvPipeline {
     //Creates a static Mat variable
     private static Mat material;
@@ -18,8 +20,16 @@ public class Pipeline extends OpenCvPipeline {
         //blur (to remove noise)
         Imgproc.blur(material, material, Constants.BlurRadius);
         //Calling findRodCenter function from the RodFinder class
-        String s = String.valueOf(Measures.distFromObj(Measures.getPixWidth(Contours.getBiggestContour(Contours.getContour(Pipeline.getClonedMat(), Constants.lowHSV, Constants.highHSV)),Contours.maxValIdxClone)));
-        Imgproc.putText(input,s,new Point(0,0),4,4,Constants.Green);
+        /*
+        String s = String.valueOf(Measures.distFromObj(
+                Measures.getPixWidth(Contours.contourPolyList(
+                        Contours.getBiggestContour(
+                                Contours.getContour(Pipeline.getClonedMat(), Constants.lowHSV, Constants.highHSV)
+                        )
+                ))));
+
+         */
+        //Imgproc.putText(input,s,new Point(0,0),4,4,Constants.Green);
         RodDetector.findRodCenter();
         return material;
     }

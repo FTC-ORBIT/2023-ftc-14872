@@ -6,14 +6,12 @@ import org.opencv.core.Rect;
 import org.opencv.imgproc.Imgproc;
 
 public class Measures {
-    public static double getPixWidth(MatOfPoint contour,int maxValIdx){
+    public static double getPixWidth(MatOfPoint2f contourPoly){
         //creates an object of Contours
         Contours objects = new Contours();
         //create a contourPlay MatOfPoint3f array (not list) and a boundRect array
-        MatOfPoint2f contourPoly = new MatOfPoint2f();
         Rect boundRect;
         //getting the largest contour corners (tl = top left & br = below right )
-        Imgproc.approxPolyDP(new MatOfPoint2f(contour.toArray()),contourPoly,3,true);
         boundRect = Imgproc.boundingRect(new MatOfPoint(contourPoly));
         //calculating the contour width
         double pixWidth = boundRect.br().y - boundRect.tl().y;

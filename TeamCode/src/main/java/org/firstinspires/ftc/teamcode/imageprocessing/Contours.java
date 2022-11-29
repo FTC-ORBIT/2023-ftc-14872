@@ -25,7 +25,7 @@ public class Contours {
         Contours objects = new Contours();
         Core.inRange(mat, lowHSV, highHSV, mat);
         //List of contour points
-        //List<MatOfPoint> contours = new ArrayList<>();                                  (don't mind that)
+        //List<MatOfPoint> contours = new Arra  yList<>();                                  (don't mind that)
         //Creates a hierarchy Mat object
         Mat hierarchy = new Mat();
         //finding contours with a function from the openCV library
@@ -56,11 +56,7 @@ public class Contours {
         return contours.get(maxValIdx);
     }
 
-    public static Point getCenter(MatOfPoint contour){
-        if (contour.empty()){return null;} //Checks if the contour list is empty or not
-        MatOfPoint2f contourPoly = new MatOfPoint2f();
-        //Gets all of the polygonal curves on the contour and puts them on to a list of Mat Points
-        Imgproc.approxPolyDP(new MatOfPoint2f(contour.toArray()), contourPoly, 3, true);
+    public static Point getCenter(MatOfPoint2f contourPoly){
         Point center = new Point();
         //Finds a circle of the minimum area enclosing a 2D point set (the minimum enclosing circle of a contour)
         Imgproc.minEnclosingCircle(contourPoly, center, new float[1]);
@@ -68,4 +64,13 @@ public class Contours {
         Imgproc.circle(Pipeline.getMat(), center, 10, Constants.Red);
         return center;
     }
+
+    public static MatOfPoint2f contourPolyList(MatOfPoint contour) {
+        if (contour.empty()){return null;} //Checks if the contour list is empty or not
+        MatOfPoint2f contourPoly = new MatOfPoint2f();
+        //Gets all of the polygonal curves on the contour and puts them on to a list of Mat Points
+        Imgproc.approxPolyDP(new MatOfPoint2f(contour.toArray()), contourPoly, 3, true);
+        return contourPoly;
+    }
+
 }

@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.imageprocessing.Constants;
 import org.firstinspires.ftc.teamcode.imageprocessing.Measures;
+import org.firstinspires.ftc.teamcode.imageprocessing.Pipeline;
 import org.firstinspires.ftc.teamcode.robotSubSystems.camera.Camera;
 import org.opencv.imgproc.Imgproc;
 
@@ -15,6 +16,9 @@ public class Autonomous14872 extends LinearOpMode {
     public void runOpMode() {
         //Camera.init function
         Camera.init(hardwareMap);
+        while (true) {
+            if (Pipeline.getMat() != null) break;
+        }
         waitForStart();
         //FTC dashboard init
         while (opModeIsActive()) { FtcDashboard.getInstance().startCameraStream(Constants.camera,60); }
