@@ -31,7 +31,7 @@ public class Drivetrain {
     }
     public void operate(Vector velocity_W, double rotation) {
         final double robotAngle = Math.toRadians(Gyro.getAngle());
-        drive(velocity_W.rotate(-robotAngle), rotation);
+        drive(velocity_W.rotate(-robotAngle), -rotation);
     }
 
     //TODO: make usable
@@ -98,7 +98,7 @@ public class Drivetrain {
     public void goTo(Vector xY) {
         double maxXY = Math.max(Math.max(xY.x,xY.y),1);
         double dist = Math.sqrt(Math.pow(xY.x,2) + Math.pow(xY.y,2));
-        while() {
+        while(true) {
             operate(xY.scale(1/maxXY),0);
         }
     }
