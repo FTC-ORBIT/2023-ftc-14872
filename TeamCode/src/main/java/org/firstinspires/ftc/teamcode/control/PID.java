@@ -6,6 +6,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 
 public class PID {
+    private double time = System.currentTimeMillis();
     private double kP;
     private double kI;
     private double kD;
@@ -17,7 +18,7 @@ public class PID {
     private double integral = 0;
 
     private double prevError = 0;
-    private double prevTime = 0;
+    private double prevTime = System.currentTimeMillis();
 
     /**
      * all of the pid values
@@ -50,17 +51,18 @@ public class PID {
      */
     public double update(double current) {
         final double currentError = wanted - current;
-
+        double currentTime = System.currentTimeMillis();
+        double deltaTime = currentTime - prevTime - 2 * GlobalData.epsilon;
         if (Math.signum(currentError) != Math.signum(prevError)){
             integral = 0;
         }else if (Math.abs(currentError) < iZone){
-            integral = integral + currentError * GlobalData.epsilon;
+            integral = integral + currentError * deltaTime;
         }
 
-        double derivative = (currentError -  prevError) / GlobalData.epsilon;
+        double derivative = (currentError -  prevError) / deltaTime;
 
         prevError = currentError;
-
+        prevTime = currentTime;
         return currentError * kP + kF * wanted + derivative * kD + integral * kI;
     }
 

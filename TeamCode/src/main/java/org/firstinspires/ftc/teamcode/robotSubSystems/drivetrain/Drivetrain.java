@@ -34,8 +34,8 @@ public class Drivetrain {
         drive(velocity_W.rotate(-robotAngle), -rotation);
     }
 
-    //TODO: make usable
-    /*
+
+
     private double[] wheelsPrevPosCm = new double[4];
     private double[] wheelsCurrentSpeedCm = new double[4];
     public Vector getVelocity_FieldCS() {
@@ -49,16 +49,6 @@ public class Drivetrain {
         return velocityField;
     }
 
-    public Vector getAcceleration() {
-        Vector currentVelocity = getVelocity_FieldCS();
-
-        Vector deltaVelocity = currentVelocity.subtract(lastVelocity);
-        Vector acceleration = deltaVelocity.scale(1 / GlobalData.deltaTime);
-
-        lastVelocity = currentVelocity;
-        return acceleration;
-    }
-    */
     public void stop() {
         for (DcMotor motor : motors) {
             motor.setPower(0);
@@ -82,7 +72,7 @@ public class Drivetrain {
         PID anglePID = new PID(kp, 0, kd, 0, 0);
         anglePID.setWanted(wantedAngle);
 
-        while (Math.abs(Gyro.getAngle()) < wantedAngle){
+        while (Math.abs(Gyro.getAngle()) < Math.abs(wantedAngle)) {
             operate(Vector.zero(), anglePID.update(Gyro.getAngle()));
         }
     }
@@ -98,8 +88,8 @@ public class Drivetrain {
     public void goTo(Vector xY) {
         double maxXY = Math.max(Math.max(xY.x,xY.y),1);
         double dist = Math.sqrt(Math.pow(xY.x,2) + Math.pow(xY.y,2));
-        while(true) {
-            operate(xY.scale(1/maxXY),0);
-        }
+        double angle = Math.atan2(xY.x,xY.y);
+        turn(angle,0.5,0);
+
     }
 }
