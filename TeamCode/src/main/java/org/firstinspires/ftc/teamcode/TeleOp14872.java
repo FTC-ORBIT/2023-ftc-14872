@@ -3,10 +3,13 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.control.PID;
 import org.firstinspires.ftc.teamcode.res.Gyro;
+import org.firstinspires.ftc.teamcode.robotData.Constants;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.Drivetrain;
 import org.firstinspires.ftc.teamcode.utils.Vector;
@@ -24,7 +27,7 @@ public class TeleOp14872 extends LinearOpMode {
         drivetrain.init(hardwareMap);
         GlobalData.isAutonomous = false;
         //Servo servo = hardwareMap.get(Servo.class, "servoArm");
-
+        DcMotor motor = hardwareMap.get(DcMotor.class, "elevator");
 
         waitForStart();
 
@@ -35,16 +38,16 @@ public class TeleOp14872 extends LinearOpMode {
             drivetrain.operate(new Vector(gamepad1.left_stick_x, -gamepad1.left_stick_y), gamepad1.left_trigger - gamepad1.right_trigger);
 
             GlobalData.lastTime = GlobalData.currentTime;
-            if (gamepad1.right_bumper) {servo.setPosition(90);}
-            if (gamepad1.left_bumper) {servo.setPosition(0);}
-            if (gamepad1.dpad_up) { Gyro.resetGyro();}
+            /*if (gamepad1.right_bumper) {servo.setPosition(90);}
+            if (gamepad1.left_bumper) {servo.setPosition(0);}*/
+            /*if (gamepad1.dpad_up) { Gyro.resetGyro();}
 
             telemetry.addData("x value", gamepad1.left_stick_x);
             telemetry.addData("y value", gamepad1.left_stick_y);
             telemetry.addData("rotation value", gamepad1.right_trigger - gamepad1.left_trigger);
             telemetry.update();*/
-            drivetrain.turn(-90,0.1,0);
-            stop();
+            drivetrain.driveStraight(50, 1, 0);
+
         }
     }
 }

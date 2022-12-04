@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.control.PID;
 import org.firstinspires.ftc.teamcode.res.Gyro;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
@@ -21,8 +22,8 @@ public class Drivetrain {
     public void init(HardwareMap hardwareMap) {
         //if (GlobalData.isAutonomous) drive = new SampleMecanumDrive(hardwareMap);
         motors[0] = hardwareMap.get(DcMotor.class, "lf");
-        motors[1] = hardwareMap.get(DcMotor.class, "rf");
-        motors[2] = hardwareMap.get(DcMotor.class, "lb");
+        motors[1] = hardwareMap.get(DcMotor.class, "lb");
+        motors[2] = hardwareMap.get(DcMotor.class, "rf");
         motors[3] = hardwareMap.get(DcMotor.class, "rb");
 
         for (final DcMotor motor : motors) {
@@ -71,11 +72,21 @@ public class Drivetrain {
     public void turn(double wantedAngle, double kp, double kd) {
         PID anglePID = new PID(kp, 0, kd, 0, 0);
         anglePID.setWanted(wantedAngle);
-
-        while (Math.abs(Gyro.getAngle()) < Math.abs(wantedAngle)) {
+        while (Math.abs(Gyro.getAngle()) <= Math.abs(wantedAngle)) {
             operate(Vector.zero(), anglePID.update(Gyro.getAngle()));
         }
     }
+
+    public void driveStraight(double dist, double kp, double kd) {
+        double avrgWheelPosStart = avrgWheelPosInCM();
+        PID straightPID = new PID(kp, 0, kd, 0, 0);
+        straightPID.setWanted(dist);
+        while (Math.abs(avrgWheelPosInCM() - avrgWheelPosStart) <= Math.abs(dist)) {
+            operate(new Vector(0,0.01) , straightPID.update(wheelRatio()));
+        }
+    }
+
+
 
     public double avrgWheelPosInCM() {
         double sum = 0;
@@ -85,11 +96,22 @@ public class Drivetrain {
         return (sum / motors.length) * DrivetrainConstants.ticksToCM;
     }
 
+    public double wheelRatio() {
+        double sum = 0;
+        for(int i = 0; i < motors.length / 2; i++) {
+            sum += motors[i].getCurrentPosition();
+        }
+        for(int i = 2; i < motors.length; i++) {
+            sum -= motors[i].getCurrentPosition();
+        }
+        return (sum / 2) * DrivetrainConstants.ticksToCM;
+    }
+
     public void goTo(Vector xY) {
         double maxXY = Math.max(Math.max(xY.x,xY.y),1);
         double dist = Math.sqrt(Math.pow(xY.x,2) + Math.pow(xY.y,2));
         double angle = Math.atan2(xY.x,xY.y);
-        turn(angle,0.5,0);
+        turn(angle,0.021,0.77);
 
     }
 }
