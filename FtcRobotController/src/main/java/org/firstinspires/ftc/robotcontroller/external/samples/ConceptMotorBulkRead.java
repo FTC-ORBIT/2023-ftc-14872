@@ -46,7 +46,6 @@ import java.util.List;
 
         Three scenarios are tested:
         Cache Mode = OFF    This is the normal default, where no cache is used, and every read produces a discrete transaction with
-
                             an expansion hub, which is the slowest approach, but guarentees that the value is as fresh (recent) as possible..
 
         Cache Mode = AUTO   This mode will attempt to minimize the number of discrete read commands, by performing bulk-reads
@@ -69,7 +68,6 @@ import java.util.List;
 
         No matter what method you use to read encoders and other inputs, you should try to
         avoid reading the same encoder input multiple times around a control loop.
-
         Under normal conditions, this will slow down the control loop.
         The preferred method is to read all the required inputs ONCE at the beginning of the loop,
         and save the values in variable that can be used by other parts of the control code.

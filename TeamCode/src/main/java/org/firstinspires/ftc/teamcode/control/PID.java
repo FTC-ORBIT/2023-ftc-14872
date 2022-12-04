@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode.control;
 
-import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 
 public class PID {
