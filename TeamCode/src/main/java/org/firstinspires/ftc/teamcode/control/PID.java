@@ -15,7 +15,6 @@ public class PID {
     private double wanted = 0;
 
     private double integral = 0;
-
     private double prevError = 0;
     private double prevTime = 0;
 
