@@ -20,17 +20,7 @@ public class Pipeline extends OpenCvPipeline {
         //blur (to remove noise)
         Imgproc.blur(material, material, Constants.BlurRadius);
         //Calling findRodCenter function from the RodFinder class
-        /*
-        String s = String.valueOf(Measures.distFromObj(
-                Measures.getPixWidth(Contours.contourPolyList(
-                        Contours.getBiggestContour(
-                                Contours.getContour(Pipeline.getClonedMat(), Constants.lowHSV, Constants.highHSV)
-                        )
-                ))));
-
-         */
-        //Imgproc.putText(input,s,new Point(0,0),4,4,Constants.Green);
-        RodDetector.findRodCenter();
+        //RodDetector.findRodCenter();
         return material;
     }
     //Cloning the material (input)

@@ -7,7 +7,7 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
 
-public class Constants {
+public final class Constants {
     //HSV constants
     public static Scalar lowHSV = new Scalar(18 , 100 , 100);
     public static Scalar highHSV = new Scalar(34 , 255 , 255);
