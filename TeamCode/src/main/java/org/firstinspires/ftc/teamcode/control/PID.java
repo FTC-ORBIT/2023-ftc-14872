@@ -52,7 +52,7 @@ public class PID {
     public double update(double current) {
         final double currentError = wanted - current;
         double currentTime = System.currentTimeMillis();
-        double deltaTime = currentTime - prevTime - 2 * GlobalData.epsilon;
+        double deltaTime = 200 * GlobalData.epsilon;
         if (Math.signum(currentError) != Math.signum(prevError)){
             integral = 0;
         }else if (Math.abs(currentError) < iZone){

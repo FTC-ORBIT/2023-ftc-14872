@@ -46,7 +46,7 @@ public class TeleOp14872 extends LinearOpMode {
             telemetry.addData("y value", gamepad1.left_stick_y);
             telemetry.addData("rotation value", gamepad1.right_trigger - gamepad1.left_trigger);
             telemetry.update();*/
-            drivetrain.driveStraight(50, 1, 0);
+            drivetrain.driveStraight(50, true);
 
         }
     }

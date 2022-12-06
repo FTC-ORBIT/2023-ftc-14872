@@ -77,12 +77,16 @@ public class Drivetrain {
         }
     }
 
-    public void driveStraight(double dist, double kp, double kd) {
-        double avrgWheelPosStart = avrgWheelPosInCM();
-        PID straightPID = new PID(kp, 0, kd, 0, 0);
-        straightPID.setWanted(dist);
-        while (Math.abs(avrgWheelPosInCM() - avrgWheelPosStart) <= Math.abs(dist)) {
-            operate(new Vector(0,0.01) , straightPID.update(wheelRatio()));
+    public void driveStraight(double distInCM, boolean forward) {
+        double beginPosition = avrgWheelPosInCM();
+        if(forward) {
+            while(avrgWheelPosInCM() <= beginPosition + distInCM && avrgWheelPosInCM() >= beginPosition - 1) {
+                operate(new Vector(0,0.5), 0);
+            }
+        } else {
+            while(avrgWheelPosInCM() >= beginPosition + distInCM && avrgWheelPosInCM() <= beginPosition - 1) {
+                operate(new Vector(0,-0.5), 0);
+            }
         }
     }
 
@@ -110,8 +114,9 @@ public class Drivetrain {
     public void goTo(Vector xY) {
         double maxXY = Math.max(Math.max(xY.x,xY.y),1);
         double dist = Math.sqrt(Math.pow(xY.x,2) + Math.pow(xY.y,2));
-        double angle = Math.atan2(xY.x,xY.y);
+        double angle = Angle.wrapAnglePlusMinusPI(Math.atan2(xY.x,xY.y));
         turn(angle,0.021,0.77);
+        driveStraight(dist, true);
 
     }
 }
