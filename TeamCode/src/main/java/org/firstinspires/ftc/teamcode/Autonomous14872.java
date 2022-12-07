@@ -21,6 +21,7 @@ public class Autonomous14872 extends LinearOpMode {
         while (true) {
             if (Pipeline.getMat() != null) break;
         }
+
         waitForStart();
         //FTC dashboard init
         while (opModeIsActive()) {
