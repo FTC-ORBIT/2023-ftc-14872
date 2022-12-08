@@ -17,7 +17,8 @@ public class Pipeline extends OpenCvPipeline {
         //blur (to remove noise)
         Imgproc.blur(material, material, Constants.BlurRadius);
         //Calling findRodCenter function from the RodFinder class
-        RodDetector.findRodCenter();
+        //RodDetector.findRodCenter();
+        Contours.distance();
         return material;
     }
     //Cloning the material (input)
