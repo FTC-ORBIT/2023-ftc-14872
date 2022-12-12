@@ -27,26 +27,29 @@ public class TeleOp14872 extends LinearOpMode {
         drivetrain.init(hardwareMap);
         GlobalData.isAutonomous = false;
         //Servo servo = hardwareMap.get(Servo.class, "servoArm");
-        DcMotor motor = hardwareMap.get(DcMotor.class, "elevator");
+        //DcMotor motor = hardwareMap.get(DcMotor.class, "elevator");
 
         waitForStart();
 
         while (!isStopRequested()){
-            /*GlobalData.currentTime = timer.milliseconds();
+            GlobalData.currentTime = timer.milliseconds();
             GlobalData.deltaTime = GlobalData.currentTime - GlobalData.lastTime;
             if(gamepad1.right_bumper) {Gyro.resetGyro();}
-            drivetrain.operate(new Vector(gamepad1.left_stick_x, -gamepad1.left_stick_y), gamepad1.left_trigger - gamepad1.right_trigger);
+            drivetrain.operate(new Vector(gamepad1.left_stick_x, gamepad1.left_stick_y), gamepad1.left_trigger - gamepad1.right_trigger);
 
             GlobalData.lastTime = GlobalData.currentTime;
             /*if (gamepad1.right_bumper) {servo.setPosition(90);}
             if (gamepad1.left_bumper) {servo.setPosition(0);}*/
-            /*if (gamepad1.dpad_up) { Gyro.resetGyro();}
+            if (gamepad1.dpad_up) { Gyro.resetGyro();}
 
             telemetry.addData("x value", gamepad1.left_stick_x);
             telemetry.addData("y value", gamepad1.left_stick_y);
             telemetry.addData("rotation value", gamepad1.right_trigger - gamepad1.left_trigger);
-            telemetry.update();*/
-            drivetrain.driveStraight(50, true);
+            telemetry.addData("robot angle", Gyro.getAngle());
+            telemetry.update();
+            if (gamepad1.a) {
+                drivetrain.turn(90, 1, 0);
+            }
 
         }
     }

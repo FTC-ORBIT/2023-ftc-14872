@@ -31,8 +31,8 @@ public class Drivetrain {
         }
     }
     public void operate(Vector velocity_W, double rotation) {
-        final double robotAngle = Math.toRadians(Gyro.getAngle());
-        drive(velocity_W.rotate(-robotAngle), -rotation);
+        final double robotAngle = Angle.wrapAnglePlusMinusPI(Math.toRadians(Gyro.getAngle()) + Math.PI/2);
+        drive(velocity_W.rotate(robotAngle), -rotation);
     }
 
 
