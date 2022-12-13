@@ -2,16 +2,13 @@ package org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain;
 
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.control.PID;
 import org.firstinspires.ftc.teamcode.res.Gyro;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 import org.firstinspires.ftc.teamcode.utils.Angle;
-import org.firstinspires.ftc.teamcode.utils.MathFuncs;
 import org.firstinspires.ftc.teamcode.utils.Vector;
 
 public class Drivetrain {
@@ -77,27 +74,21 @@ public class Drivetrain {
         }
     }
 
-    public void driveStraight(double distInCM, boolean forward) {
-        double beginPosition = avrgWheelPosInCM();
-        if(forward) {
-            while(avrgWheelPosInCM() <= beginPosition + distInCM && avrgWheelPosInCM() >= beginPosition - 1) {
-                operate(new Vector(0,0.5), 0);
-            }
-        } else {
-            while(avrgWheelPosInCM() >= beginPosition + distInCM && avrgWheelPosInCM() <= beginPosition - 1) {
-                operate(new Vector(0,-0.5), 0);
-            }
+    public void driveToDirection(double distInCM, double angle) {
+        double beginPosition = avgWheelPosInCM();
+        Vector vector = new Vector(0, 1);
+        vector.rotate(angle);
+
+        while(beginPosition + distInCM - 1 <= avgWheelPosInCM() + distInCM && beginPosition + distInCM + 1 >= avgWheelPosInCM() + distInCM ) {
+            //TODO: add angle control
+            operate(vector, 0);
         }
     }
 
 
 
-    public double avrgWheelPosInCM() {
-        double sum = 0;
-        for(DcMotor motor : motors) {
-            sum += motor.getCurrentPosition();
-        }
-        return (sum / motors.length) * DrivetrainConstants.ticksToCM;
+    public double avgWheelPosInCM(){
+        return Math.pow((wheelsCurrentSpeedCm[2] + wheelsCurrentSpeedCm[1] - wheelsCurrentSpeedCm[0] - wheelsCurrentSpeedCm[3]) / 4, 2) + Math.pow((wheelsCurrentSpeedCm[2] + wheelsCurrentSpeedCm[1] + wheelsCurrentSpeedCm[0] + wheelsCurrentSpeedCm[3]) / 4, 2);
     }
 
     public double wheelRatio() {
@@ -116,7 +107,7 @@ public class Drivetrain {
         double dist = Math.sqrt(Math.pow(xY.x,2) + Math.pow(xY.y,2));
         double angle = Angle.wrapAnglePlusMinusPI(Math.atan2(xY.x,xY.y));
         turn(angle,0.021,0.77);
-        driveStraight(dist, true);
+        driveToDirection(dist, 0);
 
     }
 }
