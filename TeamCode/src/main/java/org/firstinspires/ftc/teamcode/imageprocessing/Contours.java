@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.imageprocessing;
 
-import android.util.Pair;
-
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -10,9 +8,7 @@ import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Contours {
     public static List<MatOfPoint> getContour(Mat mat, Scalar lowHSV, Scalar highHSV){
@@ -26,7 +22,7 @@ public class Contours {
         //finding contours with a function from the openCV library
         Imgproc.findContours(mat, contours, hierarchy , Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
         //Drawing contours with a function from the openCV library
-        Imgproc.drawContours(Pipeline.getMat(), contours, -1, Constants.Red, 5);
+        Imgproc.drawContours(mat, contours, -1, Constants.Red, 5);
         return contours;
     }
 
@@ -47,30 +43,32 @@ public class Contours {
         return contours.get(maxValIdx);
     }
 
-    public static Pair<Point,Double> getCenter(MatOfPoint contour){
+    public static List<Object> getCenter(MatOfPoint contour){
         if (contour.empty()){return null;} //Checks if the contour list is empty or not
         MatOfPoint2f contourPoly = new MatOfPoint2f();
         //Gets all of the polygonal curves on the contour and puts them on to a list of Mat Points
         Imgproc.approxPolyDP(new MatOfPoint2f(contour.toArray()), contourPoly, 3, true);
         Point center = new Point();
-        Rect[] boundRect = new Rect[1];
-        boundRect[1] = Imgproc.boundingRect(new MatOfPoint2f(contourPoly));
-        double pixWidth = boundRect[1].br().x - boundRect[1].tl().x;
+        Rect boundRect;
+        boundRect = Imgproc.boundingRect(Pipeline.getMat());
+        //boundRect.br().x - boundRect.tl().x
+        double pixWidth = 11;
         //Finds a circle of the minimum area enclosing a 2D point set (the minimum enclosing circle of a contour)
         Imgproc.minEnclosingCircle(contourPoly, center, new float[1]);
         //Drawing a circle on the center of the contour
         Imgproc.circle(Pipeline.getMat(), center, 10, Constants.Red);
-        return new Pair<Point,Double>(center,pixWidth);
+        return Arrays.asList(center,pixWidth);
     }
     public static double distance() {
-        Pair<Point, Double> pair = Contours.getCenter(
+        List<Object> ppppp = Contours.getCenter(
                         //Calls the getBiggestContour function from the Contours class (to find the biggest contour)
                         Contours.getBiggestContour(
                                 //Calls the getContour function from the Contours class and assigning its values
-                                Contours.getContour(Pipeline.getClonedMat(), Constants.lowHSV, Constants.highHSV)
+                                Contours.getContour(Pipeline.getMat(), Constants.lowHSV, Constants.highHSV)
                         )
         );
-        //double pixWidth = pair.second;
+        List<Object> pixWidth = ppppp;
+        System.out.println(pixWidth);
         double constants = 26.6 * 2080;
         //double distance = constants / pixWidth;
         return constants;
