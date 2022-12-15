@@ -1,78 +1,58 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.elevator;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
-
-import android.widget.Switch;
-
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
 public class Elevator {
-    public static DcMotor elevatorMotor;
+    private static DcMotor elevMotor;
 
     public static void init(HardwareMap hardwareMap){
-        elevatorMotor = hardwareMap.get(DcMotor.class, "elevatorMotor");
-        elevatorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        elevatorMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        elevatorMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        elevMotor = hardwareMap.get(DcMotor.class, "elevMotor");
+        elevMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        elevMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        elevMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
-    public static void operate(boolean level1, boolean level2, boolean level3,int level) {
-        if(level == 1) {
-            //in ticks 1645
-            elevatorMotor.setTargetPosition(1750);
-            elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        }
-        else if(level == 2) {
-            //in ticks
-            elevatorMotor.setTargetPosition(2865);
-            elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        }
-        else if(level == 3) {
-            //in ticks
-            elevatorMotor.setTargetPosition(4085);
-            elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        }
-        else{
-            elevatorMotor.setTargetPosition(0);
-            elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    public static void operate(boolean level1Btn, boolean level2Btn, boolean level3Btn) {
+
+        if( level(level1Btn,level2Btn,level3Btn ) == 1) {
+            goToPosition(elevMotor,1645);
+            Claw.openClaw();
+            off();
         }
 
-        /*
-        switch (level) {
-            case 1:
-                //in ticks
-                elevatorMotor.setTargetPosition(1654);
-                elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                break;
-            case 2:
-                //in ticks
-                elevatorMotor.setTargetPosition(2865);
-                elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                break;
-            case 3:
-                elevatorMotor.setTargetPosition(4085);
-                elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                break;
-            //default:
-                //elevatorMotor.setTargetPosition(0);
+        else if( level(level1Btn,level2Btn,level3Btn )  == 2) {
+            goToPosition(elevMotor,2865);
+            Claw.openClaw();
+            off();
         }
 
-         */
-        elevatorMotor.setPower(0.4);
+        else if( level(level1Btn,level2Btn,level3Btn )  == 3) {
+            goToPosition(elevMotor,4085);
+            Claw.openClaw();
+            off();
+        }
+
+        else{ off(); }
+
+        elevMotor.setPower(0.55);
+    }
+    public static int level(boolean level1Btn, boolean level2Btn, boolean level3Btn) {
+        int level = 0;
+        if (level1Btn) {level = 1;}
+        if (level2Btn) {level = 2;}
+        if (level3Btn) {level = 3;}
+        return level;
     }
 
-    public static void stop(){
-        elevatorMotor.setPower(0);
-    }
+    public static void off() {elevMotor.setTargetPosition(0); runToPos(elevMotor);}
 
+    public static void goToPosition(DcMotor motor,int target) {/*in ticks*/ motor.setTargetPosition(target); runToPos(elevMotor);}
 
-    public static int getPosition() {
-        return elevatorMotor.getCurrentPosition();
-    }
+    private static void runToPos(DcMotor motor) {motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);}
+
 }
 
 
@@ -80,3 +60,26 @@ public class Elevator {
 //second stage 59.69 (5.32)
 //third stage 85.09 (7.59)
 //cm for motor rotation 11.2
+
+/*
+        switch (level(level1Btn,level2Btn,level3Btn )) {
+            case 1:
+                goToPosition(elevMotor,1645);
+                Claw.openClaw();
+                off();
+                break;
+            case 2:
+                 goToPosition(elevMotor,2865);
+                 Claw.openClaw();
+                 off();
+                break;
+            case 3:
+                goToPosition(elevMotor,4085);
+                Claw.openClaw();
+                off();
+                break;
+            default:
+                off();
+        }
+        elevMotor.setPower(0.55);
+ */
