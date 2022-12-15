@@ -43,7 +43,7 @@ public class Contours {
         return contours.get(maxValIdx);
     }
 
-    public static List<Object> getCenter(MatOfPoint contour){
+    public static Point getCenter(MatOfPoint contour){
         if (contour.empty()){return null;} //Checks if the contour list is empty or not
         MatOfPoint2f contourPoly = new MatOfPoint2f();
         //Gets all of the polygonal curves on the contour and puts them on to a list of Mat Points
@@ -57,17 +57,17 @@ public class Contours {
         Imgproc.minEnclosingCircle(contourPoly, center, new float[1]);
         //Drawing a circle on the center of the contour
         Imgproc.circle(Pipeline.getMat(), center, 10, Constants.Red);
-        return Arrays.asList(center,pixWidth);
+        return new Point(pixWidth,0);
     }
     public static double distance() {
-        List<Object> ppppp = Contours.getCenter(
-                        //Calls the getBiggestContour function from the Contours class (to find the biggest contour)
-                        Contours.getBiggestContour(
-                                //Calls the getContour function from the Contours class and assigning its values
-                                Contours.getContour(Pipeline.getMat(), Constants.lowHSV, Constants.highHSV)
-                        )
-        );
-        List<Object> pixWidth = ppppp;
+        double ppppp = Objects.requireNonNull(Contours.getCenter(
+                //Calls the getBiggestContour function from the Contours class (to find the biggest contour)
+                Contours.getBiggestContour(
+                        //Calls the getContour function from the Contours class and assigning its values
+                        Contours.getContour(Pipeline.getMat(), Constants.lowHSV, Constants.highHSV)
+                )
+        )).x;
+        double pixWidth = ppppp;
         System.out.println(pixWidth);
         double constants = 26.6 * 2080;
         //double distance = constants / pixWidth;
