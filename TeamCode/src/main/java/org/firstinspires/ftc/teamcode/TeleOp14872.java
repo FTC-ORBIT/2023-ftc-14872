@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Claw;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
 import org.firstinspires.ftc.teamcode.sensors.Gyro;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
@@ -25,6 +26,7 @@ public class TeleOp14872 extends LinearOpMode {
         Gyro.init(hardwareMap);
         //Drivetrain.init(hardwareMap);
         Elevator.init(hardwareMap);
+        Claw.init(hardwareMap);
         GlobalData.isAutonomous = false;
 
         waitForStart();
@@ -32,8 +34,12 @@ public class TeleOp14872 extends LinearOpMode {
         while (!isStopRequested()){
             GlobalData.currentTime = timer.milliseconds();
             //Drivetrain.operate(new Vector(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.left_trigger - gamepad1.right_trigger));
-            Elevator.operate(gamepad1.dpad_left,gamepad1.dpad_down,gamepad1.dpad_right);
-
+            if (gamepad1.dpad_down) {Elevator.level = 0;}
+            if (gamepad1.dpad_right) {Elevator.level = 1;}
+            if (gamepad1.dpad_up) {Elevator.level = 2;}
+            if (gamepad1.dpad_left) {Elevator.level = 3;}
+            Elevator.operate(Elevator.level);
+            Claw.operate(gamepad1.right_bumper,gamepad1.left_bumper);
             GlobalData.deltaTime = GlobalData.currentTime - GlobalData.lastTime;
             GlobalData.lastTime = GlobalData.currentTime;
 

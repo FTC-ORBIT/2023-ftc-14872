@@ -13,9 +13,9 @@ public class Claw {
         if (closeClawBtn) {closeClaw();}
     }
     public static void openClaw() {
-        clawServo.setPosition(90);
+        clawServo.setPosition(0.56);
     }
     public static void closeClaw() {
-        clawServo.setPosition(0);
+        clawServo.setPosition(1);
     }
 }
