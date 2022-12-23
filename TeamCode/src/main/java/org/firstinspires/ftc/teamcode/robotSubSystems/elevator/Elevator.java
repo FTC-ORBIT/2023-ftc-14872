@@ -6,9 +6,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
 public class Elevator {
-    public static DcMotor elevatorMotor;
-    public static int level;
-    public static void init(HardwareMap hardwareMap){
+    private DcMotor elevatorMotor;
+    private int level;
+
+    public void init(HardwareMap hardwareMap){
         elevatorMotor = hardwareMap.get(DcMotor.class, "elevMotor");
         elevatorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         elevatorMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -17,31 +18,36 @@ public class Elevator {
         elevatorMotor.setPower(0.96);
     }
 
-    public static void operate(int level) {
+    public void operate(int level) {
         switch (level) {
             case 0:
                 goToPosition(elevatorMotor,0);
+                this.level = 0;
                 break;
             case 1:
                 goToPosition(elevatorMotor,1750);
+                this.level = 1;
                 break;
             case 2:
-                goToPosition(elevatorMotor,2865);
+                goToPosition(elevatorMotor,2870);
+                this.level = 2;
                 break;
             case 3:
-                goToPosition(elevatorMotor,4085);
+                goToPosition(elevatorMotor,4090);
+                this.level = 3;
                 break;
             default:
                 elevatorMotor.setTargetPosition(0);
+                this.level = 0;
                 break;
         }
     }
 
-    public static void goToPosition(DcMotor motor,int target) { /*in ticks*/ motor.setTargetPosition(target); runToPos(motor); }
+    public void goToPosition(DcMotor motor,int target) { /*in ticks*/ motor.setTargetPosition(target); runToPos(motor); }
 
-    private static void runToPos(DcMotor motor) {motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);}
+    private void runToPos(DcMotor motor) {motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);}
 
-    public static void stop(){ elevatorMotor.setPower(0);}
+    public void stop(){ elevatorMotor.setPower(0);}
 
 }
 

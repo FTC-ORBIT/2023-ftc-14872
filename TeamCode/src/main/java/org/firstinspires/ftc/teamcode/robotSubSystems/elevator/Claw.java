@@ -4,18 +4,24 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Claw {
-    private static Servo clawServo;
-    public static void init(HardwareMap hardwareMap) {
+    private Servo clawServo;
+    private boolean isClawOpen;
+    public void init(HardwareMap hardwareMap) {
         clawServo = hardwareMap.get(Servo.class, "clawServo");
     }
-    public static void operate(Boolean openClawBtn,Boolean closeClawBtn) {
-        if (openClawBtn) {openClaw();};
-        if (closeClawBtn) {closeClaw();}
+    public void operate(boolean openClaw) {
+
+        if (openClaw) {
+            clawServo.setPosition(0.56);
+            isClawOpen = true;
+        } else {
+            clawServo.setPosition(1);
+            isClawOpen = false;
+        }
     }
-    public static void openClaw() {
-        clawServo.setPosition(0.56);
+
+    public boolean isClawOpen(){
+        return isClawOpen;
     }
-    public static void closeClaw() {
-        clawServo.setPosition(1);
-    }
+
 }
