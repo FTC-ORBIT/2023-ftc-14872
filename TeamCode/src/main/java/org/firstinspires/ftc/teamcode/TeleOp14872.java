@@ -5,7 +5,7 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gam
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
+
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -24,6 +24,8 @@ public class TeleOp14872 extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
+        Gyro.init(hardwareMap);
+        Drivetrain.init(hardwareMap);
         Claw claw = new Claw();
         Elevator elevator = new Elevator();
 

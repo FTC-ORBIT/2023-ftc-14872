@@ -4,7 +4,7 @@ public class GlobalData {
 
     // TODO: create robot states
     //public static RobotState robotState = RobotState.TRAVEL;
-    public static boolean isAutonomous = true;
+    public static boolean isAutonomous = false;
 
     public static double currentTime = 0;
     public static double lastTime = 0;
