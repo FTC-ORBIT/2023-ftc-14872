@@ -11,8 +11,8 @@ public final class Angle {
     }
     // convert 0-360 iRadians
 
-    public static float wrapAnglePlusMinusPI(final float theta) {
-        final float wrapped = theta % twoPI; // Getting the angle smallest form (not exceeding a
+    public static double wrapAnglePlusMinusPI(final double theta) {
+        final double wrapped = theta % twoPI; // Getting the angle smallest form (not exceeding a
                                              // full turn).
 // convert -180-180 in Radians
         // Adding or subtracting two pi to fit the range of +/- pi.

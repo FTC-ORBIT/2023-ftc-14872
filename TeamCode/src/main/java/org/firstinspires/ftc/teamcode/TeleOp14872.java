@@ -24,22 +24,22 @@ public class TeleOp14872 extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        Gyro.init(hardwareMap);
-        Drivetrain.init(hardwareMap);
+        Drivetrain drivetrain = new Drivetrain();
         Claw claw = new Claw();
         Elevator elevator = new Elevator();
 
         Gyro.init(hardwareMap);
-        //Drivetrain.init(hardwareMap);
+        drivetrain.init(hardwareMap);
         elevator.init(hardwareMap);
         claw.init(hardwareMap);
+
         GlobalData.isAutonomous = false;
 
         waitForStart();
 
         while (!isStopRequested()){
             GlobalData.currentTime = timer.milliseconds();
-            //Drivetrain.operate(new Vector(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.left_trigger - gamepad1.right_trigger));
+            drivetrain.operate(new Vector(gamepad1.left_stick_x, -gamepad1.left_stick_y).rotate(90), gamepad1.left_trigger - gamepad1.right_trigger);
             if (gamepad1.dpad_down) {
                 elevator.operate(0);
             }else if (gamepad1.dpad_right) {
@@ -50,7 +50,7 @@ public class TeleOp14872 extends LinearOpMode {
                 elevator.operate(3);
             }
             if (gamepad1.left_bumper){claw.operate(true);
-            } else if(gamepad1.right_bumper){claw.operate(false);}
+            }else if (gamepad1.right_bumper){claw.operate(false);}
             GlobalData.deltaTime = GlobalData.currentTime - GlobalData.lastTime;
             GlobalData.lastTime = GlobalData.currentTime;
 
