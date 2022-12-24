@@ -27,8 +27,8 @@ public class Drivetrain {
         }
     }
     public void operate(Vector velocity_W, double rotation) {
-        final double robotAngle = Angle.wrapAnglePlusMinusPI((Math.toRadians(Gyro.getAngle()) + Math.PI/2));
-        drive(velocity_W.rotate(robotAngle), -rotation);
+        final double robotAngle = Angle.wrapAnglePlusMinusPI((Math.toRadians(Gyro.getAngle())));
+        drive(velocity_W.rotate(-robotAngle), rotation);
     }
 
 
@@ -53,10 +53,10 @@ public class Drivetrain {
     }
 
     private void drive(Vector drive, double rotation) {
-        final double lfPower = drive.y - drive.x - rotation;
-        final double rfPower = drive.y + drive.x + rotation;
-        final double lbPower = drive.y + drive.x - rotation;
-        final double rbPower = drive.y - drive.x + rotation;
+        final double lfPower = -drive.y - drive.x - rotation;
+        final double rfPower = -drive.y + drive.x + rotation;
+        final double lbPower = -drive.y + drive.x - rotation;
+        final double rbPower = -drive.y - drive.x + rotation;
         final double max = Math.max(1,Math.max(Math.abs(lfPower),
                 Math.max(Math.abs(lbPower), Math.max(Math.abs(rfPower), Math.abs(rbPower)))));
         motors[0].setPower((lfPower / max));

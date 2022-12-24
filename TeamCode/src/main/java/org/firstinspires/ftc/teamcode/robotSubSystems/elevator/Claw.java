@@ -4,7 +4,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Claw {
+
     private Servo clawServo;
+    private boolean lastState = false;
     private boolean isClawOpen;
     public void init(HardwareMap hardwareMap) {
         clawServo = hardwareMap.get(Servo.class, "clawServo");

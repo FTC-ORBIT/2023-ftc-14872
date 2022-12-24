@@ -13,39 +13,47 @@ public class Elevator {
         elevatorMotor = hardwareMap.get(DcMotor.class, "elevMotor");
         elevatorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         elevatorMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        elevatorMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         level = 0;
-        elevatorMotor.setPower(0.96);
     }
 
     public void operate(int level) {
+        elevatorMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        elevatorMotor.setPower(0.85);
+
         switch (level) {
-            case 0:
-                goToPosition(elevatorMotor,0);
-                this.level = 0;
-                break;
             case 1:
-                goToPosition(elevatorMotor,1750);
+                goToPosition(elevatorMotor, 70);
                 this.level = 1;
                 break;
             case 2:
-                goToPosition(elevatorMotor,2870);
+                goToPosition(elevatorMotor,1750);
                 this.level = 2;
                 break;
             case 3:
-                goToPosition(elevatorMotor,4090);
+                goToPosition(elevatorMotor,2870);
                 this.level = 3;
                 break;
+            case 4:
+                goToPosition(elevatorMotor,4090);
+                this.level = 4;
+                break;
             default:
-                elevatorMotor.setTargetPosition(0);
+                goToPosition(elevatorMotor, 0);
                 this.level = 0;
                 break;
         }
     }
 
-    public void goToPosition(DcMotor motor,int target) { /*in ticks*/ motor.setTargetPosition(target); runToPos(motor); }
+    public void setElevatorPower(double power){
+        elevatorMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        elevatorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-    private void runToPos(DcMotor motor) {motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);}
+        elevatorMotor.setPower(power);
+    }
+
+    public int getLevel(){return level;}
+
+    public void goToPosition(DcMotor motor,int target) { /*in ticks*/ motor.setTargetPosition(target); motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);; }
 
     public void stop(){ elevatorMotor.setPower(0);}
 
