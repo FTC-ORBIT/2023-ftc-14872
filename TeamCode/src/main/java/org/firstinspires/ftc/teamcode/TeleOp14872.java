@@ -62,7 +62,7 @@ public class TeleOp14872 extends OpMode {
                 }
                 useDrive(0.75);
                 useClaw();
-                elevator.setElevatorPower(-gamepad1.left_stick_y * 0.5);
+                elevator.setElevatorPower(-gamepad1.right_stick_y * 0.5 + 0.2);
 
                 break;
             case UNLOADING:
@@ -86,36 +86,34 @@ public class TeleOp14872 extends OpMode {
     }
 
     private void useGoByLevel(){
-        if (gamepad1.dpad_down) {
-            elevator.operate(0);
-        }else if (gamepad1.dpad_right) {
-            elevator.operate(2);
-        }else if (gamepad1.dpad_up) {
-            elevator.operate(3);
-        }else if (gamepad1.dpad_left) {
-            elevator.operate(4);
-        }else if (gamepad1.left_bumper){
+        if (gamepad1.a) {
             elevator.operate(1);
+        }else if (gamepad1.x) {
+            elevator.operate(2);
+        }else if (gamepad1.y) {
+            elevator.operate(3);
+        }else if (gamepad1.b){
+            elevator.operate(4);
         }
     }
 
     private void useDrive(double powerMultiplier){
-        drivetrain.operate(new Vector(gamepad1.right_stick_x, -gamepad1.right_stick_y).scale(powerMultiplier), (gamepad1.right_trigger - gamepad1.left_trigger) * powerMultiplier);
+        drivetrain.operate(new Vector(gamepad1.left_stick_x, -gamepad1.left_stick_y).scale(powerMultiplier), (gamepad1.right_trigger - gamepad1.left_trigger) * powerMultiplier);
     }
 
     private void useClaw(){
-        if (gamepad1.right_stick_button){claw.operate(true);
+        if (gamepad1.left_bumper){claw.operate(true);
         }else if (gamepad1.right_bumper){claw.operate(false);}
     }
 
     private void changeRobotState(){
-        if (gamepad1.a){
+        if (gamepad1.dpad_down){
             GlobalData.robotState = RobotState.TRAVEL;
 
-        }else if (gamepad1.x){
+        }else if (gamepad1.dpad_right){
             GlobalData.robotState = RobotState.COLLECTION;
 
-        }else if (gamepad1.y){
+        }else if (gamepad1.dpad_left){
             GlobalData.robotState = RobotState.UNLOADING;
 
         }
