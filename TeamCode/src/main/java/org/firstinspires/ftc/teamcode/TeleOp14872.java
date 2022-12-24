@@ -37,6 +37,7 @@ public class TeleOp14872 extends OpMode {
         elevator.init(hardwareMap);
         claw.init(hardwareMap);
 
+        GlobalData.robotState = RobotState.TRAVEL;
         GlobalData.isAutonomous = false;
     }
 
@@ -48,27 +49,27 @@ public class TeleOp14872 extends OpMode {
         GlobalData.deltaTime = GlobalData.currentTime - GlobalData.lastTime;
         GlobalData.lastTime = GlobalData.currentTime;
 
+        if (gamepad1.dpad_up){
+            Gyro.resetGyro();
+        }
+
         switch (GlobalData.robotState){
             case TRAVEL:
                 if (GlobalData.robotState != lastState){
                     elevator.operate(1);
                 }
-                useDrive(1);
+                useDrive( 1 - (double) elevator.getMotorPos() / 4130 * 0.65);
+                useClaw();
+                useGoByLevel();
 
                 break;
             case COLLECTION:
                 if (GlobalData.robotState != lastState){
                     elevator.operate(0);
                 }
-                useDrive(0.75);
+                useDrive(0.40);
                 useClaw();
-                elevator.setElevatorPower(-gamepad1.right_stick_y * 0.5 + 0.2);
-
-                break;
-            case UNLOADING:
-                useDrive(0.5);
-                useClaw();
-                useGoByLevel();
+                elevator.setElevatorPower(-gamepad1.right_stick_y * 0.5 + 0.1);
 
                 break;
         }
@@ -78,8 +79,10 @@ public class TeleOp14872 extends OpMode {
         changeRobotState();
 
         telemetry.addData("robotState", GlobalData.robotState.toString());
-        telemetry.addData("joystick x", gamepad1.right_stick_x);
-        telemetry.addData("joystick y", gamepad1.right_stick_y);
+        telemetry.addData("stick right x", gamepad1.right_stick_x);
+        telemetry.addData("stick right y", gamepad1.right_stick_y);
+        telemetry.addData("stick left x", gamepad1.left_stick_x);
+        telemetry.addData("stick left y", gamepad1.left_stick_y);
         telemetry.addData("elevator level", elevator.getLevel());
 
         telemetry.update();
@@ -98,7 +101,7 @@ public class TeleOp14872 extends OpMode {
     }
 
     private void useDrive(double powerMultiplier){
-        drivetrain.operate(new Vector(gamepad1.left_stick_x, -gamepad1.left_stick_y).scale(powerMultiplier), (gamepad1.right_trigger - gamepad1.left_trigger) * powerMultiplier);
+        drivetrain.operate(new Vector(gamepad1.left_stick_x, -gamepad1.left_stick_y).scale(powerMultiplier), (gamepad1.right_trigger - gamepad1.left_trigger) * powerMultiplier * 1.4);
     }
 
     private void useClaw(){
@@ -112,9 +115,6 @@ public class TeleOp14872 extends OpMode {
 
         }else if (gamepad1.dpad_right){
             GlobalData.robotState = RobotState.COLLECTION;
-
-        }else if (gamepad1.dpad_left){
-            GlobalData.robotState = RobotState.UNLOADING;
 
         }
     }
