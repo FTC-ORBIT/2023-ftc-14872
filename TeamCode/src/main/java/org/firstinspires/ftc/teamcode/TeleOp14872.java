@@ -30,6 +30,9 @@ public class TeleOp14872 extends OpMode {
 
     RobotState lastState = GlobalData.robotState;
 
+    double gamepad1LeftStickOffsetX;
+    double gamepad1LeftStickOffsetY;
+
     @Override
     public void init() {
         Gyro.init(hardwareMap);
@@ -39,6 +42,9 @@ public class TeleOp14872 extends OpMode {
 
         GlobalData.robotState = RobotState.TRAVEL;
         GlobalData.isAutonomous = false;
+
+        gamepad1LeftStickOffsetX = gamepad1.left_stick_x;
+        gamepad1LeftStickOffsetY = gamepad1.left_stick_y;
     }
 
     @Override
@@ -49,16 +55,12 @@ public class TeleOp14872 extends OpMode {
         GlobalData.deltaTime = GlobalData.currentTime - GlobalData.lastTime;
         GlobalData.lastTime = GlobalData.currentTime;
 
-        if (gamepad1.dpad_up){
-            Gyro.resetGyro();
-        }
-
         switch (GlobalData.robotState){
             case TRAVEL:
                 if (GlobalData.robotState != lastState){
                     elevator.operate(1);
                 }
-                useDrive( 1 - (double) elevator.getMotorPos() / 4130 * 0.65);
+                useDrive( 1 - (double) elevator.getMotorPos() / 4130 * 0.65  );
                 useClaw();
                 useGoByLevel();
 
@@ -101,7 +103,7 @@ public class TeleOp14872 extends OpMode {
     }
 
     private void useDrive(double powerMultiplier){
-        drivetrain.operate(new Vector(gamepad1.left_stick_x, -gamepad1.left_stick_y).scale(powerMultiplier), (gamepad1.right_trigger - gamepad1.left_trigger) * powerMultiplier * 1.4);
+        drivetrain.operate(new Vector(gamepad1.left_stick_x - gamepad1LeftStickOffsetX, -(gamepad1.left_stick_y - gamepad1LeftStickOffsetY )).scale(powerMultiplier), (gamepad1.right_trigger - gamepad1.left_trigger) * powerMultiplier * 1.4);
     }
 
     private void useClaw(){

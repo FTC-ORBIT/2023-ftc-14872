@@ -14,10 +14,10 @@ public class Claw {
     public void operate(boolean openClaw) {
 
         if (openClaw) {
-            clawServo.setPosition(0.56);
+            clawServo.setPosition(0.57);
             isClawOpen = true;
         } else {
-            clawServo.setPosition(1);
+            clawServo.setPosition(1);   
             isClawOpen = false;
         }
     }
