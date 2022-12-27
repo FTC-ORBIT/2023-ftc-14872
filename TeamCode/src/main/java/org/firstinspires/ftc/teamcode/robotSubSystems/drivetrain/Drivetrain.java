@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain;
 
 
+import android.graphics.Point;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -15,7 +17,12 @@ public class Drivetrain {
 
     public final DcMotor[] motors = new DcMotor[4];
     //public Vector lastVelocity = getVelocity_FieldCS();
-
+   
+   //start point of robot at start
+    private Point lastPoint = new Point(0,0);
+    
+   
+   
     public void init(HardwareMap hardwareMap) {
         //if (GlobalData.isAutonomous) drive = new SampleMecanumDrive(hardwareMap);
         motors[0] = hardwareMap.get(DcMotor.class, "lf");
@@ -74,15 +81,21 @@ public class Drivetrain {
         }
     }
 
-    public void driveToDirection(double distInCM, double angle) {
-        double beginPosition = avgWheelPosInCM();
-        Vector vector = new Vector(0, 1);
-        vector.rotate(angle);
-
-        while(beginPosition + distInCM - 1 <= avgWheelPosInCM() + distInCM && beginPosition + distInCM + 1 >= avgWheelPosInCM() + distInCM ) {
-            //TODO: add angle control
-            operate(vector, 0);
+    public void driveForward(double distInCM, boolean direction) {
+        double startPos = avgWheelPosInCM();
+        PID driveForward = new PID(0,0,0,0,0);
+        driveForward.setWanted(distInCM);
+        if(direction) {
+            while(avgWheelPosInCM() < distInCM + startPos) {
+                operate(new Vector(0, 1 / (driveForward.update(avgWheelPosInCM()))), 0);
+            }
+        } 
+        else {
+            while(avgWheelPosInCM() > distInCM + startPos) {
+                operate(new Vector(0, -1 / (driveForward.update(avgWheelPosInCM()))), 0);
+            }
         }
+       
     }
 
 
@@ -102,12 +115,13 @@ public class Drivetrain {
         return (sum / 2) * DrivetrainConstants.ticksToCM;
     }
 
-    public void goTo(Vector xY) {
-        double maxXY = Math.max(Math.max(xY.x,xY.y),1);
-        double dist = Math.sqrt(Math.pow(xY.x,2) + Math.pow(xY.y,2));
-        double angle = Angle.wrapAnglePlusMinusPI(Math.atan2(xY.x,xY.y));
-        turn(angle,0.021,0.77);
-        driveToDirection(dist, 0);
-
+    public void goTo(double x, double y, boolean direction) {
+        double adjacent = x - lastPoint.x;
+        double opposite = y - lastPoint.y;
+        double distance = Math.sqrt(Math.pow(adjacent,2) + Math.pow(opposite,2));
+        double angle = Math.atan2(opposite,adjacent);
+        turn(angle,0,0);
+        driveForward(distance,direction);
+        lastPoint = new Point((int)x,(int)y);
     }
 }
