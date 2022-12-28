@@ -1,17 +1,13 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain;
 
 
-import android.graphics.Point;
-
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
-import org.firstinspires.ftc.teamcode.control.PID;
+import org.firstinspires.ftc.teamcode.control.PIDF;
 import org.firstinspires.ftc.teamcode.res.Gyro;
-import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 import org.firstinspires.ftc.teamcode.utils.Angle;
 import org.firstinspires.ftc.teamcode.utils.Vector;
 
@@ -69,10 +65,10 @@ public class Drivetrain {
     }
 
     public void turn(double wantedAngle, double kp, double kd) {
-        PID anglePID = new PID(kp, 0, kd, 0, 0);
-        anglePID.setWanted(wantedAngle);
+        PIDF anglePIDF = new PIDF(DrivetrainConstants.turnPIDCoefficients);
+        anglePIDF.setWanted(wantedAngle);
         while (Math.abs(Gyro.getAngle()) <= Math.abs(wantedAngle)) {
-            operate(Vector.zero(), anglePID.update(Gyro.getAngle()));
+            operate(Vector.zero(), anglePIDF.update(Gyro.getAngle()));
         }
     }
 
