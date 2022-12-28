@@ -22,7 +22,6 @@ public class TeleOp14872 extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         Gyro.init(hardwareMap);
-        Drivetrain.init(hardwareMap);
         Claw claw = new Claw();
         Elevator elevator = new Elevator();
 
