@@ -42,6 +42,8 @@ public class TeleOp14872 extends OpMode {
 
         GlobalData.robotState = RobotState.TRAVEL;
         GlobalData.isAutonomous = false;
+        //Servo servo = hardwareMap.get(Servo.class, "servoArm");
+        //DcMotor motor = hardwareMap.get(DcMotor.class, "elevator");
 
         gamepad1LeftStickOffsetX = gamepad1.left_stick_x;
         gamepad1LeftStickOffsetY = gamepad1.left_stick_y;

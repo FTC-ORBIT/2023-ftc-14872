@@ -2,11 +2,11 @@ package org.firstinspires.ftc.teamcode.utils;
 
 public final class Angle {
 
-    public static final float halfPI = (float) Math.PI / 2;
-    public static final float pi = (float) Math.PI;
-    public static final float twoPI = (float) Math.PI * 2;
+    public static final double halfPI = (double) Math.PI / 2;
+    public static final double pi = (double) Math.PI;
+    public static final double twoPI = (double) Math.PI * 2;
 
-    public static float wrapAngle0_2PI(final float theta) {
+    public static double wrapAngle0_2PI(final double theta) {
         return (theta % twoPI + twoPI) % twoPI;
     }
     // convert 0-360 iRadians
@@ -26,19 +26,19 @@ public final class Angle {
     }
 
     // Functions to convert between degrees and radians:
-    public static float degToRad(final float theta) {
-        return (float) Math.toRadians(theta);
-    } //float
+    public static double degToRad(final double theta) {
+        return (double) Math.toRadians(theta);
+    } //double
 
-    public static float radToDeg(final float theta) {
-        return (float) Math.toDegrees(theta);
-    } //float
+    public static double radToDeg(final double theta) {
+        return (double) Math.toDegrees(theta);
+    } //double
 
-    public static float projectBetweenPlanes(final float theta, final float alpha) {
+    public static double projectBetweenPlanes(final double theta, final double alpha) {
         if (alpha < 0) {
-            return (float) Math.atan(Math.tan(theta) / Math.cos(alpha));
+            return (double) Math.atan(Math.tan(theta) / Math.cos(alpha));
         } else {
-            return (float) Math.atan(Math.tan(theta) * Math.cos(alpha));
+            return (double) Math.atan(Math.tan(theta) * Math.cos(alpha));
         }
     }
     // alpha is the angle between the planes.

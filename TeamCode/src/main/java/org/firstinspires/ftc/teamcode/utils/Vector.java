@@ -6,17 +6,14 @@ public final class Vector {
 
     public double x;
     public double y;
-    public double r;
 
     public Vector(final double x, final double y) {
         this.x = x;
         this.y = y;
     }
 
-    public Vector(final double x, final double y, final double r) {
-        this.x = x;
-        this.y = y;
-        this.r = r;
+    public double getDistanceInCm(){
+        return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
     }
 
     public static Vector zero() {
@@ -26,7 +23,7 @@ public final class Vector {
     public static Vector INF() { return new Vector(Constants.INF, Constants.INF); } // returns INF Vector
 
     public double norm() {
-        return (double) Math.sqrt(x * x + y * y);
+        return Math.sqrt(x * x + y * y);
     }
 
     public double getAngle() {

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain;
 
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+
 public class DrivetrainConstants {
     //TODO: find values
     public static final double trackWidth = 0;
@@ -8,4 +10,5 @@ public class DrivetrainConstants {
     public static final double wheelCircumferenceInCM = 9.6 * Math.PI;
     public static final double ticksToCM = wheelCircumferenceInCM / ticksPerRev;
     public static final double cmPerWheelRev = 0f;
+    public static final PIDFCoefficients turnPIDCoefficients = new PIDFCoefficients(0, 0, 0, 0);
 }
