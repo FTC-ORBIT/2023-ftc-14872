@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.imageprocessing;
 
+import org.firstinspires.ftc.teamcode.sensors.ColorSensorV3;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
@@ -7,17 +8,19 @@ import org.openftc.easyopencv.OpenCvPipeline;
 public class Pipeline extends OpenCvPipeline {
     //Creates a static Mat variable
     private static Mat material;
+    ColorSensorV3 colorSensorV3 = new ColorSensorV3();
+    Sleeve sleeve = new Sleeve();
 
     @Override
     public Mat processFrame(Mat input) {
         //Assigning the value input (live vid) to the variable material
-        material = input;
+        //material = input;
         //Turn image to binary image (black & white pixels)
-        Imgproc.cvtColor(input, material, Constants.binary);
+        //Imgproc.cvtColor(input, material, Constants.binary);
         //blur (to remove noise)
-        Imgproc.blur(material, material, Constants.BlurRadius);
+        //Imgproc.blur(material, material, Constants.BlurRadius);
         //Calling findRodCenter function from the RodFinder class
-        RodDetector.findRodCenter();
+        //RodDetector.findRodCenter();
         return material;
     }
     //Cloning the material (input)
