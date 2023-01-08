@@ -10,8 +10,8 @@ import org.openftc.easyopencv.OpenCvCamera;
 
 public class Constants {
     //HSV constants
-    public static Scalar lowHSV = new Scalar(18 , 100 , 100);
-    public static Scalar highHSV = new Scalar(34 , 255 , 255);
+    public static Scalar lowYHSV = new Scalar(18 , 100 , 100);
+    public static Scalar highYHSV = new Scalar(34 , 255 , 255);
     //Scalar (color) constants
     public static Scalar Green = new Scalar(0 , 255 , 0);
     public static Scalar White = new Scalar(255 , 255 , 255);
@@ -26,5 +26,15 @@ public class Constants {
 
     //TODO: find values
     public static Point tlRoi = new Point(0,0);
-    public static Point brRoi = new Point(1,2);
+    public static Point brRoi = new Point(200,200);
+
+    public static Scalar lowRHSV = new Scalar(0 , 125 , 125);
+    public static Scalar highRHSV = new Scalar(13 , 255 , 255);
+    public static Scalar lowGHSV = new Scalar(35 , 69 , 147);
+    public static Scalar highGHSV = new Scalar(135 , 220 , 255);
+    public static Scalar lowBHSV = new Scalar(105 , 0 , 0);
+    public static Scalar highBHSV = new Scalar(180 , 255 , 175);
+
+    public static double percentage = 0.45;
+
 }
