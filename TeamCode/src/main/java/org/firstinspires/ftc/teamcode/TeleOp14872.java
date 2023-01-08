@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.robotSubSystems.claw.Claw;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
 import org.firstinspires.ftc.teamcode.sensors.Gyro;
@@ -45,11 +46,15 @@ public class TeleOp14872 extends LinearOpMode {
             }else if (gamepad1.dpad_left) {
                 elevator.operate(3);
             }
+            elevator.setElevatorPower(gamepad1.left_stick_y);
             if (gamepad1.left_bumper){claw.operate(true);
             } else if(gamepad1.right_bumper){claw.operate(false);}
             GlobalData.deltaTime = GlobalData.currentTime - GlobalData.lastTime;
             GlobalData.lastTime = GlobalData.currentTime;
 
+            telemetry.addData("left elevator power", elevator.elevatorMotorL.getCurrent(CurrentUnit.AMPS));
+            telemetry.addData("right elevator power", elevator.elevatorMotorR.getCurrent(CurrentUnit.AMPS));
+            telemetry.addData("dpad", gamepad1.dpad_up);
             telemetry.update();
         }
     }

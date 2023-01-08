@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.teamcode.TeleOp14872;
-import org.firstinspires.ftc.teamcode.control.PID;
+import org.firstinspires.ftc.teamcode.control.PIDF;
 
 public class ElevatorConstants {
 
