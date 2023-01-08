@@ -20,7 +20,7 @@ public class TeleOp14872 extends LinearOpMode {
         Drivetrain drivetrain = new Drivetrain();
 
         Gyro.init(hardwareMap);
-        drivetrain.init(hardwareMap);
+        drivetrain.init(hardwareMap, telemetry);
         GlobalData.isAutonomous = false;
         //Servo servo = hardwareMap.get(Servo.class, "servoArm");
         //DcMotor motor = hardwareMap.get(DcMotor.class, "elevator");
@@ -34,8 +34,7 @@ public class TeleOp14872 extends LinearOpMode {
             drivetrain.operate(new Vector(gamepad1.left_stick_x, gamepad1.left_stick_y), gamepad1.left_trigger - gamepad1.right_trigger);
 
             GlobalData.lastTime = GlobalData.currentTime;
-            /*if (gamepad1.right_bumper) {servo.setPosition(90);}
-            if (gamepad1.left_bumper) {servo.setPosition(0);}*/
+
             if (gamepad1.dpad_up) { Gyro.resetGyro();}
 
             telemetry.addData("x value", gamepad1.left_stick_x);

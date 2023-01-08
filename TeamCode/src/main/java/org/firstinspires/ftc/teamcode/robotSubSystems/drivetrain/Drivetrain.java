@@ -3,9 +3,11 @@ package org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.control.PIDF;
 import org.firstinspires.ftc.teamcode.res.Gyro;
 import org.firstinspires.ftc.teamcode.utils.Angle;
@@ -13,22 +15,30 @@ import org.firstinspires.ftc.teamcode.utils.Vector;
 
 public class Drivetrain {
 
-    public final DcMotorEx[] motors = (DcMotorEx[]) new DcMotor[4];
+    public final DcMotorEx[] motors = new DcMotorEx[4];
+    Telemetry telemetry;
 
-    public void init(HardwareMap hardwareMap) {
-        motors[0] = hardwareMap.get(DcMotorEx.class, "lf");
-        motors[1] = hardwareMap.get(DcMotorEx.class, "lb");
-        motors[2] = hardwareMap.get(DcMotorEx.class, "rf");
-        motors[3] = hardwareMap.get(DcMotorEx.class, "rb");
+    public void init(HardwareMap hardwareMap, Telemetry telemetry) {
+        motors[0] = (DcMotorEx) hardwareMap.get(DcMotor.class, "lf");
+        motors[1] = (DcMotorEx) hardwareMap.get(DcMotor.class, "lb");
+        motors[2] = (DcMotorEx) hardwareMap.get(DcMotor.class, "rf");
+        motors[3] = (DcMotorEx) hardwareMap.get(DcMotor.class, "rb");
+
+        motors[0].setDirection(DcMotorSimple.Direction.REVERSE);
+        motors[1].setDirection(DcMotorSimple.Direction.REVERSE);
 
         for (final DcMotor motor : motors) {
             motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
+
+        this.telemetry = telemetry;
     }
 
     public void operate(Vector velocity_W, double rotation) {
         final double robotAngle = Angle.wrapAnglePlusMinusPI(Math.toRadians(Gyro.getAngle()) + Math.PI/2);
-        drive(velocity_W.rotate(robotAngle), -rotation);
+        drive(velocity_W.rotate(-robotAngle + Math.PI / 2), rotation);
     }
 
 
@@ -64,14 +74,21 @@ public class Drivetrain {
         motors[3].setPower((rbPower / max));
     }
 
+    private boolean isTurnRunning = false;
+
     public void turn(double wantedAngle, double kp, double kd) {
         PIDF anglePIDF = new PIDF(DrivetrainConstants.turnPIDCoefficients);
         anglePIDF.setWanted(wantedAngle);
-        while (Math.abs(Gyro.getAngle()) <= Math.abs(wantedAngle)) {
-            operate(Vector.zero(), anglePIDF.update(Gyro.getAngle()));
+        if (Gyro.getAngle() >= wantedAngle - 0.5 && Gyro.getAngle() <= wantedAngle + 0.5) {
+            isTurnRunning = false;
+            return;
         }
+        drive(Vector.zero(), anglePIDF.update(Gyro.getAngle()));
+        isTurnRunning = true;
     }
-
+    public boolean isTurnRunning(){
+        return isTurnRunning;
+    }
     //Dor: STOP CHANGING MY CODE WE HAVE MECANUM!!!!
 
     /**
@@ -79,17 +96,30 @@ public class Drivetrain {
      * @param distInCM the amount of cm to drive.
      * @param angle the angle to drive to.
      */
+    private boolean driveToDirectionRunning = false;
+
     public void driveToDirection(double distInCM, double angle) {
         double beginPosition = avgWheelPosInCM();
-        Vector vector = new Vector(0, 1);
-        vector.rotate(angle);
+        Vector vector = new Vector(0, 0.4 * distInCM / Math.abs(distInCM));
 
-        while(beginPosition + distInCM - 1 <= avgWheelPosInCM() + distInCM && beginPosition + distInCM + 1 >= avgWheelPosInCM() + distInCM ) {
-            //TODO: add angle control
-            operate(vector, 0);
+        while (!(Math.abs(beginPosition + distInCM) - 2 <= avgWheelPosInCM() && Math.abs(beginPosition + distInCM) + 2 >= avgWheelPosInCM())){
+            operate(vector.rotate(angle), 0);
+
+            telemetry.addData("gyro", Gyro.getAngle());
+            telemetry.addData("lf wheel", motors[0].getCurrentPosition());
+            telemetry.addData("lb wheel", motors[1].getCurrentPosition());
+            telemetry.addData("rf wheel", motors[2].getCurrentPosition());
+            telemetry.addData("rb wheel", motors[3].getCurrentPosition());
+
+            telemetry.addData("distance drove", avgWheelPosInCM());
+
+            telemetry.update();
         }
+        stop();
+        //TODO: add angle control
     }
 
+    public boolean isDriveToDirectionRunning(){return driveToDirectionRunning;}
     //TODO: maybe move function to somewhere else
     /**
      * converts the wheels motors ticks into the wheels rotation in cm.
@@ -102,10 +132,13 @@ public class Drivetrain {
 
 
     public double avgWheelPosInCM(){
-        return ticksToCm(Math.sqrt(Math.pow((motors[2].getCurrentPosition() + motors[1].getCurrentPosition() - motors[0].getCurrentPosition() - motors[3].getCurrentPosition()) / 4, 2) + Math.pow((motors[2].getCurrentPosition() + motors[1].getCurrentPosition() + motors[0].getCurrentPosition() + motors[3].getCurrentPosition()) / 4, 2)));
+        return Math.sqrt(Math.pow(
+                ticksToCm(
+                        motors[2].getCurrentPosition() + motors[1].getCurrentPosition() - motors[0].getCurrentPosition() - motors[3].getCurrentPosition()) / 4, 2)
+                    + Math.pow(
+                            ticksToCm(motors[2].getCurrentPosition() + motors[1].getCurrentPosition() + motors[0].getCurrentPosition() + motors[3].getCurrentPosition()) / 4, 2));
     }
 
-    //TODO: explain to dor why we need this
     public double wheelRatio() {
         double sum = 0;
         for(int i = 0; i < motors.length / 2; i++) {
@@ -117,17 +150,17 @@ public class Drivetrain {
         return (sum / 2) * DrivetrainConstants.ticksToCM;
     }
 
-    //Dor: Do we need to use that?
-    /*
-    public void goTo(double x, double y, boolean direction) {
-        double adjacent = x - lastPoint.x;
-        double opposite = y - lastPoint.y;
-        double distance = Math.sqrt(Math.pow(adjacent,2) + Math.pow(opposite,2));
-        double angle = Math.atan2(opposite,adjacent);
-        turn(angle,0,0);
-        driveForward(distance, direction);
-        lastPoint = new Point((int)x,(int)y);
+    public void driveForward(double distInCM) {
+        double beginPosition = avgWheelPosInCM();
+        Vector vector = new Vector(0, 1);
+
+
+        while(beginPosition + distInCM - 1 <= avgWheelPosInCM() + distInCM && beginPosition + distInCM + 1 >= avgWheelPosInCM() + distInCM ) {
+            //TODO: add angle control
+            operate(vector, 0);
+        }
     }
 
-     */
+
 }
+
