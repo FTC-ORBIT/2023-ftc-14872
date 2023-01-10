@@ -75,12 +75,13 @@ public class Elevator {
 
     public void setElevatorPower(double power){
 
-        if (elevatorMotorL.getCurrentPosition() < 0 || elevatorMotorR.getCurrentPosition() < 0 || elevatorMotorL.getCurrentPosition() > 1000 || elevatorMotorR.getCurrentPosition() > 1000) {
-            return;
-        }
 
         elevatorMotorL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         elevatorMotorR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        if (elevatorMotorL.getCurrentPosition() < 0 || elevatorMotorR.getCurrentPosition() < 0 || elevatorMotorL.getCurrentPosition() > 1000 || elevatorMotorR.getCurrentPosition() > 1000) {
+            return;
+        }
 
         if (Math.abs(power) > 0.1) {
             elevatorMotorL.setPower(0.1);
