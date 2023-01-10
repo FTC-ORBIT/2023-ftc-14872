@@ -73,12 +73,23 @@ public class Elevator {
         }
     }
 
-    public void setElevatorVelocity(double power){
+    public void setElevatorPower(double power){
+
+        if (elevatorMotorL.getCurrentPosition() < 0 || elevatorMotorR.getCurrentPosition() < 0 || elevatorMotorL.getCurrentPosition() > 1000 || elevatorMotorR.getCurrentPosition() > 1000) {
+            return;
+        }
 
         elevatorMotorL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         elevatorMotorR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        elevatorMotorL.setVelocity(power * 2.5 * DrivetrainConstants.ticksPerRev);
-        elevatorMotorR.setVelocity(power * 2.5 * DrivetrainConstants.ticksPerRev);
+
+        if (Math.abs(power) > 0.3) {
+            elevatorMotorL.setPower(0.3);
+            elevatorMotorR.setPower(0.3);
+        } else {
+            elevatorMotorL.setPower(power * 2.5 * DrivetrainConstants.ticksPerRev);
+            elevatorMotorR.setPower(power * 2.5 * DrivetrainConstants.ticksPerRev);
+        }
+
     }
 
     public int getLevel(){return level;}
