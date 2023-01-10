@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
 import org.firstinspires.ftc.teamcode.sensors.Gyro;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.Drivetrain;
+import org.firstinspires.ftc.teamcode.utils.Vector;
 
 @TeleOp(name = "TeleOp14872")
 public class TeleOp14872 extends LinearOpMode {
@@ -25,9 +26,10 @@ public class TeleOp14872 extends LinearOpMode {
         Gyro.init(hardwareMap);
         Claw claw = new Claw();
         Elevator elevator = new Elevator();
+        Drivetrain drivetrain = new Drivetrain();
 
         Gyro.init(hardwareMap);
-        //Drivetrain.init(hardwareMap);
+        drivetrain.init(hardwareMap);
         elevator.init(hardwareMap);
         claw.init(hardwareMap);
         GlobalData.isAutonomous = false;
@@ -36,16 +38,7 @@ public class TeleOp14872 extends LinearOpMode {
 
         while (!isStopRequested()){
             GlobalData.currentTime = timer.milliseconds();
-            //Drivetrain.operate(new Vector(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.left_trigger - gamepad1.right_trigger));
-            if (gamepad1.dpad_down) {
-                elevator.operate(0);
-            }else if (gamepad1.dpad_right) {
-                elevator.operate(1);
-            }else if (gamepad1.dpad_up) {
-                elevator.operate(2);
-            }else if (gamepad1.dpad_left) {
-                elevator.operate(3);
-            }
+            drivetrain.operate(new Vector(gamepad1.left_stick_x, gamepad1.left_stick_y), gamepad1.left_trigger - gamepad1.right_trigger);
             elevator.setElevatorPower(gamepad1.left_stick_y);
             if (gamepad1.left_bumper){claw.operate(true);
             } else if(gamepad1.right_bumper){claw.operate(false);}
@@ -54,7 +47,6 @@ public class TeleOp14872 extends LinearOpMode {
 
             telemetry.addData("left elevator power", elevator.elevatorMotorL.getCurrent(CurrentUnit.AMPS));
             telemetry.addData("right elevator power", elevator.elevatorMotorR.getCurrent(CurrentUnit.AMPS));
-            telemetry.addData("dpad", gamepad1.dpad_up);
             telemetry.update();
         }
     }
