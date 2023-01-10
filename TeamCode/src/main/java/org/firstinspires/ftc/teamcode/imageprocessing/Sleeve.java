@@ -75,6 +75,64 @@ public class Sleeve {
     }
 
 
+    public int hello(Mat mat) {
+        // Define the Rectangle
+        final Rect ROI = new Rect(Constants.tlRoi,Constants.brRoi);
+        //Rect rect = new Rect(50, 50, 100, 100);
+
+        // Crop the image to the rectangle
+        Mat croppedImage = new Mat(mat, ROI);
+
+        // Convert the image to HSV color space
+        Mat hsvImage = new Mat();
+        Imgproc.cvtColor(croppedImage, hsvImage, Imgproc.COLOR_BGR2HSV);
+
+        // Initialize the color counters
+        int redCount = 0;
+        int greenCount = 0;
+        int blueCount = 0;
+
+        // Iterate through the pixels in the image
+        for (int i = 0; i < hsvImage.rows(); i++) {
+            for (int j = 0; j < hsvImage.cols(); j++) {
+                double[] pixel = hsvImage.get(i, j);
+                double hue = pixel[0];
+                double saturation = pixel[1];
+                double value = pixel[2];
+
+                // Check if the pixel is red
+                if (hue >= 0 && hue < 13 && saturation > 125 && saturation < 255 && value > 125) {
+                    redCount++;
+                }
+                // Check if the pixel is green
+                else if (hue >= 35 && hue < 135 && saturation > 69 && saturation < 220 && value > 147) {
+                    greenCount++;
+                }
+                // Check if the pixel is blue
+                else if (hue >= 105 && hue < 180 && saturation >= 0 && value >= 0 && value < 175) {
+                    blueCount++;
+                }
+            }
+        }
+
+        // Determine the most common color
+        int mostCommonColor = 0;
+        if (redCount > greenCount && redCount > blueCount) {
+            //red
+            mostCommonColor = 1;
+        } else if (greenCount > redCount && greenCount > blueCount) {
+            //green
+            mostCommonColor = 2;
+        } else if (blueCount > redCount && blueCount > greenCount) {
+            //blue
+            mostCommonColor = 3;
+        }
+
+        // Print the result
+        System.out.println("The most common color in the rectangle is: " + mostCommonColor);
+        return mostCommonColor;
+    }
+
 /*
     public int mostFound(Mat mat) {
         return colorSensorV3.color(

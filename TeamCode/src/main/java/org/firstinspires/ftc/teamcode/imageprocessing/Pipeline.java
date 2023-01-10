@@ -18,14 +18,12 @@ public class Pipeline extends OpenCvPipeline {
         //Assigning the value input (live vid) to the variable material
         //material = input;
         //Turn image to binary image (black & white pixels)
-        Imgproc.cvtColor(input, input, Constants.binary);
+        //Imgproc.cvtColor(input, input, Constants.binary);
         //blur (to remove noise)
         //Imgproc.blur(material, material, Constants.BlurRadius);
         //Calling findRodCenter function from the RodFinder class
         //RodDetector.findRodCenter();
-        System.out.println("B: "+sleeve.getBDouble(input));
-        System.out.println("G: "+sleeve.getGDouble(input));
-        System.out.println("R: "+sleeve.getRDouble(input));
+        sleeve.hello(input);
         //sleeve.hahahah(input);
         //int someonef = colorSensorV3.color(sleeve.getRDouble(input),sleeve.getGDouble(input),sleeve.getBDouble(input));
         //System.out.println(someonef);
