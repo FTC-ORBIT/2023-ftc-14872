@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.TeleOp14872;
-import org.firstinspires.ftc.teamcode.control.PID;
+import org.firstinspires.ftc.teamcode.control.PIDF;
 
 public class ElevatorConstants {
     public static PID setElevatorLevelPID = new PID(0,0,0,0,0);
