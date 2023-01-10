@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.utils.Vector;
 
 public class Drivetrain {
 
-    public final DcMotorEx[] motors = (DcMotorEx[]) new DcMotor[4];
+    public final DcMotorEx[] motors = (DcMotorEx[]) new DcMotorEx[4];
 
     public void init(HardwareMap hardwareMap) {
         motors[0] = hardwareMap.get(DcMotorEx.class, "lf");

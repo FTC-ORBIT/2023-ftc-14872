@@ -82,12 +82,12 @@ public class Elevator {
         elevatorMotorL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         elevatorMotorR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        if (Math.abs(power) > 0.3) {
-            elevatorMotorL.setPower(0.3);
-            elevatorMotorR.setPower(0.3);
+        if (Math.abs(power) > 0.1) {
+            elevatorMotorL.setPower(0.1);
+            elevatorMotorR.setPower(0.1);
         } else {
-            elevatorMotorL.setPower(power * 2.5 * DrivetrainConstants.ticksPerRev);
-            elevatorMotorR.setPower(power * 2.5 * DrivetrainConstants.ticksPerRev);
+            elevatorMotorL.setPower(power);
+            elevatorMotorR.setPower(power);
         }
 
     }

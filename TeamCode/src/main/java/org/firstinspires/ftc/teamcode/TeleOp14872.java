@@ -37,14 +37,18 @@ public class TeleOp14872 extends LinearOpMode {
         waitForStart();
 
         while (!isStopRequested()){
+
+
             GlobalData.currentTime = timer.milliseconds();
             drivetrain.operate(new Vector(gamepad1.left_stick_x, gamepad1.left_stick_y), gamepad1.left_trigger - gamepad1.right_trigger);
-            elevator.setElevatorPower(gamepad1.left_stick_y);
+            elevator.setElevatorPower(gamepad1.right_stick_y);
             if (gamepad1.left_bumper){claw.operate(true);
             } else if(gamepad1.right_bumper){claw.operate(false);}
             GlobalData.deltaTime = GlobalData.currentTime - GlobalData.lastTime;
             GlobalData.lastTime = GlobalData.currentTime;
 
+            telemetry.addData("left elevator pos", elevator.elevatorMotorL.getCurrentPosition());
+            telemetry.addData("right elevator pos", elevator.elevatorMotorR.getCurrentPosition());
             telemetry.addData("left elevator power", elevator.elevatorMotorL.getCurrent(CurrentUnit.AMPS));
             telemetry.addData("right elevator power", elevator.elevatorMotorR.getCurrent(CurrentUnit.AMPS));
             telemetry.update();
