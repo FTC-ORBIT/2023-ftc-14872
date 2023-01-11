@@ -24,21 +24,21 @@ public class Drivetrain {
         motors[2] = (DcMotorEx) hardwareMap.get(DcMotor.class, "rf");
         motors[3] = (DcMotorEx) hardwareMap.get(DcMotor.class, "rb");
 
+        motors[2].setDirection(DcMotorSimple.Direction.REVERSE);
         motors[0].setDirection(DcMotorSimple.Direction.REVERSE);
-        motors[1].setDirection(DcMotorSimple.Direction.REVERSE);
 
-        for (final DcMotor motor : motors) {
-            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        for (final DcMotorEx motor : motors) {
+            motor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+            motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+            motor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         }
 
         this.telemetry = telemetry;
     }
 
     public void operate(Vector velocity_W, double rotation) {
-        final double robotAngle = Angle.wrapAnglePlusMinusPI(Math.toRadians(Gyro.getAngle()) + Math.PI/2);
-        drive(velocity_W.rotate(-robotAngle + Math.PI / 2), rotation);
+        final double robotAngle = Angle.wrapAnglePlusMinusPI(Math.toRadians(Gyro.getAngle()) + Math.PI * 1.5 );
+        drive(velocity_W.rotate(-robotAngle), rotation);
     }
 
 
@@ -51,7 +51,7 @@ public class Drivetrain {
     }
 
     public void stop() {
-        for (DcMotor motor : motors) {
+        for (DcMotorEx motor : motors) {
             motor.setPower(0);
         }
     }
@@ -62,10 +62,10 @@ public class Drivetrain {
      * @param rotation which direction to rotate and at what speed.
      */
     private void drive(Vector directionNPower, double rotation) {
-        final double lfPower = directionNPower.y + directionNPower.x + rotation;
-        final double rfPower = directionNPower.y - directionNPower.x - rotation;
-        final double lbPower = directionNPower.y - directionNPower.x + rotation;
-        final double rbPower = directionNPower.y + directionNPower.x - rotation;
+        final double lfPower = directionNPower.y - directionNPower.x - rotation;
+        final double rfPower = directionNPower.y + directionNPower.x + rotation;
+        final double lbPower = directionNPower.y + directionNPower.x - rotation;
+        final double rbPower = directionNPower.y - directionNPower.x + rotation;
         final double max = Math.max(1,Math.max(Math.abs(lfPower),
                 Math.max(Math.abs(lbPower), Math.max(Math.abs(rfPower), Math.abs(rbPower)))));
         motors[0].setPower((lfPower / max));

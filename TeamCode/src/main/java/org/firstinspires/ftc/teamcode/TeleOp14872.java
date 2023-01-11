@@ -23,7 +23,6 @@ public class TeleOp14872 extends LinearOpMode {
         drivetrain.init(hardwareMap, telemetry);
         GlobalData.isAutonomous = false;
         //Servo servo = hardwareMap.get(Servo.class, "servoArm");
-        //DcMotor motor = hardwareMap.get(DcMotor.class, "elevator");
 
         waitForStart();
 
@@ -31,12 +30,16 @@ public class TeleOp14872 extends LinearOpMode {
             GlobalData.currentTime = timer.milliseconds();
             GlobalData.deltaTime = GlobalData.currentTime - GlobalData.lastTime;
             if(gamepad1.right_bumper) {Gyro.resetGyro();}
-            drivetrain.operate(new Vector(gamepad1.left_stick_x, gamepad1.left_stick_y), gamepad1.left_trigger - gamepad1.right_trigger);
+            drivetrain.operate(new Vector(gamepad1.left_stick_x, -gamepad1.left_stick_y), gamepad1.left_trigger - gamepad1.right_trigger);
 
             GlobalData.lastTime = GlobalData.currentTime;
 
             if (gamepad1.dpad_up) { Gyro.resetGyro();}
 
+            telemetry.addData("lf encoder", drivetrain.motors[0].getCurrentPosition());
+            telemetry.addData("lb encoder", drivetrain.motors[1].getCurrentPosition());
+            telemetry.addData("rf encoder", drivetrain.motors[2].getCurrentPosition());
+            telemetry.addData("rb encoder", drivetrain.motors[3].getCurrentPosition());
             telemetry.addData("x value", gamepad1.left_stick_x);
             telemetry.addData("y value", gamepad1.left_stick_y);
             telemetry.addData("rotation value", gamepad1.right_trigger - gamepad1.left_trigger);
