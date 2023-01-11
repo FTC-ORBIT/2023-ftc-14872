@@ -11,10 +11,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-
-import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
-import org.firstinspires.ftc.teamcode.robotSubSystems.claw.Claw;
-
+import org.firstinspires.ftc.teamcode.robotData.RobotState;
+import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Claw;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
 import org.firstinspires.ftc.teamcode.sensors.Gyro;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
@@ -50,7 +48,6 @@ public class TeleOp14872 extends OpMode {
         gamepad1LeftStickOffsetX = gamepad1.left_stick_x;
         gamepad1LeftStickOffsetY = gamepad1.left_stick_y;
     }
-
 
     @Override
     public void loop() {
@@ -122,7 +119,6 @@ public class TeleOp14872 extends OpMode {
 
         }else if (gamepad1.dpad_right){
             GlobalData.robotState = RobotState.COLLECTION;
-
 
         }
     }
