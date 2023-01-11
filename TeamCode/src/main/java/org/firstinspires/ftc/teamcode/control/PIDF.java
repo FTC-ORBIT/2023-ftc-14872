@@ -7,29 +7,21 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 
 public class PIDF {
-    private double time = System.currentTimeMillis();
-    private double kP;
-    private double kI;
-    private double kD;
-    private double iZone;
-    private double kF;
+    private PIDFCoefficients coefficients;
+    private double iZone = 0;
 
     private double wanted = 0;
-
     private double integral = 0;
     private double prevError = 0;
-    private double prevTime = System.currentTimeMillis();
+
+    private final double deltaTime = GlobalData.deltaTime;
 
     /**
      * all of the pid values
      * @param coefficients the PIDF coefficients
      */
     public PIDF(PIDFCoefficients coefficients) {
-        this.kP = kP;
-        this.kI = kI;
-        this.kD = kD;
-        this.kF = kF;
-        this.iZone = iZone;
+        this.coefficients = coefficients;
     }
 
     /**
@@ -47,8 +39,6 @@ public class PIDF {
      */
     public double update(double current) {
         final double currentError = wanted - current;
-        double currentTime = System.currentTimeMillis();
-        double deltaTime = 200 * GlobalData.epsilon;
         if (Math.signum(currentError) != Math.signum(prevError)){
             integral = 0;
         }else if (Math.abs(currentError) < iZone){
@@ -58,8 +48,6 @@ public class PIDF {
         double derivative = (currentError -  prevError) / deltaTime;
 
         prevError = currentError;
-        prevTime = currentTime;
-        return currentError * kP + kF * wanted + derivative * kD + integral * kI;
+        return currentError * coefficients.p + coefficients.f * wanted + derivative * coefficients.d + integral * coefficients.i;
     }
-
 }

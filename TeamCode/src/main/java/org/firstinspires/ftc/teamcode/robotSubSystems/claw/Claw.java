@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.robotSubSystems.elevator;
+package org.firstinspires.ftc.teamcode.robotSubSystems.claw;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -14,10 +14,10 @@ public class Claw {
     public void operate(boolean openClaw) {
 
         if (openClaw) {
-            clawServo.setPosition(0.57);
+            clawServo.setPosition(ClawConstants.clawOpenPosition);
             isClawOpen = true;
         } else {
-            clawServo.setPosition(1);   
+            clawServo.setPosition(ClawConstants.clawClosedPosition);
             isClawOpen = false;
         }
     }

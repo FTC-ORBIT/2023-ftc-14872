@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.res.Gyro;
 import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.Drivetrain;
+import org.firstinspires.ftc.teamcode.sensors.Gyro;
 import org.firstinspires.ftc.teamcode.utils.Vector;
 
 @Autonomous(name = "Autonomous14872")

@@ -1,18 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.opMode;
-
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.robotData.RobotState;
-import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Claw;
+import org.firstinspires.ftc.teamcode.robotSubSystems.claw.Claw;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
 import org.firstinspires.ftc.teamcode.sensors.Gyro;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
@@ -36,7 +31,7 @@ public class TeleOp14872 extends OpMode {
     @Override
     public void init() {
         Gyro.init(hardwareMap);
-        drivetrain.init(hardwareMap);
+        drivetrain.init(hardwareMap, telemetry);
         elevator.init(hardwareMap);
         claw.init(hardwareMap);
 
@@ -46,6 +41,7 @@ public class TeleOp14872 extends OpMode {
 
         gamepad1LeftStickOffsetX = gamepad1.left_stick_x;
         gamepad1LeftStickOffsetY = gamepad1.left_stick_y;
+        lastDpadState = gamepad1.dpad_down;
     }
 
     @Override
@@ -58,18 +54,13 @@ public class TeleOp14872 extends OpMode {
 
         switch (GlobalData.robotState){
             case TRAVEL:
-                if (GlobalData.robotState != lastState){
-                    elevator.operate(1);
-                }
-                useDrive( 1 - (double) elevator.getMotorPos() / 4130 * 0.65  );
+                useDrive( 1 - (double) elevator.getPosition() / 4130 * 0.65);
                 useClaw();
                 useGoByLevel();
 
                 break;
             case COLLECTION:
-                if (GlobalData.robotState != lastState){
-                    elevator.operate(0);
-                }
+
                 useDrive(0.40);
                 useClaw();
                 elevator.setElevatorPower(-gamepad1.right_stick_y * 0.5 + 0.1);
@@ -104,7 +95,7 @@ public class TeleOp14872 extends OpMode {
     }
 
     private void useDrive(double powerMultiplier){
-        drivetrain.operate(new Vector(gamepad1.left_stick_x - gamepad1LeftStickOffsetX, -(gamepad1.left_stick_y - gamepad1LeftStickOffsetY )).scale(powerMultiplier), (gamepad1.right_trigger - gamepad1.left_trigger) * powerMultiplier * 1.4);
+        drivetrain.operate(new Vector(gamepad1.left_stick_x - gamepad1LeftStickOffsetX, -(gamepad1.left_stick_y - gamepad1LeftStickOffsetY )).scale(powerMultiplier), (gamepad1.left_trigger - gamepad1.right_trigger) * powerMultiplier * 1.4);
     }
 
     private void useClaw(){
@@ -112,12 +103,14 @@ public class TeleOp14872 extends OpMode {
         }else if (gamepad1.right_bumper){claw.operate(false);}
     }
 
+    boolean lastDpadState;
     private void changeRobotState(){
-        if (gamepad1.dpad_down){
-            GlobalData.robotState = RobotState.TRAVEL;
-
-        }else if (gamepad1.dpad_right){
-            GlobalData.robotState = RobotState.COLLECTION;
+        if (gamepad1.dpad_down && !lastDpadState) {
+            if (GlobalData.robotState == RobotState.TRAVEL){
+                GlobalData.robotState = RobotState.COLLECTION;
+            } else
+                GlobalData.robotState = RobotState.TRAVEL;
         }
+        lastDpadState  = gamepad1.dpad_down;
     }
 }
