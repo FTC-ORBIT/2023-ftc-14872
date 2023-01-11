@@ -1,29 +1,32 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.imageprocessing.Constants;
-import org.firstinspires.ftc.teamcode.robotSubSystems.camera.Camera;
-import org.firstinspires.ftc.teamcode.sensors.ColorSensorV3;
+import org.firstinspires.ftc.teamcode.res.Gyro;
+import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.Drivetrain;
+import org.firstinspires.ftc.teamcode.utils.Vector;
 
 @Autonomous(name = "Autonomous14872")
 public class Autonomous14872 extends LinearOpMode {
-    ColorSensorV3 colorSensorV3 = new ColorSensorV3();
+
+    Drivetrain drivetrain = new Drivetrain();
+
 
     @Override
-    public void runOpMode() {
-        //Camera.init function
-        Camera.init(hardwareMap);
-        colorSensorV3.init(hardwareMap);
+    public void runOpMode() throws InterruptedException {
+
+        drivetrain.init(hardwareMap, telemetry);
+        Gyro.init(hardwareMap);
 
         waitForStart();
-        //FTC dashboard init
-        while (opModeIsActive()) {
-            FtcDashboard.getInstance().startCameraStream(Constants.camera,60);
-            colorSensorV3.colorTelemetry(telemetry);
-        }
 
+        drivetrain.driveToDirection(-100, 0);
+
+        while (opModeIsActive()){
+
+
+        }
     }
 }
