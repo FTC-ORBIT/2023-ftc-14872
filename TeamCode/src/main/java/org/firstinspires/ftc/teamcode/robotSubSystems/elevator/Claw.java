@@ -26,4 +26,5 @@ public class Claw {
         return isClawOpen;
     }
 
+    public double clawPos() {return clawServo.getPosition();}
 }
