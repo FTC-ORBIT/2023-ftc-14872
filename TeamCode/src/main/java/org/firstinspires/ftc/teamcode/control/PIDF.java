@@ -4,9 +4,6 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-
-import org.firstinspires.ftc.teamcode.robotData.Constants;
-
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 
 public class PIDF {
@@ -28,13 +25,11 @@ public class PIDF {
      * @param coefficients the PIDF coefficients
      */
     public PIDF(PIDFCoefficients coefficients) {
-
-        this.kP = coefficients.p;
-        this.kI = coefficients.i;
-        this.kD = coefficients.d;
-        this.kF = coefficients.f;
-        this.iZone = coefficients.f;
-
+        this.kP = kP;
+        this.kI = kI;
+        this.kD = kD;
+        this.kF = kF;
+        this.iZone = iZone;
     }
 
     /**
@@ -53,9 +48,7 @@ public class PIDF {
     public double update(double current) {
         final double currentError = wanted - current;
         double currentTime = System.currentTimeMillis();
-
-        double deltaTime = 2000000000 * Constants.epsilon;
-
+        double deltaTime = 200 * GlobalData.epsilon;
         if (Math.signum(currentError) != Math.signum(prevError)){
             integral = 0;
         }else if (Math.abs(currentError) < iZone){
