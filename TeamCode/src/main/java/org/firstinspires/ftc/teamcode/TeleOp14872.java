@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.utils.Vector;
 @TeleOp(name = "TeleOp14872")
 public class TeleOp14872 extends LinearOpMode {
 
-    private ElapsedTime timer = new ElapsedTime();
+    private final ElapsedTime timer = new ElapsedTime();
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -41,7 +41,12 @@ public class TeleOp14872 extends LinearOpMode {
 
             GlobalData.currentTime = timer.milliseconds();
             //drivetrain.operate(new Vector(gamepad1.left_stick_x, gamepad1.left_stick_y), gamepad1.left_trigger - gamepad1.right_trigger);
-            elevator.setElevatorPower(-gamepad1.right_stick_y);
+            //elevator.setElevatorPower(-gamepad1.right_stick_y);
+            if (gamepad1.dpad_down) {elevator.operate(0);}
+            if (gamepad1.dpad_up) {elevator.operate(1);}
+            if (gamepad1.dpad_left) {elevator.operate(2);}
+            if (gamepad1.dpad_right) {elevator.operate(3);}
+            if (gamepad1.right_stick_button) {elevator.operate(4);}
             if (gamepad1.left_bumper){claw.operate(false);
             } else if(gamepad1.right_bumper){claw.operate(true);}
             GlobalData.deltaTime = GlobalData.currentTime - GlobalData.lastTime;

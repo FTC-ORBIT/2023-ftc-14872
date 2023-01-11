@@ -21,12 +21,10 @@ public class Elevator {
         elevatorMotorL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         elevatorMotorL.setDirection(DcMotorSimple.Direction.REVERSE);
         elevatorMotorL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        elevatorMotorL.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, ElevatorConstants.pidfCoefficients);
 
         elevatorMotorR = (DcMotorEx) hardwareMap.get(DcMotor.class, "elevMotorR");
         elevatorMotorR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         elevatorMotorR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        elevatorMotorR.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, ElevatorConstants.pidfCoefficients);
 
         level = 0;
     }
@@ -45,9 +43,14 @@ public class Elevator {
      */
     public void operate(int level) {
         elevatorMotorL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        elevatorMotorL.setPower(0.3);
+        elevatorMotorL.setPower(0.9);
         elevatorMotorR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        elevatorMotorR.setPower(0.3);
+        elevatorMotorR.setPower(0.9);
+
+        if ((elevatorMotorL.getCurrentPosition() < 0 || elevatorMotorR.getCurrentPosition() < 0)|| (elevatorMotorL.getCurrentPosition() > ElevatorConstants.maxEncoderTick || elevatorMotorR.getCurrentPosition() > ElevatorConstants.maxEncoderTick)) {
+            stop();
+            return;
+        }
 
         switch (level) {
             case 1:
