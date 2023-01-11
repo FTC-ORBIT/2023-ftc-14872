@@ -101,7 +101,6 @@ public class ConceptVuforiaFieldNavigation extends LinearOpMode {
 
     // Since ImageTarget trackables use mm to specifiy their dimensions, we must use mm for all the physical dimension.
     // We will define some constants and conversions here.  These are useful for the FTC competition field.
-
     private static final float mmPerInch        = 25.4f;
     private static final float mmTargetHeight   = 6 * mmPerInch;          // the height of the center of the target image above the floor
     private static final float halfField        = 72 * mmPerInch;
@@ -167,7 +166,6 @@ public class ConceptVuforiaFieldNavigation extends LinearOpMode {
         identifyTarget(1, "Red Rear Wall",        halfField,  -oneAndHalfTile, mmTargetHeight, 90, 0, -90);
         identifyTarget(2, "Blue Audience Wall",  -halfField,   oneAndHalfTile, mmTargetHeight, 90, 0,  90);
         identifyTarget(3, "Blue Rear Wall",       halfField,   oneAndHalfTile, mmTargetHeight, 90, 0, -90);
-
 
         /*
          * Create a transformation matrix describing where the phone is on the robot.
