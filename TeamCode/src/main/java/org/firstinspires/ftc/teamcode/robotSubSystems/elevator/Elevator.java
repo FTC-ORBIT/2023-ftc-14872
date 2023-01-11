@@ -1,64 +1,109 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.elevator;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+
+import org.firstinspires.ftc.teamcode.control.PIDF;
+import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.DrivetrainConstants;
 
 
 public class Elevator {
-    private DcMotor elevatorMotor;
+    public DcMotorEx elevatorMotorL;
+    public DcMotorEx elevatorMotorR;
     private int level;
 
     public void init(HardwareMap hardwareMap){
-        elevatorMotor = hardwareMap.get(DcMotor.class, "elevMotor");
-        elevatorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        elevatorMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        elevatorMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        elevatorMotorL = (DcMotorEx) hardwareMap.get(DcMotor.class, "elevMotorL");
+        elevatorMotorL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        elevatorMotorL.setDirection(DcMotorSimple.Direction.REVERSE);
+        elevatorMotorL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        elevatorMotorR = (DcMotorEx) hardwareMap.get(DcMotor.class, "elevMotorR");
+        elevatorMotorR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        elevatorMotorR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         level = 0;
     }
 
-    public int getMotorPos(){
-        return elevatorMotor.getCurrentPosition();
+    public int getMotorLPos(){
+        return elevatorMotorL.getCurrentPosition();
     }
+
+    public int getMotorRPos(){
+        return elevatorMotorR.getCurrentPosition();
+    }
+
+    /**
+     * goes from level 0 - 4 in the elevator look at ElevatorConstants to see values
+     * @param level level 0 is default and 1 - 4 are not
+     */
     public void operate(int level) {
-        elevatorMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        elevatorMotor.setPower(0.95);
+        elevatorMotorL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        elevatorMotorL.setPower(0.9);
+        elevatorMotorR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        elevatorMotorR.setPower(0.9);
+
+        if ((elevatorMotorL.getCurrentPosition() < 0 || elevatorMotorR.getCurrentPosition() < 0)|| (elevatorMotorL.getCurrentPosition() > ElevatorConstants.maxEncoderTick || elevatorMotorR.getCurrentPosition() > ElevatorConstants.maxEncoderTick)) {
+            stop();
+            return;
+        }
 
         switch (level) {
             case 1:
-                goToPosition(elevatorMotor, 70);
+                goToPosition(elevatorMotorL, elevatorMotorR, ElevatorConstants.elevatorLevelsInTicks[1]);
                 this.level = 1;
                 break;
             case 2:
-                goToPosition(elevatorMotor,1815);
+                goToPosition(elevatorMotorL, elevatorMotorR, ElevatorConstants.elevatorLevelsInTicks[2]);
                 this.level = 2;
                 break;
             case 3:
-                goToPosition(elevatorMotor,2910);
+                goToPosition(elevatorMotorL, elevatorMotorR, ElevatorConstants.elevatorLevelsInTicks[3]);
                 this.level = 3;
                 break;
             case 4:
-                goToPosition(elevatorMotor,4115);
+                goToPosition(elevatorMotorL, elevatorMotorR, ElevatorConstants.elevatorLevelsInTicks[4]);
                 this.level = 4;
                 break;
             default:
-                goToPosition(elevatorMotor, 0);
+                goToPosition(elevatorMotorL, elevatorMotorR, ElevatorConstants.elevatorLevelsInTicks[0]);
                 this.level = 0;
                 break;
         }
     }
 
     public void setElevatorPower(double power){
-        elevatorMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        elevatorMotor.setPower(power);
+        elevatorMotorL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        elevatorMotorR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        if ((elevatorMotorL.getCurrentPosition() < 0 || elevatorMotorR.getCurrentPosition() < 0) && power < 0 || (elevatorMotorL.getCurrentPosition() > ElevatorConstants.maxEncoderTick || elevatorMotorR.getCurrentPosition() > ElevatorConstants.maxEncoderTick) && power > 0) {
+            stop();
+            return;
+        }
+
+        elevatorMotorL.setPower(power * 0.5);
+        elevatorMotorR.setPower(power * 0.5);
     }
 
     public int getLevel(){return level;}
 
-    public void goToPosition(DcMotor motor,int target) { /*in ticks*/ motor.setTargetPosition(target); motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);}
+    public void goToPosition(DcMotor leftMotor,DcMotor rightMotor, int target) {
 
-    public void stop(){ elevatorMotor.setPower(0);}
+        leftMotor.setTargetPosition(target);
+        rightMotor.setTargetPosition(target);
+        leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+    public void stop(){
+        elevatorMotorL.setPower(0);
+        elevatorMotorR.setPower(0);
+    }
 
 }
 
@@ -67,22 +112,3 @@ public class Elevator {
 //second stage 59.69 (5.32)
 //third stage 85.09 (7.59)
 //cm for motor rotation 11.2
-
-
-/*
-        if (level == 0){
-            goToPosition(elevatorMotor,0);
-        }
-        if(level == 1) {
-            goToPosition(elevatorMotor,1750);
-        }
-        else if(level == 2) {
-            goToPosition(elevatorMotor,2865);
-        }
-        else if(level == 3) {
-            goToPosition(elevatorMotor,4085);
-        }
-        else{
-            goToPosition(elevatorMotor,0);
-        }
-*/
