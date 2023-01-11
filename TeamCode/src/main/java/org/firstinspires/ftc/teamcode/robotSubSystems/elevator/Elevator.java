@@ -45,9 +45,9 @@ public class Elevator {
      */
     public void operate(int level) {
         elevatorMotorL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        elevatorMotorL.setPower(1);
+        elevatorMotorL.setPower(0.3);
         elevatorMotorR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        elevatorMotorR.setPower(1);
+        elevatorMotorR.setPower(0.3);
 
         switch (level) {
             case 1:
@@ -75,22 +75,16 @@ public class Elevator {
 
     public void setElevatorPower(double power){
 
-
         elevatorMotorL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         elevatorMotorR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        if (elevatorMotorL.getCurrentPosition() < 0 || elevatorMotorR.getCurrentPosition() < 0 || elevatorMotorL.getCurrentPosition() > 1000 || elevatorMotorR.getCurrentPosition() > 1000) {
+        if ((elevatorMotorL.getCurrentPosition() < 0 || elevatorMotorR.getCurrentPosition() < 0) && power < 0 || (elevatorMotorL.getCurrentPosition() > ElevatorConstants.maxEncoderTick || elevatorMotorR.getCurrentPosition() > ElevatorConstants.maxEncoderTick) && power > 0) {
+            stop();
             return;
         }
 
-        if (Math.abs(power) > 0.1) {
-            elevatorMotorL.setPower(0.1);
-            elevatorMotorR.setPower(0.1);
-        } else {
-            elevatorMotorL.setPower(power);
-            elevatorMotorR.setPower(power);
-        }
-
+        elevatorMotorL.setPower(power * 0.5);
+        elevatorMotorR.setPower(power * 0.5);
     }
 
     public int getLevel(){return level;}

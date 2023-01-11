@@ -9,9 +9,10 @@ import org.firstinspires.ftc.teamcode.control.PIDF;
 
 public class ElevatorConstants {
 
-    public static double motorRotationsPerLevel = 25.4/11.2;
-    public static int[] elevatorLevelsInTicks = {0, 70, 1815, 2910, 4115};
+    public static final double motorRotationsPerLevel = 25.4/11.2;
+    public static final int[] elevatorLevelsInTicks = {0, 70, 1815, 2910, 4115};
     //TODO: find the best values.
-    public static PIDFCoefficients pidfCoefficients = new PIDFCoefficients(0, 0, 0, 0);
+    public static final PIDFCoefficients pidfCoefficients = new PIDFCoefficients(0, 0, 0, 0);
+    public static final double maxEncoderTick = 4300;
 
 }
