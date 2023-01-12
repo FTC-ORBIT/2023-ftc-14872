@@ -52,6 +52,8 @@ public class TeleOp14872 extends OpMode {
         GlobalData.deltaTime = GlobalData.currentTime - GlobalData.lastTime;
         GlobalData.lastTime = GlobalData.currentTime;
 
+        changeRobotState();
+
         switch (GlobalData.robotState){
             case TRAVEL:
                 useDrive( 1 - (double) elevator.getPosition() / 4130 * 0.65);
@@ -70,7 +72,6 @@ public class TeleOp14872 extends OpMode {
 
         lastState = GlobalData.robotState;
 
-        changeRobotState();
 
         telemetry.addData("robotState", GlobalData.robotState.toString());
         telemetry.addData("stick right x", gamepad1.right_stick_x);
@@ -105,6 +106,12 @@ public class TeleOp14872 extends OpMode {
 
     boolean lastDpadState;
     private void changeRobotState(){
+        if (GlobalData.robotState != RobotState.TRAVEL){
+            if (gamepad1.b || gamepad1.a || gamepad1.y || gamepad1.x){
+                GlobalData.robotState = RobotState.TRAVEL;
+                return;
+            }
+        }
         if (gamepad1.dpad_down && !lastDpadState) {
             if (GlobalData.robotState == RobotState.TRAVEL){
                 GlobalData.robotState = RobotState.COLLECTION;
