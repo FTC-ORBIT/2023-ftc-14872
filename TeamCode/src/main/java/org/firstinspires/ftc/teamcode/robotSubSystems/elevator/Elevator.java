@@ -39,9 +39,9 @@ public class Elevator {
      */
     public void operate(int level) {
         MotorL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        MotorL.setPower(1);
+        MotorL.setPower(0.95);
         MotorR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        MotorR.setPower(1);
+        MotorR.setPower(0.95);
 
         if ((MotorL.getCurrentPosition() < 0 || MotorR.getCurrentPosition() < 0) || (MotorL.getCurrentPosition() > ElevatorConstants.maxEncoderTick || MotorR.getCurrentPosition() > ElevatorConstants.maxEncoderTick)) {
             stop();
@@ -50,7 +50,7 @@ public class Elevator {
 
         switch (level) {
             case 1:
-                goToPosition(MotorL, MotorR, ElevatorConstants.elevatorLevelsInTicks[1]);
+                goToPosition(MotorL, MotorR, ElevatorConstants.elevatorLevelsInTicks[0]);
                 this.level = 1;
                 break;
             case 2:

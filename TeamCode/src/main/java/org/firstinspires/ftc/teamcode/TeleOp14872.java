@@ -106,7 +106,7 @@ public class TeleOp14872 extends OpMode {
 
     boolean lastDpadState;
     private void changeRobotState(){
-        if (GlobalData.robotState != RobotState.TRAVEL){
+        if (GlobalData.robotState == RobotState.COLLECTION){
             if (gamepad1.b || gamepad1.a || gamepad1.y || gamepad1.x){
                 GlobalData.robotState = RobotState.TRAVEL;
                 return;
