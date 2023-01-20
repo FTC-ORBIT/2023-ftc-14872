@@ -37,7 +37,6 @@ public class Sleeve {
     }
 
     public double getBDouble(Mat mat){
-
         final Rect BLUE_ROI = new Rect(Constants.tlRoi,Constants.brRoi);
         //Imgproc.cvtColor(mat,mat,Constants.binary);
         Core.inRange(mat,Constants.lowBHSV,Constants.highBHSV,mat);
@@ -133,7 +132,6 @@ public class Sleeve {
         return mostCommonColor;
     }
 
-/*
     public int mostFound(Mat mat) {
         return colorSensorV3.color(
                 getRDouble(mat),
@@ -142,5 +140,48 @@ public class Sleeve {
         );
     }
 
- */
+    public static int colorMaybe(Mat mat) {
+        final Rect ROI = new Rect(Constants.tlRoi,Constants.brRoi);
+        Mat hsvImage = new Mat();
+        Mat croppedImage = new Mat(mat, ROI);
+        int redCount = 0;
+        int blueCount = 0;
+        int greenCount = 0;
+        Imgproc.cvtColor(croppedImage,hsvImage,Constants.binary);
+
+        // Iterate through each pixel in the image
+        for (int row = 0; row < hsvImage.rows(); row++) {
+            for (int col = 0; col < hsvImage.cols(); col++) {
+                double[] pixel = hsvImage.get(row, col);
+                double hue = pixel[0];
+                double saturation = pixel[1];
+                double value = pixel[2];
+
+                // Check if the pixel is within the range of the desired color
+                if (hue >= 0 && hue <= 15) {
+                    redCount++;
+                } else if (hue >= 110 && hue <= 130) {
+                    blueCount++;
+                } else if (hue >= 60 && hue <= 80) {
+                    greenCount++;
+                }
+            }
+        }
+
+        // Find the most common color
+        int mostCommonColor = 0;
+        int maxCount = Math.max(redCount, Math.max(blueCount, greenCount));
+        if (maxCount == redCount) {
+            mostCommonColor = 1;
+        } else if (maxCount == blueCount) {
+            mostCommonColor = 2;
+        } else if (maxCount == greenCount) {
+            mostCommonColor = 3;
+        }
+        System.out.println("The most common color is " + mostCommonColor);
+        return mostCommonColor;
+    }
+
+
+
 }
