@@ -181,6 +181,13 @@ public class Sleeve {
         System.out.println("The most common color is " + mostCommonColor);
         return mostCommonColor;
     }
+    public Scalar pixels(Mat mat) {
+        double[] pixel = mat.get(11,30);
+        Scalar pixColor = new Scalar(pixel);
+        final Rect ROI = new Rect(10,10,20,20);
+        mat.submat(ROI).setTo(pixColor);
+        return pixColor;
+    }
 
 
 
