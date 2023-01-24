@@ -23,7 +23,7 @@ public class Pipeline extends OpenCvPipeline {
         //Imgproc.blur(material, material, Constants.BlurRadius);
         //Calling findRodCenter function from the RodFinder class
         //RodDetector.findRodCenter();
-        sleeve.hello(input);
+        System.out.println(sleeve.mostColorInRect(input));
         //sleeve.hahahah(input);
         //int someonef = colorSensorV3.color(sleeve.getRDouble(input),sleeve.getGDouble(input),sleeve.getBDouble(input));
         //System.out.println(someonef);

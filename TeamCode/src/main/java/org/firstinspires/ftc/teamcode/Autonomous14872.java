@@ -18,7 +18,7 @@ public class Autonomous14872 extends LinearOpMode {
     public void runOpMode() {
         //Camera.init function
         Camera.init(hardwareMap);
-        colorSensorV3.init(hardwareMap);
+        //colorSensorV3.init(hardwareMap);
         waitForStart();
         //FTC dashboard init
         while (opModeIsActive()) {
