@@ -105,16 +105,6 @@ public class Drivetrain {
 
         while (!(Math.abs(beginPosition + distInCM) - 2 <= avgWheelPosInCM() && Math.abs(beginPosition + distInCM) + 2 >= avgWheelPosInCM())){
             operate(vector.rotate(angle), 0);
-
-            telemetry.addData("gyro", Gyro.getAngle());
-            telemetry.addData("lf wheel", motors[0].getCurrentPosition());
-            telemetry.addData("lb wheel", motors[1].getCurrentPosition());
-            telemetry.addData("rf wheel", motors[2].getCurrentPosition());
-            telemetry.addData("rb wheel", motors[3].getCurrentPosition());
-
-            telemetry.addData("distance drove", avgWheelPosInCM());
-
-            telemetry.update();
         }
         stop();
         //TODO: add angle control

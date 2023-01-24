@@ -43,6 +43,8 @@ public class TeleOp14872 extends OpMode {
         gamepad1LeftStickOffsetX = gamepad1.left_stick_x;
         gamepad1LeftStickOffsetY = gamepad1.left_stick_y;
         lastDpadState = gamepad1.dpad_down;
+
+        claw.operate(false);
     }
 
     @Override
