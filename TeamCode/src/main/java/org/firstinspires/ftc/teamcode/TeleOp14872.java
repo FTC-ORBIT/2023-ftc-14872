@@ -59,7 +59,7 @@ public class TeleOp14872 extends OpMode {
 
         switch (GlobalData.robotState){
             case TRAVEL:
-                useDrive( 1 - (double) elevator.getPosition() / 4130 * 0.65);
+                useDrive( 1 - elevator.getPosition() / 4130 * 0.65);
                 useClaw();
                 useGoByLevel();
 

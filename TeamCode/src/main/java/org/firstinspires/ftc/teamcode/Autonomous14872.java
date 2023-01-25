@@ -26,20 +26,24 @@ public class Autonomous14872 extends LinearOpMode {
 
         claw.operate(false);
 
-        parkingDecider(2);
+        parkingDecider(3);
 
 
     }
 
     public void parkingDecider(int parkingSpot) {
-        switch(parkingSpot) {
-            case 1:             drivetrain.driveToDirection(75, 0);
-                                drivetrain.driveToDirection(65, -90);
-
-                case 2:         drivetrain.driveToDirection(75, 0);
-
-                case 3:         drivetrain.driveToDirection(75, 0);
-                                drivetrain.driveToDirection(65, 90);
+        switch (parkingSpot) {
+            case 1:
+                drivetrain.driveToDirection(60, 0);
+                drivetrain.driveToDirection(30, -67.5);
+                break;
+            case 2:
+                drivetrain.driveToDirection(65, 0);
+                break;
+            case 3:
+                drivetrain.driveToDirection(60, 0);
+                drivetrain.driveToDirection(30, 67.5);
+                break;
         }
     }
 }

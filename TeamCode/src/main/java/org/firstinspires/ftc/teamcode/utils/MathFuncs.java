@@ -49,7 +49,7 @@ public final class MathFuncs {
         return Math.abs((value - reference) / reference);
     }
 
-    private static int[] factorials = { 1, 1, 2, 6 };
+    private static final int[] factorials = { 1, 1, 2, 6 };
 
     public static double hypotenuse(final double a, final double b) {
         return Math.sqrt(a * a + b * b);

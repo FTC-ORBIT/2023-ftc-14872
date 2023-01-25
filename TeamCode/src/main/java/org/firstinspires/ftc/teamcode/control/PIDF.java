@@ -7,8 +7,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 
 public class PIDF {
-    private PIDFCoefficients coefficients;
-    private double iZone = 0;
+    private final PIDFCoefficients coefficients;
+    private final double iZone = 0;
 
     private double wanted = 0;
     private double integral = 0;

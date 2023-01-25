@@ -97,7 +97,7 @@ public class Drivetrain {
      * @param distInCM the amount of cm to drive.
      * @param angle the angle to drive to.
      */
-    private boolean driveToDirectionRunning = false;
+    private final boolean driveToDirectionRunning = false;
 
     public void driveToDirection(double distInCM, double angle) {
         double beginPosition = avgWheelPosInCM();

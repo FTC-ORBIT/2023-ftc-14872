@@ -2,9 +2,9 @@ package org.firstinspires.ftc.teamcode.utils;
 
 public final class Angle {
 
-    public static final double halfPI = (double) Math.PI / 2;
-    public static final double pi = (double) Math.PI;
-    public static final double twoPI = (double) Math.PI * 2;
+    public static final double halfPI = Math.PI / 2;
+    public static final double pi = Math.PI;
+    public static final double twoPI = Math.PI * 2;
 
     public static double wrapAngle0_2PI(final double theta) {
         return (theta % twoPI + twoPI) % twoPI;
@@ -27,18 +27,18 @@ public final class Angle {
 
     // Functions to convert between degrees and radians:
     public static double degToRad(final double theta) {
-        return (double) Math.toRadians(theta);
+        return Math.toRadians(theta);
     } //double
 
     public static double radToDeg(final double theta) {
-        return (double) Math.toDegrees(theta);
+        return Math.toDegrees(theta);
     } //double
 
     public static double projectBetweenPlanes(final double theta, final double alpha) {
         if (alpha < 0) {
-            return (double) Math.atan(Math.tan(theta) / Math.cos(alpha));
+            return Math.atan(Math.tan(theta) / Math.cos(alpha));
         } else {
-            return (double) Math.atan(Math.tan(theta) * Math.cos(alpha));
+            return Math.atan(Math.tan(theta) * Math.cos(alpha));
         }
     }
     // alpha is the angle between the planes.

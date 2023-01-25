@@ -30,7 +30,7 @@ public final class Vector {
         if (x == 0 && y == 0) {
             return 0;
         } else {
-            return (double) Math.atan2(y, x);
+            return Math.atan2(y, x);
         }
     }
 
@@ -47,20 +47,20 @@ public final class Vector {
     }
     // returns maagal hyehida
     public static Vector unit(final double angle) {
-        return new Vector((double) Math.cos(angle) , (double) Math.sin(angle));
+        return new Vector(Math.cos(angle), Math.sin(angle));
     }
 
     public static Vector fromAngleAndRadius(final double theta, final double radius) {
-        final double vectorX = (double) Math.cos(theta) * radius;
-        final double vectorY = (double) Math.sin(theta) * radius;
+        final double vectorX = Math.cos(theta) * radius;
+        final double vectorY = Math.sin(theta) * radius;
         return new Vector(vectorX, vectorY);
     }
 
     public double dotProduct(final Vector other) { return x * other.x + y * other.y;}
 
     public Vector rotate(final double theta) {
-        final double sinTheta = (double) Math.sin(theta);
-        final double cosTheta = (double) Math.cos(theta);
+        final double sinTheta = Math.sin(theta);
+        final double cosTheta = Math.cos(theta);
 
         final double newX = x * cosTheta - y * sinTheta;
         final double newY = x * sinTheta + y * cosTheta;
@@ -134,6 +134,6 @@ public final class Vector {
         if (normA == 0 || normB == 0)
             return 0;
 
-        return (double) Math.acos(a.dotProduct(b) / (normA * normB));
+        return Math.acos(a.dotProduct(b) / (normA * normB));
     }
 }

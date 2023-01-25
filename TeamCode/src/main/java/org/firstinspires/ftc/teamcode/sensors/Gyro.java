@@ -10,10 +10,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
 public class Gyro {
-    private static float gyroOffset = 0;
-    private static float prevHeading = 0;
-    private static float heading = 0;
-    private static float omega = 0;
+    private static final float gyroOffset = 0;
+    private static final float prevHeading = 0;
+    private static final float heading = 0;
+    private static final float omega = 0;
     public static BNO055IMU imu;
     private static double  lastAngle;
     static double currentAngle = 0;
