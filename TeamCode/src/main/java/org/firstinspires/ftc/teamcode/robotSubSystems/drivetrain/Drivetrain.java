@@ -104,7 +104,7 @@ public class Drivetrain {
         Vector vector = new Vector(0, 0.4 * distInCM / Math.abs(distInCM));
 
         while (!(Math.abs(beginPosition + distInCM) - 2 <= avgWheelPosInCM() && Math.abs(beginPosition + distInCM) + 2 >= avgWheelPosInCM())){
-            operate(vector.rotate(angle), 0);
+            operate(vector.rotate(Math.toRadians(angle)), 0);
         }
         stop();
         //TODO: add angle control
