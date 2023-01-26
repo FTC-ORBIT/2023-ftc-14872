@@ -26,7 +26,7 @@ public class ColorSensorV3 {
         return getColor;
     }
 
-    private int color(int red, int green, int blue) {
+    public int color(double red, double green, double blue) {
         int colorInInt = 0;
         if (red > green && red > blue) { colorInInt = 1; }
         if (green > red && green > blue) { colorInInt = 2; }
