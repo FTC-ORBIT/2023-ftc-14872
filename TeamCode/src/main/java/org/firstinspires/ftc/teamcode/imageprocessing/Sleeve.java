@@ -12,9 +12,7 @@ public class Sleeve {
     public static int mostColorInRect(Mat mat) {
         final Rect ROI = new Rect(Constants.tlRoi,Constants.brRoi);
         Mat croppedImage = new Mat(mat, ROI);
-        int redCount = 0;
-        int greenCount = 0;
-        int whiteCount = 0;
+        int redCount = 0; int greenCount = 0; int whiteCount = 0;
 
         // Iterate through each pixel in the image
         for (int row = 0; row < croppedImage.rows(); row++) {
@@ -31,7 +29,6 @@ public class Sleeve {
                 if (red > 150 && green > 150 && blue > 150) { whiteCount++; }
             }
         }
-
         // Find the most common color
         return mostCommonColor(redCount,greenCount,whiteCount);
     }
