@@ -15,21 +15,8 @@ public class Pipeline extends OpenCvPipeline {
 
     @Override
     public Mat processFrame(Mat input) {
-        //Assigning the value input (live vid) to the variable material
-        //material = input;
-        //Turn image to binary image (black & white pixels)
-        //Imgproc.cvtColor(input, input, Constants.binary);
-        //blur (to remove noise)
-        //Imgproc.blur(material, material, Constants.BlurRadius);
-        //Calling findRodCenter function from the RodFinder class
-        //RodDetector.findRodCenter();
-        System.out.println(sleeve.mostColorInRect(input));
-        //sleeve.hahahah(input);
-        //int someonef = colorSensorV3.color(sleeve.getRDouble(input),sleeve.getGDouble(input),sleeve.getBDouble(input));
-        //System.out.println(someonef);
-
-
-        //System.out.println(sleeve.getBDouble(input) + " , " + sleeve.getGDouble(input) + " , " + sleeve.getBDouble(input));
+        sleeve.color = sleeve.mostColorInRect(input);
+        //System.out.println(sleeve.mostColorInRect(input));
         return input;
     }
     //Cloning the material (input)

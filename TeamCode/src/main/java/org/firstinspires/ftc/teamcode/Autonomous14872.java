@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.teamcode.imageprocessing.Sleeve;
 import org.firstinspires.ftc.teamcode.robotSubSystems.claw.Claw;
 import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.Drivetrain;
 import org.firstinspires.ftc.teamcode.sensors.Gyro;
@@ -14,6 +15,7 @@ public class Autonomous14872 extends LinearOpMode {
 
     Drivetrain drivetrain = new Drivetrain();
     Claw claw = new Claw();
+    Sleeve sleeve = new Sleeve();
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -25,11 +27,7 @@ public class Autonomous14872 extends LinearOpMode {
         waitForStart();
 
         claw.operate(false);
-
-
-
-        parkingDecider(2);
-
+        parkingDecider(1);
 
     }
 
@@ -37,15 +35,17 @@ public class Autonomous14872 extends LinearOpMode {
         switch (parkingSpot) {
             case 1:
                 drivetrain.driveToDirection(60, 0);
-                drivetrain.driveToDirection(30, -90);
+                drivetrain.driveToDirection(30, 90);
                 break;
             case 2:
                 drivetrain.driveToDirection(65, 0);
                 break;
             case 3:
                 drivetrain.driveToDirection(60, 0);
-                drivetrain.driveToDirection(30, 90);
+                drivetrain.driveToDirection(30, -90);
                 break;
+            default:
+                parkingDecider(parkingSpot);
         }
     }
 }

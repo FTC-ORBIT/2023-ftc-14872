@@ -9,7 +9,10 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 public class Sleeve {
-    public static int mostColorInRect(Mat mat) {
+
+    public int color = 0;
+
+    public int mostColorInRect(Mat mat) {
         final Rect ROI = new Rect(Constants.tlRoi,Constants.brRoi);
         Mat croppedImage = new Mat(mat, ROI);
         int redCount = 0; int greenCount = 0; int whiteCount = 0;
@@ -33,7 +36,7 @@ public class Sleeve {
         return mostCommonColor(redCount,greenCount,whiteCount);
     }
 
-    public static int mostCommonColor(int redCount, int greenCount, int whiteCount) {
+    public int mostCommonColor(int redCount, int greenCount, int whiteCount) {
         int mostCommonColor = 0;
         int maxCount = Math.max(redCount, Math.max(whiteCount, greenCount));
         if (maxCount == redCount) {
@@ -48,7 +51,7 @@ public class Sleeve {
     }
 
 
-    public static Scalar pixels(Mat mat) {
+    public Scalar pixels(Mat mat) {
         double[] pixel = mat.get(11,30);
         Scalar pixColor = new Scalar(pixel);
         final Rect ROI = new Rect(10,10,20,20);

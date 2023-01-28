@@ -28,6 +28,8 @@ public class TeleOp14872 extends OpMode {
 
     double gamepad1LeftStickOffsetX;
     double gamepad1LeftStickOffsetY;
+    double gamepad1RightStickOffsetX;
+    double gamepad1RightStickOffsetY;
 
     @Override
     public void init() {
@@ -40,6 +42,8 @@ public class TeleOp14872 extends OpMode {
         GlobalData.isAutonomous = false;
         //Servo servo = hardwareMap.get(Servo.class, "servoArm");
 
+        gamepad1RightStickOffsetX = gamepad1.right_stick_x;
+        gamepad1RightStickOffsetY = gamepad1.right_stick_y;
         gamepad1LeftStickOffsetX = gamepad1.left_stick_x;
         gamepad1LeftStickOffsetY = gamepad1.left_stick_y;
         lastDpadState = gamepad1.dpad_down;
@@ -68,7 +72,7 @@ public class TeleOp14872 extends OpMode {
 
                 useDrive(0.40);
                 useClaw();
-                elevator.setElevatorPower(-gamepad1.right_stick_y * 0.5 + 0.1);
+                elevator.setElevatorPower(-gamepad1.right_stick_y + gamepad1RightStickOffsetY * 0.5 + 0.1);
 
                 break;
         }
