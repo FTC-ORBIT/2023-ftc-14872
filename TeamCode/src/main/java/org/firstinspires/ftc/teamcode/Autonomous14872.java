@@ -3,8 +3,10 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.imageprocessing.Sleeve;
+import org.firstinspires.ftc.teamcode.imageprocessing.camera.Camera;
 import org.firstinspires.ftc.teamcode.robotSubSystems.claw.Claw;
 import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.Drivetrain;
 import org.firstinspires.ftc.teamcode.sensors.Gyro;
@@ -23,11 +25,12 @@ public class Autonomous14872 extends LinearOpMode {
         drivetrain.init(hardwareMap, telemetry);
         claw.init(hardwareMap);
         Gyro.init(hardwareMap);
+        Camera.init(hardwareMap);
 
         waitForStart();
 
         claw.operate(false);
-        parkingDecider(1);
+        parkingDecider(sleeve.color);
 
     }
 

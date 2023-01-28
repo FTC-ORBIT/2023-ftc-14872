@@ -63,7 +63,7 @@ public class TeleOp14872 extends OpMode {
 
         switch (GlobalData.robotState){
             case TRAVEL:
-                double elevPercent = 1.25 * (4090 - elevator.getPosition()) / 409;
+                double elevPercent = 1.25 * (4090 - elevator.getPosition()) / 4090;
                 useDrive((Math.exp(elevPercent) - Math.exp(-elevPercent)) / (Math.exp(elevPercent) + Math.exp(-elevPercent)) + 0.3);
                 useClaw();
                 useGoByLevel();

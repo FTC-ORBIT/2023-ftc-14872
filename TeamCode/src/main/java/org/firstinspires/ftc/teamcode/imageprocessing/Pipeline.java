@@ -12,11 +12,14 @@ public class Pipeline extends OpenCvPipeline {
     private static Mat material;
     ColorSensorV3 colorSensorV3 = new ColorSensorV3();
     Sleeve sleeve = new Sleeve();
-
+    private int i = 0;
     @Override
     public Mat processFrame(Mat input) {
-        sleeve.color = sleeve.mostColorInRect(input);
-        //System.out.println(sleeve.mostColorInRect(input));
+        if (i == 0) {
+            sleeve.color = sleeve.mostColorInRect(input);
+            i++;
+        }
+
         return input;
     }
     //Cloning the material (input)
