@@ -63,7 +63,8 @@ public class TeleOp14872 extends OpMode {
 
         switch (GlobalData.robotState){
             case TRAVEL:
-                useDrive( 1 - elevator.getPosition() / 4130 * 0.65);
+                double elevPercent = 1.25 * (4090 - elevator.getPosition()) / 409;
+                useDrive((Math.exp(elevPercent) - Math.exp(-elevPercent)) / (Math.exp(elevPercent) + Math.exp(-elevPercent)) + 0.3);
                 useClaw();
                 useGoByLevel();
 
@@ -72,7 +73,7 @@ public class TeleOp14872 extends OpMode {
 
                 useDrive(0.40);
                 useClaw();
-                elevator.setElevatorPower(-gamepad1.right_stick_y + gamepad1RightStickOffsetY * 0.5 + 0.1);
+                elevator.setElevatorPower((-gamepad1.right_stick_y - gamepad1RightStickOffsetY) * 0.5 + 0.1);
 
                 break;
         }
