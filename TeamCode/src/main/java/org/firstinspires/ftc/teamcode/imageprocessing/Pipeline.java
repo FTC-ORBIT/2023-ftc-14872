@@ -15,10 +15,9 @@ public class Pipeline extends OpenCvPipeline {
     private int i = 0;
     @Override
     public Mat processFrame(Mat input) {
-        if (i == 0) {
-            sleeve.color = sleeve.mostColorInRect(input);
-            i++;
-        }
+        sleeve.color = sleeve.mostColorInRect(input);
+
+
 
         return input;
     }

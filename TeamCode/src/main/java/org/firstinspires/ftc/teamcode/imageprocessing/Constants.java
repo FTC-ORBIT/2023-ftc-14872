@@ -22,6 +22,6 @@ public class Constants {
     public static OpenCvCamera camera;
 
     //TODO: find values
-    public static Point tlRoi = new Point(0,0);
-    public static Point brRoi = new Point(200,160);
+    public static Point tlRoi = new Point(65,80);
+    public static Point brRoi = new Point(170,180);
 }

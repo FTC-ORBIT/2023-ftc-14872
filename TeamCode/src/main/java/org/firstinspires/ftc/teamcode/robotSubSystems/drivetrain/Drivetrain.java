@@ -98,10 +98,11 @@ public class Drivetrain {
      * @param angle the angle to drive to.
      */
     private final boolean driveToDirectionRunning = false;
-
     public void driveToDirection(double distInCM, double angle) {
+
         double beginPosition = avgWheelPosInCM();
         Vector vector = new Vector(0, 0.4 * distInCM / Math.abs(distInCM));
+
 
         while (!(Math.abs(beginPosition + distInCM) - 2 <= avgWheelPosInCM() && Math.abs(beginPosition + distInCM) + 2 >= avgWheelPosInCM())){
             operate(vector.rotate(Math.toRadians(angle)), 0);

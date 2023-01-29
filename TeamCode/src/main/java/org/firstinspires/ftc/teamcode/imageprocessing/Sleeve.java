@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.imageprocessing;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Autonomous14872;
 import org.firstinspires.ftc.teamcode.sensors.ColorSensorV3;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -10,10 +12,11 @@ import org.opencv.imgproc.Imgproc;
 
 public class Sleeve {
 
-    public int color = 0;
+    public static int color = 0;
 
     public int mostColorInRect(Mat mat) {
         final Rect ROI = new Rect(Constants.tlRoi,Constants.brRoi);
+        Imgproc.rectangle(mat, Constants.tlRoi, Constants.brRoi, new Scalar(255, 0 , 0));
         Mat croppedImage = new Mat(mat, ROI);
         int redCount = 0; int greenCount = 0; int whiteCount = 0;
 
@@ -29,25 +32,26 @@ public class Sleeve {
 
                 if (red > green && red > blue) { redCount++; }
                 if (green > red && green > blue) { greenCount++; }
-                if (red > 150 && green > 150 && blue > 150) { whiteCount++; }
+                if (red > 170 && green > 170 && blue > 170) { whiteCount++; }
             }
         }
+        Telemetry telemetry = Autonomous14872.telemetry1;
+        //telemetry.addData("redCount", redCount);
+        //telemetry.addData("greenCount", greenCount - 3000);
+        //telemetry.addData("whiteCount", whiteCount -2500 );
+        //telemetry.addData("color", color);
+        //telemetry.update();
+
+
         // Find the most common color
-        return mostCommonColor(redCount,greenCount,whiteCount);
+        return mostCommonColor(redCount + 1500,greenCount- 3000,whiteCount - 2500);
     }
 
     public int mostCommonColor(int redCount, int greenCount, int whiteCount) {
-        int mostCommonColor = 0;
         int maxCount = Math.max(redCount, Math.max(whiteCount, greenCount));
-        if (maxCount == redCount) {
-            mostCommonColor = 1;
-        } else if (maxCount == greenCount) {
-            mostCommonColor = 2;
-        }
-        else if (maxCount == whiteCount) {
-            mostCommonColor = 3;
-        }
-        return mostCommonColor;
+        if(maxCount == redCount) return 1;
+        if(maxCount == greenCount) return 2;
+        return 3;
     }
 
 
