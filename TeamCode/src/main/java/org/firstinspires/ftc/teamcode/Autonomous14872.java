@@ -32,22 +32,16 @@ public class Autonomous14872 extends LinearOpMode {
         Gyro.init(hardwareMap);
         Camera.init(hardwareMap);
 
+        Gyro.resetGyro();
+
         waitForStart();
 
         claw.operate(false);
 
         while (opModeIsActive() && Sleeve.color == 0){}
-        /*drivetrain.driveToDirection(60, 0);
-        drivetrain.driveToDirection(15, 90);
-        elevator.operate(3);
-        claw.operate(true);
-        elevator.operate(2);
-        drivetrain.driveToDirection(15, -90);
-        drivetrain.driveToDirection(60, 180);*/
+
 
         parkingDecider(Sleeve.color);
-
-
 
     }
 

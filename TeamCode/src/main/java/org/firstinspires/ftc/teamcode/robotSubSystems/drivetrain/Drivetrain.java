@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -41,7 +42,7 @@ public class Drivetrain {
     }
 
     public void operate(Vector velocity_W, double rotation) {
-        final double robotAngle = Angle.wrapAnglePlusMinusPI(Math.toRadians(Gyro.getAngle()) + Math.PI * 1.5 );
+        final double robotAngle = Angle.wrapAnglePlusMinusPI(Math.toRadians(Gyro.getAngle()) + Math.PI * 1.5);
         drive(velocity_W.rotate(-robotAngle), rotation);
     }
 
@@ -65,7 +66,7 @@ public class Drivetrain {
      * @param directionNPower the direction to drive and the speed to drive there.
      * @param rotation which direction to rotate and at what speed.
      */
-    private void drive(Vector directionNPower, double rotation) {
+    private void   drive(Vector directionNPower, double rotation) {
         final double lfPower = directionNPower.y - directionNPower.x - rotation;
         final double rfPower = directionNPower.y + directionNPower.x + rotation;
         final double lbPower = directionNPower.y + directionNPower.x - rotation;
@@ -80,7 +81,7 @@ public class Drivetrain {
 
     private boolean isTurnRunning = false;
 
-    public void turn(double wantedAngle, double kp, double kd) {
+    public void turn(double wantedAngle, LinearOpMode opMode) {
         PIDF anglePIDF = new PIDF(DrivetrainConstants.turnPIDCoefficients);
         anglePIDF.setWanted(wantedAngle);
         if (Gyro.getAngle() >= wantedAngle - 0.5 && Gyro.getAngle() <= wantedAngle + 0.5) {
@@ -103,12 +104,20 @@ public class Drivetrain {
     private final boolean driveToDirectionRunning = false;
     public void driveToDirection(double distInCM, double angle, LinearOpMode linearOpMode) {
 
+        PIDF angleControl = new PIDF(new PIDFCoefficients(0.01, 0, 0, 0));
+        angleControl.setWanted(Gyro.getAngle());
+
         double beginPosition = avgWheelPosInCM();
-        Vector vector = new Vector(0, 0.4 * distInCM / Math.abs(distInCM));
+        Vector vector = new Vector(0, 0.4 * Math.signum(distInCM));
+        double turn;
 
 
         while (!(Math.abs(beginPosition + distInCM) - 2 <= avgWheelPosInCM() && Math.abs(beginPosition + distInCM) + 2 >= avgWheelPosInCM()) && linearOpMode.opModeIsActive()){
-            operate(vector.rotate(Math.toRadians(angle)), 0);
+            turn = angleControl.update(Gyro.getAngle());
+            operate(vector.rotate(Math.toRadians(angle)), turn);
+            telemetry.addData("gyro", Gyro.getAngle());
+            telemetry.addData("power", turn);
+            telemetry.update();
         }
         stop();
         //TODO: add angle control

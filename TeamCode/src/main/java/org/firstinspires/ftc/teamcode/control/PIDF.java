@@ -14,7 +14,7 @@ public class PIDF {
     private double integral = 0;
     private double prevError = 0;
 
-    private final double deltaTime = GlobalData.deltaTime;
+    private final double deltaTime = 1;
 
     /**
      * all of the pid values
