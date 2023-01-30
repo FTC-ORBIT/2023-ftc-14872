@@ -37,7 +37,6 @@ public class Autonomous14872 extends LinearOpMode {
         claw.operate(false);
 
         while (opModeIsActive() && Sleeve.color == 0){}
-        int i = Sleeve.color;
         /*drivetrain.driveToDirection(60, 0);
         drivetrain.driveToDirection(15, 90);
         elevator.operate(3);
@@ -46,9 +45,7 @@ public class Autonomous14872 extends LinearOpMode {
         drivetrain.driveToDirection(15, -90);
         drivetrain.driveToDirection(60, 180);*/
 
-        telemetry.addData("i", i);
-        telemetry.update();
-        parkingDecider(i);
+        parkingDecider(Sleeve.color);
 
 
 
@@ -58,15 +55,17 @@ public class Autonomous14872 extends LinearOpMode {
 
         switch (parkingSpot) {
             case 1:
-                drivetrain.driveToDirection(70, 90);
-                drivetrain.driveToDirection(65, 0);
+                drivetrain.driveToDirection(5,0,this);
+                drivetrain.driveToDirection(75, 90, this);
+                drivetrain.driveToDirection(40, 0, this);
                 break;
             case 2:
-                drivetrain.driveToDirection(65, 0);
+                drivetrain.driveToDirection(65, 0, this);
                 break;
             case 3:
-                drivetrain.driveToDirection(70, -90);
-                drivetrain.driveToDirection(65, 0);
+                drivetrain.driveToDirection(5,0,this);
+                drivetrain.driveToDirection(75, -90, this);
+                drivetrain.driveToDirection(40, 0, this);
                 break;
             default:
                 parkingDecider(2);

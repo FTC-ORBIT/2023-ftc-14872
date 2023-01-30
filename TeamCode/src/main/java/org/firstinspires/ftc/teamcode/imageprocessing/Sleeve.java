@@ -15,9 +15,11 @@ public class Sleeve {
     public static int color = 0;
 
     public int mostColorInRect(Mat mat) {
+
         final Rect ROI = new Rect(Constants.tlRoi,Constants.brRoi);
         Imgproc.rectangle(mat, Constants.tlRoi, Constants.brRoi, new Scalar(255, 0 , 0));
         Mat croppedImage = new Mat(mat, ROI);
+        Imgproc.blur(croppedImage, croppedImage, Constants.BlurRadius);
         int redCount = 0; int greenCount = 0; int whiteCount = 0;
 
         // Iterate through each pixel in the image
@@ -30,21 +32,23 @@ public class Sleeve {
                 double green = pixScalar.val[1];
                 double blue = pixScalar.val[2];
 
-                if (red > green && red > blue) { redCount++; }
-                if (green > red && green > blue) { greenCount++; }
-                if (red > 170 && green > 170 && blue > 170) { whiteCount++; }
+                if (red > 133 && red < 255 && green > 158 && green < 255 && blue > 165 && blue < 255) { whiteCount++;
+                }
+                else if (red > 23 && red < 98 && green > 73 && green < 210 && blue > 39 && blue < 163) { greenCount++;
+                }
+                else if (red > 138 && red < 255 && green > 0 && green < 150 && blue > 67 && blue < 146) { redCount++;}
             }
         }
         Telemetry telemetry = Autonomous14872.telemetry1;
-        //telemetry.addData("redCount", redCount);
-        //telemetry.addData("greenCount", greenCount - 3000);
-        //telemetry.addData("whiteCount", whiteCount -2500 );
-        //telemetry.addData("color", color);
-        //telemetry.update();
+           telemetry.addData("redCount", redCount);
+           telemetry.addData("greenCount", greenCount);
+           telemetry.addData("whiteCount", whiteCount - 500);
+           telemetry.addData("color", color);
+           telemetry.update();
 
 
         // Find the most common color
-        return mostCommonColor(redCount + 1500,greenCount- 3000,whiteCount - 2500);
+        return mostCommonColor(redCount , greenCount, whiteCount - 500 );
     }
 
     public int mostCommonColor(int redCount, int greenCount, int whiteCount) {

@@ -2,6 +2,8 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain;
 
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -9,6 +11,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Autonomous14872;
 import org.firstinspires.ftc.teamcode.control.PIDF;
 import org.firstinspires.ftc.teamcode.sensors.Gyro;
 import org.firstinspires.ftc.teamcode.utils.Angle;
@@ -98,13 +101,13 @@ public class Drivetrain {
      * @param angle the angle to drive to.
      */
     private final boolean driveToDirectionRunning = false;
-    public void driveToDirection(double distInCM, double angle) {
+    public void driveToDirection(double distInCM, double angle, LinearOpMode linearOpMode) {
 
         double beginPosition = avgWheelPosInCM();
         Vector vector = new Vector(0, 0.4 * distInCM / Math.abs(distInCM));
 
 
-        while (!(Math.abs(beginPosition + distInCM) - 2 <= avgWheelPosInCM() && Math.abs(beginPosition + distInCM) + 2 >= avgWheelPosInCM())){
+        while (!(Math.abs(beginPosition + distInCM) - 2 <= avgWheelPosInCM() && Math.abs(beginPosition + distInCM) + 2 >= avgWheelPosInCM()) && linearOpMode.opModeIsActive()){
             operate(vector.rotate(Math.toRadians(angle)), 0);
         }
         stop();
