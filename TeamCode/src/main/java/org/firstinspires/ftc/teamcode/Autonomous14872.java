@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.aprilTags.AprilTagDetection;
 import org.firstinspires.ftc.teamcode.imageprocessing.Constants;
 import org.firstinspires.ftc.teamcode.imageprocessing.Pipeline;
 import org.firstinspires.ftc.teamcode.imageprocessing.Sleeve;
@@ -17,9 +18,18 @@ public class Autonomous14872 extends LinearOpMode {
     @Override
     public void runOpMode() {
         //Camera.init function
-        Camera.init(hardwareMap);
+        AprilTagDetection.runAprilTagDetection(this);
         //colorSensorV3.init(hardwareMap);
         waitForStart();
+        switch (AprilTagDetection.wantedParkingSpot()){
+            case LEFT:
+
+            case RIGHT:
+
+            case MIDDLE:
+
+        }
+
         //FTC dashboard init
         while (opModeIsActive()) {
             FtcDashboard.getInstance().startCameraStream(Constants.camera,60);
