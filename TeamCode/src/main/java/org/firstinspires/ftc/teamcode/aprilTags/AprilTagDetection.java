@@ -9,56 +9,17 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.ArrayList;
 
-
 public class AprilTagDetection {
-
+    ATConstants atConstants = new ATConstants();
     private static ParkingSpot parkingSpot = ParkingSpot.LEFT;
 
     static OpenCvCamera camera;
     static AprilTagDetectionPipline aprilTagDetectionPipeline;
 
-    static final double FEET_PER_METER = 3.28084;
-
-    // Lens intrinsics
-    // UNITS ARE PIXELS
-    // NOTE: this calibration is for the C920 webcam at 800x448.
-    // You will need to do your own calibration for other configurations!
-    static double fx = 2080.281;
-    static double fy = 2072.668;
-    static double cx = 987.693;
-    static double cy = 534.467;
-
-    // UNITS ARE METERS
-    static double tagsize = 0.166;
-
-    static int leftTagNum = 0;
-    static int middleTagNum = 1;
-    static int rightTagNum = 2;
-
     static org.openftc.apriltag.AprilTagDetection tagOfInterest = null;
 
     public static void runAprilTagDetection(LinearOpMode opMode) {
-        int cameraMonitorViewId = opMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", opMode.hardwareMap.appContext.getPackageName());
-        camera = OpenCvCameraFactory.getInstance().createWebcam(opMode.hardwareMap.get(WebcamName.class, "camera"), cameraMonitorViewId);
-        aprilTagDetectionPipeline = new AprilTagDetectionPipline(tagsize, fx, fy, cx, cy);
-
-        camera.setPipeline(aprilTagDetectionPipeline);
-        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-        {
-            @Override
-            public void onOpened()
-            {
-                camera.startStreaming(640,480, OpenCvCameraRotation.UPRIGHT);
-            }
-
-            @Override
-            public void onError(int errorCode)
-            {
-
-            }
-        });
-
-        opMode.telemetry.setMsTransmissionInterval(50);
+        cameraInit(opMode);
 
         /*
          * The INIT-loop:
@@ -74,34 +35,13 @@ public class AprilTagDetection {
 
                 for(org.openftc.apriltag.AprilTagDetection tag : currentDetections)
                 {
-                    if(tag.id == leftTagNum || tag.id == middleTagNum || tag.id == rightTagNum)
+                    if(tag.id == ATConstants.leftTagNum || tag.id == ATConstants.middleTagNum || tag.id == ATConstants.rightTagNum)
                     {
                         tagOfInterest = tag;
                         tagFound = true;
                         break;
                     }
                 }
-
-                if(tagFound)
-                {
-                    opMode.telemetry.addLine("Tag of interest is in sight!\n\nLocation data:");
-                    tagToTelemetry(tagOfInterest, opMode);
-                }
-                else
-                {
-                    opMode.telemetry.addLine("Don't see tag of interest :(");
-
-                    if(tagOfInterest == null)
-                    {
-                        opMode.telemetry.addLine("(The tag has never been seen)");
-                    }
-                    else
-                    {
-                        opMode.telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
-                        tagToTelemetry(tagOfInterest, opMode);
-                    }
-                }
-
             }
             else
             {
@@ -141,11 +81,11 @@ public class AprilTagDetection {
             opMode.telemetry.update();
         }
 
-        if(tagOfInterest.id == leftTagNum) {
+        if(tagOfInterest.id == ATConstants.leftTagNum) {
             parkingSpot = ParkingSpot.LEFT;
-        }else if (tagOfInterest.id == middleTagNum){
+        }else if (tagOfInterest.id == ATConstants.middleTagNum){
             parkingSpot = ParkingSpot.MIDDLE;
-        }else if (tagOfInterest.id == rightTagNum){
+        }else if (tagOfInterest.id == ATConstants.rightTagNum){
             parkingSpot = ParkingSpot.RIGHT;
         }
 
@@ -160,12 +100,29 @@ public class AprilTagDetection {
     static void tagToTelemetry(org.openftc.apriltag.AprilTagDetection detection , LinearOpMode opMode)
     {
         opMode.telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
-//        opMode.telemetry.addLine(String.format("Translation X: %.2f feet", detection.pose.x*FEET_PER_METER));
-//        opMode.telemetry.addLine(String.format("Translation Y: %.2f feet", detection.pose.y*FEET_PER_METER));
-//        opMode.telemetry.addLine(String.format("Translation Z: %.2f feet", detection.pose.z*FEET_PER_METER));
-//        opMode.telemetry.addLine(String.format("Rotation Yaw: %.2f degrees", Math.toDegrees(detection.pose.yaw)));
-//        opMode.telemetry.addLine(String.format("Rotation Pitch: %.2f degrees", Math.toDegrees(detection.pose.pitch)));
-//        opMode.telemetry.addLine(String.format("Rotation Roll: %.2f degrees", Math.toDegrees(detection.pose.roll)));
     }
+
+
+
+    public static void cameraInit(LinearOpMode opMode) {
+        int cameraMonitorViewId = opMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", opMode.hardwareMap.appContext.getPackageName());
+        camera = OpenCvCameraFactory.getInstance().createWebcam(opMode.hardwareMap.get(WebcamName.class, "camera"), cameraMonitorViewId);
+        aprilTagDetectionPipeline = new AprilTagDetectionPipline(ATConstants.tagsize, ATConstants.fx, ATConstants.fy, ATConstants.cx, ATConstants.cy);
+
+        camera.setPipeline(aprilTagDetectionPipeline);
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+        {
+            @Override
+            public void onOpened()
+            {
+                camera.startStreaming(640,480, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode) { /*on error*/ }
+        });
+    }
+
+
 
 }
