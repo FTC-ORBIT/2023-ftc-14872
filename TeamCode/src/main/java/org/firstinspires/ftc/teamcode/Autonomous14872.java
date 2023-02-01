@@ -38,10 +38,9 @@ public class Autonomous14872 extends LinearOpMode {
 
         claw.operate(false);
 
-        while (opModeIsActive() && Sleeve.color == 0){}
-
-
-        parkingDecider(Sleeve.color);
+        /*while (opModeIsActive() && Sleeve.color == 0){}
+        parkingDecider(Sleeve.color);*/
+        drivetrain.driveToDirection(50,0,this);
 
     }
 

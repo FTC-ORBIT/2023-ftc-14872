@@ -61,4 +61,20 @@ public final class MathFuncs {
     public static double calcAngleOnUnitCircle(Vector vector){
         return Math.atan2(vector.x, vector.y);
     }
+
+    public static double smootherStep(double edge0, double edge1, double x) {
+        // Scale, and clamp x to 0..1 range
+        x = clamp((x - edge0) / (edge1 - edge0), 0.0, 1.0);
+        // Evaluate polynomial
+        return x * x * x * (x * (x * 6 - 15) + 10);
+    }
+
+    public static double clamp(double x, double lowerlimit, double upperlimit) {
+        if (x < lowerlimit)
+            x = lowerlimit;
+        if (x > upperlimit)
+            x = upperlimit;
+        return x;
+    }
+
 }
