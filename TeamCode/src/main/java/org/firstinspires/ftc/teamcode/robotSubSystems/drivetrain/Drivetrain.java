@@ -103,37 +103,45 @@ public class Drivetrain {
      * @param angle the angle to drive to.
      */
     private final boolean driveToDirectionRunning = false;
-    public void driveToDirection(double distInCM, double angle, LinearOpMode linearOpMode) {
+    public void driveToDirection(double distInCM, double angle, double speed, LinearOpMode linearOpMode) {
 
         double turn;
+        distInCM = Math.abs(distInCM);
         double beginPosition = avgWheelPosInCM();
         if (distInCM < 25) distInCM = 25 * Math.signum(distInCM);
-        double power = 0.2;
+        double power = 0;
+        double distanceDrove = Math.abs(avgWheelPosInCM() - beginPosition);
+        Vector vector;
 
         PIDF angleControl = new PIDF(new PIDFCoefficients(0.01, 0, 0, 0));
         angleControl.setWanted(Gyro.getAngle());
 
-        Vector vector = new Vector(0, power * Math.signum(distInCM));
+        while (distInCM >= distanceDrove && linearOpMode.opModeIsActive()){
+            turn = angleControl.update(Gyro.getAngle());
+            distanceDrove = Math.abs(avgWheelPosInCM() - beginPosition);
 
-        while (Math.abs(distInCM) >= Math.abs(avgWheelPosInCM() - beginPosition) && linearOpMode.opModeIsActive()){
-            if(5 >= Math.abs(avgWheelPosInCM() - beginPosition) && power <= 0.4) {
-                turn = angleControl.update(Gyro.getAngle());
-                operate(vector.rotate(Math.toRadians(angle)), turn);
-                power = MathFuncs.smootherStep(0,5,Math.abs(avgWheelPosInCM() - beginPosition)) * (1/5) + 0.2;
-                vector = new Vector(0,power * Math.signum(distInCM));
-            } else if (5 <= Math.abs(avgWheelPosInCM() - beginPosition) && Math.abs(distInCM) - 10 >= Math.abs(avgWheelPosInCM() - beginPosition) ) {
-                vector = new Vector(0, Math.signum(distInCM) / 5 * 2);
-                turn = angleControl.update(Gyro.getAngle());
-                operate(vector.rotate(Math.toRadians(angle)), turn);
-            } else if (Math.abs(distInCM) >= Math.abs(avgWheelPosInCM() - beginPosition) && Math.abs(distInCM) - 10 <= Math.abs(avgWheelPosInCM() - beginPosition)) {
-                turn = angleControl.update(Gyro.getAngle());
-                operate(vector.rotate(Math.toRadians(angle)), turn);
-                power = MathFuncs.smootherStep(0,10,-Math.abs(avgWheelPosInCM() - beginPosition)) * (2/5);
-                vector = new Vector(0,power * Math.signum(distInCM));
-                if(power < 0.1) break;
+            if(5 >= distanceDrove) {
+                telemetry.addData("speed mode", "accelerating");
+                power = MathFuncs.smootherStep(0,5,distanceDrove + 1.5) * (speed);
+
+            } else if (distInCM - 20 <= distanceDrove) {
+                telemetry.addData("speed mode", "decelerating");
+                power = (1 - MathFuncs.smootherStep(0,15, distanceDrove - (distInCM - 20) - 4)) * (speed);
+
+            } else {
+                telemetry.addData("speed mode", "normal");
+                power = speed;
             }
+            vector = new Vector(0,power * Math.signum(distInCM));
+            operate(vector.rotate(Math.toRadians(angle)), turn);
+
+            telemetry.addData("distance drove", distanceDrove);
+            telemetry.addData("power", power);
+            telemetry.addData("turn power", turn);
+            telemetry.update();
 
         }
+        telemetry.addLine("finished");
 
         stop();
     }

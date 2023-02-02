@@ -40,7 +40,7 @@ public class Autonomous14872 extends LinearOpMode {
 
         /*while (opModeIsActive() && Sleeve.color == 0){}
         parkingDecider(Sleeve.color);*/
-        drivetrain.driveToDirection(50,0,this);
+        drivetrain.driveToDirection(100,0, 0.4, this);
 
     }
 
@@ -48,17 +48,17 @@ public class Autonomous14872 extends LinearOpMode {
 
         switch (parkingSpot) {
             case 1:
-                drivetrain.driveToDirection(5,0,this);
-                drivetrain.driveToDirection(75, 90, this);
-                drivetrain.driveToDirection(40, 0, this);
+                drivetrain.driveToDirection(5,0, 0.4,this);
+                drivetrain.driveToDirection(75, 90, 0.4, this);
+                drivetrain.driveToDirection(40, 0, 0.4, this);
                 break;
             case 2:
-                drivetrain.driveToDirection(65, 0, this);
+                drivetrain.driveToDirection(65, 0, 0.4, this);
                 break;
             case 3:
-                drivetrain.driveToDirection(5,0,this);
-                drivetrain.driveToDirection(75, -90, this);
-                drivetrain.driveToDirection(40, 0, this);
+                drivetrain.driveToDirection(5,0, 0.4,this);
+                drivetrain.driveToDirection(75, -90, 0.4, this);
+                drivetrain.driveToDirection(40, 0, 0.4, this);
                 break;
             default:
                 parkingDecider(2);
