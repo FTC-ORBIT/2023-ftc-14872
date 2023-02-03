@@ -2,6 +2,8 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain;
 
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -36,7 +38,7 @@ public class Drivetrain {
         for (final DcMotorEx motor : motors) {
             motor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
             motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-            motor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+            motor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         }
 
         this.telemetry = telemetry;
@@ -48,12 +50,15 @@ public class Drivetrain {
     }
 
 
-
+    /**
+     * get robot velocity
+     * @return velocity in wheel rotations per second
+     */
     public Vector getVelocity_FieldCS() {
-        Vector velocityField = new Vector(0,0);
+        Vector velocityField = new Vector(0, 0);
         velocityField.x = (motors[2].getVelocity() + motors[1].getVelocity() - motors[0].getVelocity() - motors[3].getVelocity()) / 4;
         velocityField.y = (motors[2].getVelocity() + motors[1].getVelocity() + motors[0].getVelocity() + motors[3].getVelocity()) / 4;
-        return velocityField;
+        return velocityField.scale(1 / DrivetrainConstants.ticksPerRev);
     }
 
     public void stop() {
@@ -67,54 +72,46 @@ public class Drivetrain {
      * @param directionNPower the direction to drive and the speed to drive there.
      * @param rotation which direction to rotate and at what speed.
      */
-    private void   drive(Vector directionNPower, double rotation) {
+    private void drive(Vector directionNPower, double rotation) {
         final double lfPower = directionNPower.y - directionNPower.x - rotation;
         final double rfPower = directionNPower.y + directionNPower.x + rotation;
         final double lbPower = directionNPower.y + directionNPower.x - rotation;
         final double rbPower = directionNPower.y - directionNPower.x + rotation;
         final double max = Math.max(1,Math.max(Math.abs(lfPower),
                 Math.max(Math.abs(lbPower), Math.max(Math.abs(rfPower), Math.abs(rbPower)))));
-        motors[0].setPower((lfPower / max));
-        motors[1].setPower((rfPower / max));
-        motors[2].setPower((lbPower / max));
-        motors[3].setPower((rbPower / max));
+        motors[0].setVelocity((lfPower / max) * DrivetrainConstants.maxSpeed * DrivetrainConstants.ticksPerRev);
+        motors[1].setVelocity((rfPower / max) * DrivetrainConstants.maxSpeed * DrivetrainConstants.ticksPerRev);
+        motors[2].setVelocity((lbPower / max) * DrivetrainConstants.maxSpeed * DrivetrainConstants.ticksPerRev);
+        motors[3].setVelocity((rbPower / max) * DrivetrainConstants.maxSpeed * DrivetrainConstants.ticksPerRev);
     }
 
-    private boolean isTurnRunning = false;
 
     public void turn(double wantedAngle, LinearOpMode opMode) {
         PIDF anglePIDF = new PIDF(DrivetrainConstants.turnPIDCoefficients);
         anglePIDF.setWanted(wantedAngle);
-        if (Gyro.getAngle() >= wantedAngle - 0.5 && Gyro.getAngle() <= wantedAngle + 0.5) {
-            isTurnRunning = false;
-            return;
+        while (!(Gyro.getAngle() >= wantedAngle - 0.5 && Gyro.getAngle() <= wantedAngle + 0.5) && opMode.opModeIsActive()) {
+            drive(Vector.zero(), anglePIDF.update(Gyro.getAngle()));
         }
-        drive(Vector.zero(), anglePIDF.update(Gyro.getAngle()));
-        isTurnRunning = true;
     }
-    public boolean isTurnRunning(){
-        return isTurnRunning;
-    }
-    //Dor: STOP CHANGING MY CODE WE HAVE MECANUM!!!!
 
     /**
      * drives to the given angle the given distance.
      * @param distInCM the amount of cm to drive.
      * @param angle the angle to drive to.
      */
-    private final boolean driveToDirectionRunning = false;
     public void driveToDirection(double distInCM, double angle, double speed, LinearOpMode linearOpMode) {
 
         double turn;
         distInCM = Math.abs(distInCM);
         double beginPosition = avgWheelPosInCM();
-        if (distInCM < 25) distInCM = 25 * Math.signum(distInCM);
-        double power = 0;
+        double velocity;
         double distanceDrove = Math.abs(avgWheelPosInCM() - beginPosition);
         Vector vector;
 
         PIDF angleControl = new PIDF(new PIDFCoefficients(0.01, 0, 0, 0));
         angleControl.setWanted(Gyro.getAngle());
+
+        linearOpMode.sleep(1000);
 
         while (distInCM >= distanceDrove && linearOpMode.opModeIsActive()){
             turn = angleControl.update(Gyro.getAngle());
@@ -122,23 +119,23 @@ public class Drivetrain {
 
             if(5 >= distanceDrove) {
                 telemetry.addData("speed mode", "accelerating");
-                power = MathFuncs.smootherStep(0,5,distanceDrove + 1.5) * (speed);
+                velocity = MathFuncs.smootherStep(0,5,distanceDrove + 1.5) * (speed);
 
-            } else if (distInCM - 20 <= distanceDrove) {
+            } else if (distInCM - 35 * speed <= distanceDrove) {
                 telemetry.addData("speed mode", "decelerating");
-                power = (1 - MathFuncs.smootherStep(0,15, distanceDrove - (distInCM - 20) - 4)) * (speed);
+                velocity = (1 - MathFuncs.smootherStep(0,20, distanceDrove - (distInCM - 20) - 7 * speed)) * (speed);
 
             } else {
                 telemetry.addData("speed mode", "normal");
-                power = speed;
+                velocity = speed;
             }
-            vector = new Vector(0,power * Math.signum(distInCM));
+            vector = new Vector(0,velocity * Math.signum(distInCM));
             operate(vector.rotate(Math.toRadians(angle)), turn);
 
+            telemetry.addData("velocity", getVelocity_FieldCS());
             telemetry.addData("distance drove", distanceDrove);
-            telemetry.addData("power", power);
+            telemetry.addData("power", velocity * DrivetrainConstants.maxSpeed);
             telemetry.addData("turn power", turn);
-            telemetry.update();
 
         }
         telemetry.addLine("finished");
@@ -146,8 +143,6 @@ public class Drivetrain {
         stop();
     }
 
-    public boolean isDriveToDirectionRunning(){return driveToDirectionRunning;}
-    //TODO: maybe move function to somewhere else
     /**
      * converts the wheels motors ticks into the wheels rotation in cm.
      * @param ticks the motor ticks.
@@ -157,7 +152,6 @@ public class Drivetrain {
         return ticks * DrivetrainConstants.ticksToCM;
     }
 
-
     public double avgWheelPosInCM(){
         return Math.sqrt(Math.pow(
                 ticksToCm(
@@ -165,29 +159,6 @@ public class Drivetrain {
                     + Math.pow(
                             ticksToCm(motors[2].getCurrentPosition() + motors[1].getCurrentPosition() + motors[0].getCurrentPosition() + motors[3].getCurrentPosition()) / 4, 2));
     }
-
-    public double wheelRatio() {
-        double sum = 0;
-        for(int i = 0; i < motors.length / 2; i++) {
-            sum += motors[i].getCurrentPosition();
-        }
-        for(int i = 2; i < motors.length; i++) {
-            sum -= motors[i].getCurrentPosition();
-        }
-        return (sum / 2) * DrivetrainConstants.ticksToCM;
-    }
-
-    public void driveForward(double distInCM) {
-        double beginPosition = avgWheelPosInCM();
-        Vector vector = new Vector(0, 1);
-
-
-        while(beginPosition + distInCM - 1 <= avgWheelPosInCM() + distInCM && beginPosition + distInCM + 1 >= avgWheelPosInCM() + distInCM ) {
-            //TODO: add angle control
-            operate(vector, 0);
-        }
-    }
-
 
 }
 

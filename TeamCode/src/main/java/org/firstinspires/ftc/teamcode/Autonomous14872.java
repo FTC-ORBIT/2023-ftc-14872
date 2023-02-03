@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -40,7 +42,7 @@ public class Autonomous14872 extends LinearOpMode {
 
         /*while (opModeIsActive() && Sleeve.color == 0){}
         parkingDecider(Sleeve.color);*/
-        drivetrain.driveToDirection(100,0, 0.4, this);
+        drivetrain.driveToDirection(50,0, 1, this);
 
     }
 
