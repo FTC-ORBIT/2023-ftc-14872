@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.aprilTags.AprilTagDetection;
 
 import java.security.PublicKey;
 
@@ -25,7 +26,6 @@ public class ColorSensorV3 {
         getColor[2] = colorSensor.blue();
         return getColor;
     }
-
     public int color(double red, double green, double blue) {
         int colorInInt = 0;
         if (red > green && red > blue) { colorInInt = 1; }
