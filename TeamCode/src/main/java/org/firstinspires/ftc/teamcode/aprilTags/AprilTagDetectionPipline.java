@@ -29,6 +29,7 @@ import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.MatOfPoint3f;
 import org.opencv.core.Point;
 import org.opencv.core.Point3;
+import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.apriltag.AprilTagDetection;
@@ -41,6 +42,7 @@ public class AprilTagDetectionPipline extends OpenCvPipeline
 {
     private long nativeApriltagPtr;
     private Mat grey = new Mat();
+
     private ArrayList<AprilTagDetection> detections = new ArrayList<>();
 
     private ArrayList<AprilTagDetection> detectionsUpdate = new ArrayList<>();
@@ -98,6 +100,8 @@ public class AprilTagDetectionPipline extends OpenCvPipeline
     @Override
     public Mat processFrame(Mat input)
     {
+        Rect ROI = new Rect(ATConstants.tlRoi, ATConstants.brRoi);
+        //Mat croppedImage = new Mat(input,ROI);
         // Convert to greyscale
         Imgproc.cvtColor(input, grey, Imgproc.COLOR_RGBA2GRAY);
 
