@@ -40,6 +40,7 @@ public class Sleeve {
                 }
             }
         }
+        /*
         Telemetry telemetry = Autonomous14872.telemetry1;
            telemetry.addData("redCount", redCount - 200);
            telemetry.addData("greenCount", greenCount);
@@ -47,6 +48,7 @@ public class Sleeve {
            telemetry.addData("color", color);
            telemetry.update();
 
+         */
 
         // Find the most common color
         return mostCommonColor(redCount - 200 , greenCount, whiteCount - 2600 );

@@ -65,6 +65,8 @@ public class Elevator {
                 goToPosition(MotorL, MotorR, ElevatorConstants.elevatorLevelsInTicks[4]);
                 this.level = 4;
                 break;
+            case 5:
+                goToPosition(MotorL, MotorR, ElevatorConstants.elevatorLevelsInTicks[1]);
             default:
                 goToPosition(MotorL, MotorR, ElevatorConstants.elevatorLevelsInTicks[0]);
                 this.level = 0;
