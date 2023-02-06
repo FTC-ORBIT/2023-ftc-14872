@@ -40,6 +40,7 @@ public class Autonomous14872 extends LinearOpMode {
         ParkingSpot parkingSpot = AprilTagDetection.findTag(camera.get(), telemetry);
 
         waitForStart();
+
         parkingDecider(parkingSpot);
             //FTC dashboard init
         /*while (AprilTagDetection.findTag(camera.get(), telemetry) == ParkingSpot.NONE && opModeIsActive()){
