@@ -8,7 +8,7 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
 
-public class Constants {
+public class ImgprocConstants {
     //HSV constants
     public static Scalar lowYHSV = new Scalar(18 , 100 , 100);
     public static Scalar highYHSV = new Scalar(34 , 255 , 255);
@@ -24,4 +24,13 @@ public class Constants {
     //TODO: find values
     public static Point tlRoi = new Point(155, 110);
     public static Point brRoi = new Point(240,220);
+
+    // Lens intrinsics
+    // UNITS ARE PIXELS
+    // NOTE: this calibration is for the C920 webcam at 800x448.
+    // You will need to do your own calibration for other configurations!
+    public static double fx = 2080.281;
+    public static double fy = 2072.668;
+    public static double cx = 987.693;
+    public static double cy = 534.467;
 }

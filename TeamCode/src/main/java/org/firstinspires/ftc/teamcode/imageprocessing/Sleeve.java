@@ -1,11 +1,6 @@
 package org.firstinspires.ftc.teamcode.imageprocessing;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Autonomous14872;
-import org.firstinspires.ftc.teamcode.sensors.ColorSensorV3;
-import org.opencv.core.Core;
 import org.opencv.core.Mat;
-import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
@@ -16,10 +11,10 @@ public class Sleeve {
 
     public int mostColorInRect(Mat mat) {
 
-        final Rect ROI = new Rect(Constants.tlRoi,Constants.brRoi);
-        Imgproc.rectangle(mat, Constants.tlRoi, Constants.brRoi, new Scalar(255, 0 , 0));
+        final Rect ROI = new Rect(ImgprocConstants.tlRoi, ImgprocConstants.brRoi);
+        Imgproc.rectangle(mat, ImgprocConstants.tlRoi, ImgprocConstants.brRoi, new Scalar(255, 0 , 0));
         Mat croppedImage = new Mat(mat, ROI);
-        Imgproc.blur(croppedImage, croppedImage, Constants.BlurRadius);
+        Imgproc.blur(croppedImage, croppedImage, ImgprocConstants.BlurRadius);
         int redCount = 0; int greenCount = 0; int whiteCount = 0;
 
         // Iterate through each pixel in the image

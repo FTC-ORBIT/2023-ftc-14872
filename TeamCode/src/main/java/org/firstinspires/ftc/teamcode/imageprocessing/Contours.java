@@ -31,7 +31,7 @@ public class Contours {
         //finding contours with a function from the openCV library
         Imgproc.findContours(mat, objects.contours, hierarchy , Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
         //Drawing contours with a function from the openCV library
-        Imgproc.drawContours(Pipeline.getMat(), objects.contours, -1, Constants.Red, 5);
+        Imgproc.drawContours(Pipeline.getMat(), objects.contours, -1, ImgprocConstants.Red, 5);
         return objects.contours;
     }
 
@@ -65,7 +65,7 @@ public class Contours {
         //Finds a circle of the minimum area enclosing a 2D point set (the minimum enclosing circle of a contour)
         Imgproc.minEnclosingCircle(contourPoly, center, new float[1]);
         //Drawing a circle on the center of the contour
-        Imgproc.circle(Pipeline.getMat(), center, 10, Constants.Red);
+        Imgproc.circle(Pipeline.getMat(), center, 10, ImgprocConstants.Red);
         return center;
     }
 

@@ -8,7 +8,7 @@ public class RodDetector {
                 //Calls the getBiggestContour function from the Contours class (to find the biggest contour)
                 Contours.getBiggestContour(
                         //Calls the getContour function from the Contours class and assigning its values
-                        Contours.getContour(Pipeline.getClonedMat(), Constants.lowYHSV, Constants.highYHSV)
+                        Contours.getContour(Pipeline.getClonedMat(), ImgprocConstants.lowYHSV, ImgprocConstants.highYHSV)
                 )
         );
     }

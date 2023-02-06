@@ -4,9 +4,9 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.aprilTags.AprilTagDetection;
-import org.firstinspires.ftc.teamcode.imageprocessing.Constants;
-import org.firstinspires.ftc.teamcode.imageprocessing.Sleeve;
+import org.firstinspires.ftc.teamcode.imageprocessing.aprilTags.AprilTagDetection;
+import org.firstinspires.ftc.teamcode.imageprocessing.ImgprocConstants;
+import org.firstinspires.ftc.teamcode.imageprocessing.camera.Camera;
 import org.firstinspires.ftc.teamcode.robotSubSystems.claw.Claw;
 import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.Drivetrain;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
@@ -15,10 +15,12 @@ import org.firstinspires.ftc.teamcode.sensors.Gyro;
 
 @Autonomous(name = "Autonomous14872")
 public class Autonomous14872 extends LinearOpMode {
+
     ColorSensorV3 colorSensorV3 = new ColorSensorV3();
     Drivetrain drivetrain = new Drivetrain();
     Claw claw = new Claw();
     Elevator elevator = new Elevator();
+    Camera camera = new Camera(hardwareMap);
     @Override
     public void runOpMode() {
         drivetrain.init(hardwareMap,telemetry);
@@ -26,7 +28,7 @@ public class Autonomous14872 extends LinearOpMode {
         claw.init(hardwareMap);
         elevator.init(hardwareMap);
         //Camera.init function
-        AprilTagDetection.runAprilTagDetection(this);
+        AprilTagDetection.runAprilTagDetection(camera.get());
         //colorSensorV3.init(hardwareMap);
         waitForStart();
         switch (AprilTagDetection.wantedParkingSpot()){
@@ -41,7 +43,7 @@ public class Autonomous14872 extends LinearOpMode {
 
         //FTC dashboard init
         while (opModeIsActive()) {
-            FtcDashboard.getInstance().startCameraStream(Constants.camera,60);
+            FtcDashboard.getInstance().startCameraStream(ImgprocConstants.camera,60);
         }
 
     }
