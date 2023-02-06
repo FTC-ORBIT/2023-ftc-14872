@@ -18,9 +18,6 @@ public class ImgprocConstants {
     public static int binary = Imgproc.COLOR_RGB2HSV;
     //Blur size radius
     public static Size BlurRadius = new Size(3,3);
-    //camera
-    public static OpenCvCamera camera;
-
     //TODO: find values
     public static Point tlRoi = new Point(155, 110);
     public static Point brRoi = new Point(240,220);

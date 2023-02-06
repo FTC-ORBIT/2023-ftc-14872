@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.imageprocessing.ImgprocConstants;
 import org.firstinspires.ftc.teamcode.imageprocessing.Pipeline;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 public class Camera {
@@ -19,17 +20,19 @@ public class Camera {
         //Camera name from init in the Driver Station
         WebcamName webcamName = hardwareMap.get(WebcamName.class, "camera");
         //Camera monitor view
+        webcamName.resetDeviceConfigurationForOpMode();
         camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
         //Creates an object to show the camera view in the Telemetry area
         Pipeline pipeline = new Pipeline();
         //Sets the pipeline
         camera.setPipeline(pipeline);
         //Opening the camera
-        ImgprocConstants.camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             //live streaming
             public void onOpened() {
-                camera.startStreaming(320, 240);
+                camera.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override

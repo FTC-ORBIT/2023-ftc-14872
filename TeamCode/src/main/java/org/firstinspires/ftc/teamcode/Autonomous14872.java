@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.imageprocessing.aprilTags.AprilTagDetection;
-import org.firstinspires.ftc.teamcode.imageprocessing.ImgprocConstants;
+import org.firstinspires.ftc.teamcode.imageprocessing.aprilTags.ParkingSpot;
 import org.firstinspires.ftc.teamcode.imageprocessing.camera.Camera;
 import org.firstinspires.ftc.teamcode.robotSubSystems.claw.Claw;
 import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.Drivetrain;
@@ -20,63 +21,69 @@ public class Autonomous14872 extends LinearOpMode {
     Drivetrain drivetrain = new Drivetrain();
     Claw claw = new Claw();
     Elevator elevator = new Elevator();
-    Camera camera = new Camera(hardwareMap);
+    TelemetryPacket packet = new TelemetryPacket();
     @Override
     public void runOpMode() {
-        drivetrain.init(hardwareMap,telemetry);
+
+        Camera camera = new Camera(hardwareMap);
+        drivetrain.init(hardwareMap, telemetry);
         Gyro.init(hardwareMap);
         claw.init(hardwareMap);
         elevator.init(hardwareMap);
-        //Camera.init function
-        AprilTagDetection.runAprilTagDetection(camera.get());
         //colorSensorV3.init(hardwareMap);
+        FtcDashboard.getInstance().startCameraStream(camera.get(), 60);
+
+        telemetry.addData("tag", AprilTagDetection.findTag(camera.get(), telemetry));
+        packet.put("tag", AprilTagDetection.findTag(camera.get(), telemetry));
+        FtcDashboard.getInstance().sendTelemetryPacket(packet);
+        telemetry.update();
+        ParkingSpot parkingSpot = AprilTagDetection.findTag(camera.get(), telemetry);
+
         waitForStart();
-        switch (AprilTagDetection.wantedParkingSpot()){
-            case LEFT:
-                parkingDecider(1);
-            case MIDDLE:
-                parkingDecider(2);
-            case RIGHT:
-                //3
-                cone();
+        parkingDecider(parkingSpot);
+            //FTC dashboard init
+        /*while (AprilTagDetection.findTag(camera.get(), telemetry) == ParkingSpot.NONE && opModeIsActive()){
+            telemetry.addData("tag", AprilTagDetection.findTag(camera.get(), telemetry));
+            packet.put("tag", AprilTagDetection.findTag(camera.get(), telemetry));
+            FtcDashboard.getInstance().sendTelemetryPacket(packet);
+            telemetry.update();
         }
 
-        //FTC dashboard init
-        while (opModeIsActive()) {
-            FtcDashboard.getInstance().startCameraStream(ImgprocConstants.camera,60);
-        }
+         */
 
     }
-    public void parkingDecider(int parkingSpot) {
+
+    public void parkingDecider(ParkingSpot parkingSpot) {
 
         switch (parkingSpot) {
-            case 1:
-                drivetrain.driveToDirection(5,0, 0.4,this);
+            case LEFT:
+                drivetrain.driveToDirection(5, 0, 0.4, this);
                 drivetrain.driveToDirection(60, 90, 0.6, this);
                 drivetrain.driveToDirection(35, 0, 0.6, this);
                 break;
-            case 2:
+            case MIDDLE:
                 drivetrain.driveToDirection(65, 0, 0.6, this);
                 break;
-            case 3:
-                drivetrain.driveToDirection(5,0, 0.4,this);
+            case RIGHT:
+                drivetrain.driveToDirection(5, 0, 0.4, this);
                 drivetrain.driveToDirection(60, -90, 0.6, this);
                 drivetrain.driveToDirection(35, 0, 0.6, this);
                 break;
             default:
-                parkingDecider(2);
+                parkingDecider(ParkingSpot.MIDDLE);
         }
     }
+
     public void cone() {
         claw.operate(false);
         //drivetrain.driveToDirection(65,0,0.5,this);
         //drivetrain.driveToDirection(60,-90,0.5,this);
-        drivetrain.driveToDirection(5,0, 0.4,this);
+        drivetrain.driveToDirection(5, 0, 0.4, this);
         drivetrain.driveToDirection(58, -90, 0.6, this);
         drivetrain.driveToDirection(29, 0, 0.6, this);
         elevator.operate(4);
-        drivetrain.driveToDirection(23,-90,0.4,this);
-        drivetrain.driveToDirection(10,0,0.4,this);
+        drivetrain.driveToDirection(23, -90, 0.4, this);
+        drivetrain.driveToDirection(10, 0, 0.4, this);
         claw.operate(true);
     }
 }

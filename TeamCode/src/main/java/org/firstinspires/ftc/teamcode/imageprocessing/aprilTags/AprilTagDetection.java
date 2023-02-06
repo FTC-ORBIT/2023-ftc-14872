@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.imageprocessing.aprilTags;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.imageprocessing.ImgprocConstants;
 import org.openftc.easyopencv.OpenCvCamera;
 
 import java.util.ArrayList;
@@ -7,27 +9,32 @@ import java.util.ArrayList;
 public class AprilTagDetection {
 
     ATConstants atConstants = new ATConstants();
-    static AprilTagDetectionPipline aprilTagDetectionPipeline;
-
+    static AprilTagDetectionPipline aprilTagDetectionPipeline = new AprilTagDetectionPipline(ATConstants.tagsize, ImgprocConstants.fx, ImgprocConstants.fy, ImgprocConstants.cx, ImgprocConstants.cy);
     static org.openftc.apriltag.AprilTagDetection tagOfInterest = null;
 
-    public static ParkingSpot findTag(OpenCvCamera camera) {
+    public static ParkingSpot findTag(OpenCvCamera camera, Telemetry telemetry) {
+
+        tagOfInterest = null;
 
         camera.setPipeline(aprilTagDetectionPipeline);
 
         ArrayList<org.openftc.apriltag.AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
 
         if (currentDetections.size() != 0) {
+            for (org.openftc.apriltag.AprilTagDetection tag : currentDetections){
+                telemetry.addData("id" + tag.id,tag.id );
 
-            for (org.openftc.apriltag.AprilTagDetection tag : currentDetections) {
                 if (tag.id == ATConstants.leftTagNum || tag.id == ATConstants.middleTagNum || tag.id == ATConstants.rightTagNum) {
                     tagOfInterest = tag;
                     break;
                 }
             }
+            telemetry.update();
         }
 
-        if (tagOfInterest.id == ATConstants.leftTagNum) {
+        if (tagOfInterest == null){
+            return ParkingSpot.NONE;
+        }else if (tagOfInterest.id == ATConstants.leftTagNum) {
             return ParkingSpot.LEFT;
         } else if (tagOfInterest.id == ATConstants.middleTagNum) {
             return ParkingSpot.MIDDLE;
