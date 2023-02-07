@@ -103,7 +103,7 @@ public class Drivetrain {
 
         double turn;
         distInCM = Math.abs(distInCM);
-        double beginPosition = avgWheelPosInCM();
+        double beginPosition = Math.abs(avgWheelPosInCM());
         double velocity;
         double distanceDrove = Math.abs(avgWheelPosInCM() - beginPosition);
         Vector vector;
@@ -111,15 +111,15 @@ public class Drivetrain {
         PIDF angleControl = new PIDF(new PIDFCoefficients(0.01, 0, 0, 0));
         angleControl.setWanted(Gyro.getAngle());
 
-        while (distInCM >= distanceDrove && linearOpMode.opModeIsActive()){
+        while (Math.abs(distInCM) >= Math.abs(distanceDrove) && linearOpMode.opModeIsActive()){
             turn = angleControl.update(Gyro.getAngle());
             distanceDrove = Math.abs(avgWheelPosInCM() - beginPosition);
 
-            if(5 >= distanceDrove) {
+            if(5 >= Math.abs(distanceDrove)) {
                 telemetry.addData("speed mode", "accelerating");
                 velocity = MathFuncs.smootherStep(0,5,distanceDrove + 1.5) * (speed);
 
-            } else if (distInCM - 35 * speed <= distanceDrove) {
+            } else if (Math.abs(distInCM) - 35 * speed <= Math.abs(distanceDrove)) {
                 telemetry.addData("speed mode", "decelerating");
                 velocity = (1 - MathFuncs.smootherStep(0,20, distanceDrove - (distInCM - 20) - 7 * speed)) * (speed);
 

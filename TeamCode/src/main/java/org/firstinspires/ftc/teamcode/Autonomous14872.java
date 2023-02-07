@@ -40,21 +40,13 @@ public class Autonomous14872 extends LinearOpMode {
         ParkingSpot parkingSpot = AprilTagDetection.findTag(camera.get(), telemetry);
 
         waitForStart();
-
-        parkingDecider(parkingSpot);
-            //FTC dashboard init
-        /*while (AprilTagDetection.findTag(camera.get(), telemetry) == ParkingSpot.NONE && opModeIsActive()){
-            telemetry.addData("tag", AprilTagDetection.findTag(camera.get(), telemetry));
-            packet.put("tag", AprilTagDetection.findTag(camera.get(), telemetry));
-            FtcDashboard.getInstance().sendTelemetryPacket(packet);
-            telemetry.update();
-        }
-
-         */
-
+        claw.operate(false);
+        //parkingDecider(parkingSpot);
+        coneLeft2();
+        parkingDecider2(parkingSpot);
     }
 
-    public void parkingDecider(ParkingSpot parkingSpot) {
+    public void parkingDeciderPrime(ParkingSpot parkingSpot) {
 
         switch (parkingSpot) {
             case LEFT:
@@ -71,11 +63,28 @@ public class Autonomous14872 extends LinearOpMode {
                 drivetrain.driveToDirection(35, 0, 0.6, this);
                 break;
             default:
-                parkingDecider(ParkingSpot.MIDDLE);
+                parkingDeciderPrime(ParkingSpot.MIDDLE);
         }
     }
 
-    public void cone() {
+    public void parkingDecider2(ParkingSpot parkingSpot) {
+
+        switch (parkingSpot) {
+            case LEFT:
+                drivetrain.driveToDirection(23, 90, 0.4, this);
+                break;
+            case MIDDLE:
+                drivetrain.driveToDirection(8, 90, 0.4, this);
+                break;
+            case RIGHT:
+                drivetrain.driveToDirection(10, -90, 0.4, this);
+                break;
+            default:
+                parkingDeciderPrime(ParkingSpot.MIDDLE);
+        }
+    }
+
+    public void coneLeft1() {
         claw.operate(false);
         //drivetrain.driveToDirection(65,0,0.5,this);
         //drivetrain.driveToDirection(60,-90,0.5,this);
@@ -86,5 +95,20 @@ public class Autonomous14872 extends LinearOpMode {
         drivetrain.driveToDirection(23, -90, 0.4, this);
         drivetrain.driveToDirection(10, 0, 0.4, this);
         claw.operate(true);
+    }
+    public void coneLeft2() {
+        claw.operate(false);
+        claw.operate(false);
+        this.sleep(500);
+        elevator.operate(2);
+        drivetrain.driveToDirection(5, 0, 0.4, this);
+        drivetrain.driveToDirection(45, -90, 0.4, this);
+        drivetrain.driveToDirection(85, 0, 0.4, this);
+        elevator.operate(4);
+        drivetrain.driveToDirection(9.8, 90, 0.5, this);
+        drivetrain.driveToDirection(5, 0, 0.4, this);
+        claw.operate(true);
+        this.sleep(500);
+        drivetrain.driveToDirection(5, 180, 0.4, this);
     }
 }
