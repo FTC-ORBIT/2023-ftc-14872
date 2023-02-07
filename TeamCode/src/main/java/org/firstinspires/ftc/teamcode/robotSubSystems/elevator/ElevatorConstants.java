@@ -14,5 +14,6 @@ public class ElevatorConstants {
     public static final int[] elevatorLevelsInTicks = {0, 900, 1815, 2910, 4000};
     //TODO: find the best values.
     public static final double maxEncoderTick = 4300;
+    public static final int[] coneStackLevelsInTicks ={213, 288, 374, 454, 534};
 
 }
