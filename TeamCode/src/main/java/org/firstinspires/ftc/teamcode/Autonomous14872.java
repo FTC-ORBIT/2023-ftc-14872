@@ -4,7 +4,9 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.imageprocessing.aprilTags.AprilTagDetection;
 import org.firstinspires.ftc.teamcode.imageprocessing.aprilTags.ParkingSpot;
 import org.firstinspires.ftc.teamcode.imageprocessing.camera.Camera;
@@ -13,10 +15,11 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.Drivetrain;
 import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
 import org.firstinspires.ftc.teamcode.sensors.ColorSensorV3;
 import org.firstinspires.ftc.teamcode.sensors.Gyro;
+import org.firstinspires.ftc.teamcode.sensors.RevDistanceSensor;
 
 @Autonomous(name = "Autonomous14872")
 public class Autonomous14872 extends LinearOpMode {
-
+    RevDistanceSensor revDistanceSensor = new RevDistanceSensor();
     ColorSensorV3 colorSensorV3 = new ColorSensorV3();
     Drivetrain drivetrain = new Drivetrain();
     Claw claw = new Claw();
@@ -24,12 +27,12 @@ public class Autonomous14872 extends LinearOpMode {
     TelemetryPacket packet = new TelemetryPacket();
     @Override
     public void runOpMode() {
-
         Camera camera = new Camera(hardwareMap);
         drivetrain.init(hardwareMap, telemetry);
         Gyro.init(hardwareMap);
         claw.init(hardwareMap);
         elevator.init(hardwareMap);
+        revDistanceSensor.init(hardwareMap);
         //colorSensorV3.init(hardwareMap);
         FtcDashboard.getInstance().startCameraStream(camera.get(), 60);
 
@@ -71,16 +74,16 @@ public class Autonomous14872 extends LinearOpMode {
 
         switch (parkingSpot) {
             case LEFT:
-                drivetrain.driveToDirection(23, 90, 0.4, this);
+                drivetrain.driveToDirection(22, 90, 0.4, this);
                 break;
             case MIDDLE:
-                drivetrain.driveToDirection(8, 90, 0.4, this);
+                drivetrain.driveToDirection(6, 90, 0.3, this);
                 break;
             case RIGHT:
-                drivetrain.driveToDirection(10, -90, 0.4, this);
+                drivetrain.driveToDirection(9, -90, 0.4, this);
                 break;
             default:
-                parkingDeciderPrime(ParkingSpot.MIDDLE);
+                parkingDecider2(ParkingSpot.MIDDLE);
         }
     }
 
@@ -105,8 +108,8 @@ public class Autonomous14872 extends LinearOpMode {
         drivetrain.driveToDirection(45, -90, 0.4, this);
         drivetrain.driveToDirection(85, 0, 0.4, this);
         elevator.operate(4);
-        drivetrain.driveToDirection(9.8, 90, 0.5, this);
-        drivetrain.driveToDirection(5, 0, 0.4, this);
+        drivetrain.driveToDirection(9.6, 90, 0.5, this);
+        drivetrain.driveToDirection(revDistanceSensor.findDistance()-15, 0, 0.4, this);
         claw.operate(true);
         this.sleep(500);
         drivetrain.driveToDirection(5, 180, 0.4, this);

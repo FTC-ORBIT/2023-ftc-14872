@@ -1,15 +1,19 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.elevator;
 
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.teamcode.robotSubSystems.claw.Claw;
 
 
 public class Elevator {
     public DcMotorEx MotorL;
     public DcMotorEx MotorR;
     private int level;
+    Claw claw = new Claw();
 
     public void init(HardwareMap hardwareMap){
 
@@ -73,6 +77,28 @@ public class Elevator {
                 break;
         }
     }
+    public void coneInsert() {
+        switch (getLevel()) {
+            case 2:
+                goToPosition(MotorR, MotorL, ElevatorConstants.elevatorLevelsInTicks[2] - 500);
+                //claw.operate(true);
+                goToPosition(MotorR, MotorL, ElevatorConstants.elevatorLevelsInTicks[2]);
+                break;
+            case 3:
+                goToPosition(MotorR, MotorL, ElevatorConstants.elevatorLevelsInTicks[3] - 500);
+                //claw.operate(true);
+                goToPosition(MotorR, MotorL, ElevatorConstants.elevatorLevelsInTicks[3]);
+                break;
+            case 4:
+                goToPosition(MotorR, MotorL, ElevatorConstants.elevatorLevelsInTicks[4] - 500);
+                //claw.operate(true);
+                goToPosition(MotorR, MotorL, ElevatorConstants.elevatorLevelsInTicks[4]);
+            default:
+                break;
+        }
+    }
+
+
 
     public void setElevatorPower(double power){
 

@@ -14,7 +14,6 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Autonomous14872;
 import org.firstinspires.ftc.teamcode.control.PIDF;
 import org.firstinspires.ftc.teamcode.sensors.Gyro;
 import org.firstinspires.ftc.teamcode.utils.Angle;
