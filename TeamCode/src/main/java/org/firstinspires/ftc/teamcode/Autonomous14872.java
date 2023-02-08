@@ -16,8 +16,8 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
 import org.firstinspires.ftc.teamcode.sensors.ColorSensorV3;
 import org.firstinspires.ftc.teamcode.sensors.Gyro;
 import org.firstinspires.ftc.teamcode.sensors.RevDistanceSensor;
-
-@Autonomous(name = "Autonomous14872")
+//need to do autonomous to the Right side too
+@Autonomous(name = "Autonomous14872Left")
 public class Autonomous14872 extends LinearOpMode {
     RevDistanceSensor revDistanceSensor = new RevDistanceSensor();
     ColorSensorV3 colorSensorV3 = new ColorSensorV3();
@@ -27,26 +27,22 @@ public class Autonomous14872 extends LinearOpMode {
     TelemetryPacket packet = new TelemetryPacket();
     @Override
     public void runOpMode() {
-        Camera camera = new Camera(hardwareMap);
         drivetrain.init(hardwareMap, telemetry);
         Gyro.init(hardwareMap);
         claw.init(hardwareMap);
         elevator.init(hardwareMap);
         revDistanceSensor.init(hardwareMap);
         //colorSensorV3.init(hardwareMap);
-        FtcDashboard.getInstance().startCameraStream(camera.get(), 60);
+        //FtcDashboard.getInstance().startCameraStream(camera.get(), 60);
 
-        telemetry.addData("tag", AprilTagDetection.findTag(camera.get(), telemetry));
-        packet.put("tag", AprilTagDetection.findTag(camera.get(), telemetry));
-        FtcDashboard.getInstance().sendTelemetryPacket(packet);
-        telemetry.update();
-        ParkingSpot parkingSpot = AprilTagDetection.findTag(camera.get(), telemetry);
+        AprilTagDetection.runAprilTagDetection(this);
+
 
         waitForStart();
         claw.operate(false);
         //parkingDecider(parkingSpot);
         coneLeft2();
-        parkingDecider2(parkingSpot);
+        parkingDecider2(AprilTagDetection.wantedParkingSpot());
     }
 
     public void parkingDeciderPrime(ParkingSpot parkingSpot) {
@@ -109,8 +105,11 @@ public class Autonomous14872 extends LinearOpMode {
         drivetrain.driveToDirection(85, 0, 0.4, this);
         elevator.operate(4);
         drivetrain.driveToDirection(9.6, 90, 0.5, this);
-        drivetrain.driveToDirection(revDistanceSensor.findDistance()-15, 0, 0.4, this);
+        drivetrain.driveToDirection(revDistanceSensor.findDistance()-14, 0, 0.4, this);
+        elevator.operate(5);
         claw.operate(true);
+        this.sleep(200);
+        elevator.operate(4);
         this.sleep(500);
         drivetrain.driveToDirection(5, 180, 0.4, this);
     }

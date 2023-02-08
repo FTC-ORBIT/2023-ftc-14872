@@ -107,7 +107,7 @@ public class Drivetrain {
         double distanceDrove = Math.abs(avgWheelPosInCM() - beginPosition);
         Vector vector;
 
-        PIDF angleControl = new PIDF(new PIDFCoefficients(0.01, 0, 0, 0));
+        PIDF angleControl = new PIDF(new PIDFCoefficients(0.01, 0.05, 0, 0));
         angleControl.setWanted(Gyro.getAngle());
 
         while (Math.abs(distInCM) >= Math.abs(distanceDrove) && linearOpMode.opModeIsActive()){

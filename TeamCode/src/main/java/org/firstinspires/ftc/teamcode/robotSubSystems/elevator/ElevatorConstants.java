@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.control.PIDF;
 public class ElevatorConstants {
 
     public static final double motorRotationsPerLevel = 25.4/11.2;
-    public static final int[] elevatorLevelsInTicks = {0, 900, 1815, 2910, 4000,};
+    public static final int[] elevatorLevelsInTicks = {0, 3300, 1815, 2910, 4000,};
     //TODO: find the best values.
     public static final double maxEncoderTick = 4300;
 
