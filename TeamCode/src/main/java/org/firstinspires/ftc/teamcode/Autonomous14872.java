@@ -16,6 +16,8 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.elevator.Elevator;
 import org.firstinspires.ftc.teamcode.sensors.ColorSensorV3;
 import org.firstinspires.ftc.teamcode.sensors.Gyro;
 import org.firstinspires.ftc.teamcode.sensors.RevDistanceSensor;
+import org.firstinspires.ftc.teamcode.utils.Vector;
+
 //need to do autonomous to the Right side too
 @Autonomous(name = "Autonomous14872Left")
 public class Autonomous14872 extends LinearOpMode {
@@ -43,6 +45,10 @@ public class Autonomous14872 extends LinearOpMode {
         //parkingDecider(parkingSpot);
         coneLeft2();
         parkingDecider2(AprilTagDetection.wantedParkingSpot());
+        while (opModeIsActive()) {
+            telemetry.addData("sensor", revDistanceSensor.findDistance());
+            telemetry.update();
+        }
     }
 
     public void parkingDeciderPrime(ParkingSpot parkingSpot) {
@@ -104,8 +110,8 @@ public class Autonomous14872 extends LinearOpMode {
         drivetrain.driveToDirection(45, -90, 0.4, this);
         drivetrain.driveToDirection(85, 0, 0.4, this);
         elevator.operate(4);
-        drivetrain.driveToDirection(9.6, 90, 0.5, this);
-        drivetrain.driveToDirection(revDistanceSensor.findDistance()-14, 0, 0.4, this);
+        this.sleep(100);
+        drivetrain.driveToDirection(revDistanceSensor.findDistance()-15, 0, 0.4, this);
         elevator.operate(5);
         claw.operate(true);
         this.sleep(200);
