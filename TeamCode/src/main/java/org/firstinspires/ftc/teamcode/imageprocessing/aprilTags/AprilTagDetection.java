@@ -2,21 +2,24 @@ package org.firstinspires.ftc.teamcode.imageprocessing.aprilTags;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.imageprocessing.ImgprocConstants;
+import org.firstinspires.ftc.teamcode.imageprocessing.camera.Camera;
 import org.openftc.easyopencv.OpenCvCamera;
 
 import java.util.ArrayList;
 
 public class AprilTagDetection {
 
-    ATConstants atConstants = new ATConstants();
+    public static void init(Camera camera){
+
+        camera.setPipeline(aprilTagDetectionPipeline);
+    }
+
     static AprilTagDetectionPipline aprilTagDetectionPipeline = new AprilTagDetectionPipline(ATConstants.tagsize, ImgprocConstants.fx, ImgprocConstants.fy, ImgprocConstants.cx, ImgprocConstants.cy);
     static org.openftc.apriltag.AprilTagDetection tagOfInterest = null;
 
-    public static ParkingSpot findTag(OpenCvCamera camera, Telemetry telemetry) {
+    public static ParkingSpot findTag(Telemetry telemetry) {
 
         tagOfInterest = null;
-
-        camera.setPipeline(aprilTagDetectionPipeline);
 
         ArrayList<org.openftc.apriltag.AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
 

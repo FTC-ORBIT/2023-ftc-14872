@@ -28,6 +28,7 @@ public class Autonomous14872 extends LinearOpMode {
     @Override
     public void runOpMode() {
         Camera camera = new Camera(hardwareMap);
+        AprilTagDetection.init(camera);
         drivetrain.init(hardwareMap, telemetry);
         Gyro.init(hardwareMap);
         claw.init(hardwareMap);
@@ -36,11 +37,11 @@ public class Autonomous14872 extends LinearOpMode {
         //colorSensorV3.init(hardwareMap);
         FtcDashboard.getInstance().startCameraStream(camera.get(), 60);
 
-        telemetry.addData("tag", AprilTagDetection.findTag(camera.get(), telemetry));
-        packet.put("tag", AprilTagDetection.findTag(camera.get(), telemetry));
+        telemetry.addData("tag", AprilTagDetection.findTag(telemetry));
+        packet.put("tag", AprilTagDetection.findTag(telemetry));
         FtcDashboard.getInstance().sendTelemetryPacket(packet);
         telemetry.update();
-        ParkingSpot parkingSpot = AprilTagDetection.findTag(camera.get(), telemetry);
+        ParkingSpot parkingSpot = AprilTagDetection.findTag(telemetry);
 
         waitForStart();
         claw.operate(false);
