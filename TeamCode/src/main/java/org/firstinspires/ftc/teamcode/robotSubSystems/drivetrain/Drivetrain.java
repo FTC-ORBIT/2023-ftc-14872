@@ -88,9 +88,11 @@ public class Drivetrain {
     public void turn(double wantedAngle, LinearOpMode opMode) {
         PIDF anglePIDF = new PIDF(DrivetrainConstants.turnPIDCoefficients);
         anglePIDF.setWanted(wantedAngle);
-        while (!(Gyro.getAngle() >= wantedAngle - 0.5 && Gyro.getAngle() <= wantedAngle + 0.5) && opMode.opModeIsActive()) {
+        while (!(Gyro.getAngle() >= wantedAngle - 0.1 && Gyro.getAngle() <= wantedAngle + 0.1) && opMode.opModeIsActive()) {
             drive(Vector.zero(), anglePIDF.update(Gyro.getAngle()));
         }
+
+        stop();
     }
 
     /**
