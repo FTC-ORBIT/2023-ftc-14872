@@ -64,9 +64,7 @@ public class TeleOp14872 extends OpMode {
         if (gamepad1.dpad_up){
             Gyro.resetGyro();
         }
-        //if (gamepad1.dpad_right) {
-            //elevator.coneInsert(this);
-        //}
+
         switch (GlobalData.robotState){
             case TRAVEL:
                 double elevPercent = 1.25 * (4090 - elevator.getPosition()) / 4090;
@@ -79,7 +77,7 @@ public class TeleOp14872 extends OpMode {
 
                 useDrive(0.40);
                 useClaw();
-                elevator.setElevatorPower((-gamepad1.right_stick_y - gamepad1RightStickOffsetY) * 0.5 + 0.1);
+                elevator.setElevatorPower((-gamepad1.right_stick_y - gamepad1RightStickOffsetY) + 0.1);
 
                 break;
         }
@@ -104,7 +102,7 @@ public class TeleOp14872 extends OpMode {
             elevator.operate(2);
         }else if (gamepad1.y) {
             elevator.operate(3);
-        }else if (gamepad1.b){
+        }else if (gamepad1.b) {
             elevator.operate(4);
         }
     }
@@ -134,4 +132,5 @@ public class TeleOp14872 extends OpMode {
         }
         lastDpadState  = gamepad1.dpad_down;
     }
+
 }

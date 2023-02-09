@@ -8,12 +8,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.Drivetrain;
 
 public class RevDistanceSensor {
-    Drivetrain drivetrain = new Drivetrain();
-    private DistanceSensor distanceSensor;
+    private DistanceSensor distanceSensorB;
+    private DistanceSensor distanceSensorF;
     public void init(HardwareMap hardwareMap) {
-        distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
+        distanceSensorF = hardwareMap.get(DistanceSensor.class, "distanceSensorB");
+        distanceSensorB = hardwareMap.get(DistanceSensor.class, "distanceSensorF");
     }
-    public double findDistance() {
-        return distanceSensor.getDistance(DistanceUnit.CM);
+    public double findDistanceB() {
+        return distanceSensorB.getDistance(DistanceUnit.CM);
     }
+    public double findDistanceF() {return distanceSensorF.getDistance(DistanceUnit.CM);}
 }

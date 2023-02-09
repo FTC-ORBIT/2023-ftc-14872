@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.robotSubSystems.elevator;
 
+import android.graphics.Path;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -13,6 +15,7 @@ public class Elevator {
     public DcMotorEx MotorL;
     public DcMotorEx MotorR;
     private int level;
+    private int coneStackLevel;
     Claw claw = new Claw();
 
     public void init(HardwareMap hardwareMap){
@@ -78,28 +81,6 @@ public class Elevator {
                 break;
         }
     }
-    public void coneInsert() {
-        switch (getLevel()) {
-            case 2:
-                goToPosition(MotorR, MotorL, ElevatorConstants.elevatorLevelsInTicks[2] - 500);
-                //claw.operate(true);
-                goToPosition(MotorR, MotorL, ElevatorConstants.elevatorLevelsInTicks[2]);
-                break;
-            case 3:
-                goToPosition(MotorR, MotorL, ElevatorConstants.elevatorLevelsInTicks[3] - 500);
-                //claw.operate(true);
-                goToPosition(MotorR, MotorL, ElevatorConstants.elevatorLevelsInTicks[3]);
-                break;
-            case 4:
-                goToPosition(MotorR, MotorL, ElevatorConstants.elevatorLevelsInTicks[4] - 500);
-                //claw.operate(true);
-                goToPosition(MotorR, MotorL, ElevatorConstants.elevatorLevelsInTicks[4]);
-            default:
-                break;
-        }
-    }
-
-
 
     public void setElevatorPower(double power){
 
@@ -134,6 +115,40 @@ public class Elevator {
         MotorR.setPower(0);
     }
 
+    //gets elevator to the right level according to cone stack for autonomous
+    public void coneStackLevel(int wantedConeStackLevel) {
+        MotorL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        MotorL.setPower(1);
+        MotorR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        MotorR.setPower(1);
+        if ((MotorL.getCurrentPosition() < 0 || MotorR.getCurrentPosition() < 0) || (MotorL.getCurrentPosition() > ElevatorConstants.maxEncoderTick || MotorR.getCurrentPosition() > ElevatorConstants.maxEncoderTick)) {
+            stop();
+            return;
+        }
+        switch (wantedConeStackLevel) {
+            case 1:
+                goToPosition(MotorL, MotorR, ElevatorConstants.coneStackLevelsInTicks[0]);
+                coneStackLevel = 1;
+                break;
+            case 2:
+                goToPosition(MotorL, MotorR, ElevatorConstants.coneStackLevelsInTicks[1]);
+                coneStackLevel = 2;
+                break;
+            case 3:
+                goToPosition(MotorL, MotorR, ElevatorConstants.coneStackLevelsInTicks[2]);
+                coneStackLevel = 3;
+                break;
+            case 4:
+                goToPosition(MotorL, MotorR, ElevatorConstants.coneStackLevelsInTicks[3]);
+                coneStackLevel = 4;
+                break;
+            case 5:
+                goToPosition(MotorL, MotorR, ElevatorConstants.coneStackLevelsInTicks[4]);
+                coneStackLevel = 5;
+                break;
+
+        }
+    }
 }
 
 
