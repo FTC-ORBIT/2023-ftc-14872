@@ -34,24 +34,17 @@ public class Autonomous14872 extends LinearOpMode {
         claw.init(hardwareMap);
         elevator.init(hardwareMap);
         revDistanceSensor.init(hardwareMap);
-        //colorSensorV3.init(hardwareMap);
-        //FtcDashboard.getInstance().startCameraStream(camera.get(), 60);
 
         AprilTagDetection.runAprilTagDetection(this);
 
-
         waitForStart();
+
         claw.operate(false);
-        //parkingDecider(parkingSpot);
         coneLeft2();
         parkingDecider2(AprilTagDetection.wantedParkingSpot());
-        while (opModeIsActive()) {
-            telemetry.addData("sensor", revDistanceSensor.findDistance());
-            telemetry.update();
-        }
     }
 
-    public void parkingDeciderPrime(ParkingSpot parkingSpot) {
+   public void parkingDeciderPrime(ParkingSpot parkingSpot) {
 
         switch (parkingSpot) {
             case LEFT:
@@ -63,12 +56,12 @@ public class Autonomous14872 extends LinearOpMode {
                 drivetrain.driveToDirection(65, 0, 0.6, this);
                 break;
             case RIGHT:
-                drivetrain.driveToDirection(5, 0, 0.4, this);
-                drivetrain.driveToDirection(60, -90, 0.6, this);
-                drivetrain.driveToDirection(35, 0, 0.6, this);
-                break;
+              drivetrain.driveToDirection(5, 0, 0.4, this);
+               drivetrain.driveToDirection(60, -90, 0.6, this);
+               drivetrain.driveToDirection(35, 0, 0.6, this);
+               break;
             default:
-                parkingDeciderPrime(ParkingSpot.MIDDLE);
+             parkingDeciderPrime(ParkingSpot.MIDDLE);
         }
     }
 
@@ -111,12 +104,24 @@ public class Autonomous14872 extends LinearOpMode {
         drivetrain.driveToDirection(85, 0, 0.4, this);
         elevator.operate(4);
         this.sleep(100);
-        drivetrain.driveToDirection(revDistanceSensor.findDistance()-15, 0, 0.4, this);
+        travelTillDist(40,70);
+        this.sleep(500);
+        drivetrain.driveToDirection(revDistanceSensor.findDistance() - 15,7,0.3,this);
         elevator.operate(5);
+        this.sleep(200);
         claw.operate(true);
         this.sleep(200);
         elevator.operate(4);
-        this.sleep(500);
         drivetrain.driveToDirection(5, 180, 0.4, this);
+
+    }
+    public void travelTillDist(double dist, int limit) {
+        for (int i = 0; i < limit; i++) {
+            if (revDistanceSensor.findDistance() <= dist) {
+                drivetrain.stop();
+            } else {
+                drivetrain.operate(new Vector(-0.3, 0), 0);
+            }
+        }
     }
 }

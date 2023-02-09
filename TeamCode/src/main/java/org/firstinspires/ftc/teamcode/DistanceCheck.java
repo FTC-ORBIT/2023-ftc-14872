@@ -20,18 +20,12 @@ public class DistanceCheck extends LinearOpMode {
         Gyro.init(hardwareMap);
         revDistanceSensor.init(hardwareMap);
         waitForStart();
-        travelTillDist(40);
+
+
         while (opModeIsActive()) {
             telemetry.addData("distance: ", revDistanceSensor.findDistance());
             telemetry.update();
         }
 
-    }
-    public void travelTillDist(double dist) {
-        if (revDistanceSensor.findDistance() <= dist) {
-            drivetrain.stop();
-        } else {
-            drivetrain.operate(new Vector(-0.2, 0), 0);
-        }
     }
 }
