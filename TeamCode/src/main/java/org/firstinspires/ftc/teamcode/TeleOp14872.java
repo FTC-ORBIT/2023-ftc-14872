@@ -75,9 +75,9 @@ public class TeleOp14872 extends OpMode {
                 break;
             case COLLECTION:
 
-                useDrive(0.40);
+                useDrive(0.6);
                 useClaw();
-                elevator.setElevatorPower((-gamepad1.right_stick_y - gamepad1RightStickOffsetY) + 0.1);
+                elevator.setElevatorPower((-gamepad1.right_stick_y - gamepad1RightStickOffsetY) * 0.95 + 0.1);
 
                 break;
         }
