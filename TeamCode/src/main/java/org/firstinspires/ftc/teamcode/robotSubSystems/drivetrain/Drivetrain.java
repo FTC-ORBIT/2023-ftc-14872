@@ -24,6 +24,7 @@ public class Drivetrain {
 
     public final DcMotorEx[] motors = new DcMotorEx[4];
     Telemetry telemetry;
+    LinearOpMode opMode;
 
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
         motors[0] = (DcMotorEx) hardwareMap.get(DcMotor.class, "lf");
@@ -41,6 +42,25 @@ public class Drivetrain {
         }
 
         this.telemetry = telemetry;
+    }
+
+    public void init(HardwareMap hardwareMap, Telemetry telemetry, LinearOpMode opMode) {
+        motors[0] = (DcMotorEx) hardwareMap.get(DcMotor.class, "lf");
+        motors[1] = (DcMotorEx) hardwareMap.get(DcMotor.class, "lb");
+        motors[2] = (DcMotorEx) hardwareMap.get(DcMotor.class, "rf");
+        motors[3] = (DcMotorEx) hardwareMap.get(DcMotor.class, "rb");
+
+        motors[2].setDirection(DcMotorSimple.Direction.REVERSE);
+        motors[0].setDirection(DcMotorSimple.Direction.REVERSE);
+
+        for (final DcMotorEx motor : motors) {
+            motor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+            motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+            motor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        }
+
+        this.telemetry = telemetry;
+        this.opMode = opMode;
     }
 
     public void operate(Vector velocity_W, double rotation) {
@@ -84,12 +104,20 @@ public class Drivetrain {
         motors[3].setVelocity((rbPower / max) * DrivetrainConstants.maxSpeed * DrivetrainConstants.ticksPerRev);
     }
 
+    TelemetryPacket packet = new TelemetryPacket();
 
-    public void turn(double wantedAngle, LinearOpMode opMode) {
+    public void turn(double wantedAngle) {
         PIDF anglePIDF = new PIDF(DrivetrainConstants.turnPIDCoefficients);
         anglePIDF.setWanted(wantedAngle);
+        double power;
         while (!(Gyro.getAngle() >= wantedAngle - 0.1 && Gyro.getAngle() <= wantedAngle + 0.1) && opMode.opModeIsActive()) {
-            drive(Vector.zero(), anglePIDF.update(Gyro.getAngle()));
+            power = anglePIDF.update(Gyro.getAngle());
+            drive(Vector.zero(), power);
+
+            packet.put("power", power);
+            packet.put("angle", Gyro.getAngle());
+
+            FtcDashboard.getInstance().sendTelemetryPacket(packet);
         }
 
         stop();
@@ -100,7 +128,7 @@ public class Drivetrain {
      * @param distInCM the amount of cm to drive.
      * @param angle the angle to drive to.
      */
-    public void driveToDirection(double distInCM, double angle, double speed, LinearOpMode linearOpMode) {
+    public void driveToDirection(double distInCM, double angle, double speed) {
 
         double turn;
         distInCM = Math.abs(distInCM);
@@ -112,7 +140,7 @@ public class Drivetrain {
         PIDF angleControl = new PIDF(new PIDFCoefficients(0.01, 0, 0, 0));
         angleControl.setWanted(Gyro.getAngle());
 
-        while (Math.abs(distInCM) >= Math.abs(distanceDrove) && linearOpMode.opModeIsActive()){
+        while (Math.abs(distInCM) >= Math.abs(distanceDrove) && opMode.opModeIsActive()){
             turn = angleControl.update(Gyro.getAngle());
             distanceDrove = Math.abs(avgWheelPosInCM() - beginPosition);
 
