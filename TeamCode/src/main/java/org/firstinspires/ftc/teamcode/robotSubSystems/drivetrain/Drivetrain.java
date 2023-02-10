@@ -44,7 +44,10 @@ public class Drivetrain {
         this.telemetry = telemetry;
     }
 
-    public void init(HardwareMap hardwareMap, Telemetry telemetry, LinearOpMode opMode) {
+    public void init(LinearOpMode opMode) {
+
+        HardwareMap hardwareMap = opMode.hardwareMap;
+
         motors[0] = (DcMotorEx) hardwareMap.get(DcMotor.class, "lf");
         motors[1] = (DcMotorEx) hardwareMap.get(DcMotor.class, "lb");
         motors[2] = (DcMotorEx) hardwareMap.get(DcMotor.class, "rf");
@@ -59,7 +62,7 @@ public class Drivetrain {
             motor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         }
 
-        this.telemetry = telemetry;
+        this.telemetry = opMode.telemetry;
         this.opMode = opMode;
     }
 

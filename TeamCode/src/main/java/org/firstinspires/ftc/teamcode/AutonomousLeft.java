@@ -27,19 +27,20 @@ public class AutonomousLeft extends LinearOpMode {
     Elevator elevator = new Elevator();
     @Override
     public void runOpMode() {
-        drivetrain.init(hardwareMap, telemetry);
+        drivetrain.init(this);
         Gyro.init(hardwareMap);
+        Camera camera = new Camera(hardwareMap);
         claw.init(hardwareMap);
         elevator.init(hardwareMap);
         revDistanceSensor.init(hardwareMap);
-
-        AprilTagDetection.runAprilTagDetection(this);
+        AprilTagDetection.init(camera);
+        FtcDashboard.getInstance().startCameraStream(camera.get(), 60);
 
         waitForStart();
 
         claw.operate(false);
         autonomousLeft();
-        parkingDeciderLeft(AprilTagDetection.wantedParkingSpot());
+        parkingDeciderLeft(AprilTagDetection.findTag(telemetry));
     }
 
 
@@ -49,21 +50,21 @@ public class AutonomousLeft extends LinearOpMode {
         claw.operate(false);
         claw.operate(false);
         this.sleep(500);
-        elevator.operate(2);
-        drivetrain.driveToDirection(5, 0, 0.4, this);
-        drivetrain.driveToDirection(45, -90, 0.4, this);
-        drivetrain.driveToDirection(85, 0, 0.4, this);
+        elevator.coneStackLevel(3);
+        drivetrain.driveToDirection(5, 0, 0.4);
+        drivetrain.driveToDirection(55, -90, 0.4);
+        drivetrain.driveToDirection(85, 0, 0.4);
         elevator.operate(4);
         this.sleep(100);
         travelTillDistLeft(80,70);
         this.sleep(500);
-        drivetrain.driveToDirection(revDistanceSensor.findDistanceB() - 15,7,0.3,this);
+        drivetrain.driveToDirection(revDistanceSensor.findDistanceB() - 15,7,0.3);
         elevator.operate(5);
         this.sleep(200);
         claw.operate(true);
         this.sleep(200);
         elevator.operate(4);
-        drivetrain.driveToDirection(5, 180, 0.4, this);
+        drivetrain.driveToDirection(5, 180, 0.4);
         elevator.operate(1);
 
     }
@@ -72,13 +73,13 @@ public class AutonomousLeft extends LinearOpMode {
 
         switch (parkingSpot) {
             case LEFT:
-                drivetrain.driveToDirection(22, 90, 0.4, this);
+                drivetrain.driveToDirection(22, 90, 0.4);
                 break;
             case MIDDLE:
-                drivetrain.driveToDirection(6, 90, 0.3, this);
+                drivetrain.driveToDirection(6, 90, 0.3);
                 break;
             case RIGHT:
-                drivetrain.driveToDirection(9, -90, 0.4, this);
+                drivetrain.driveToDirection(9, -90, 0.4);
                 break;
             default:
                 parkingDeciderLeft(ParkingSpot.MIDDLE);
