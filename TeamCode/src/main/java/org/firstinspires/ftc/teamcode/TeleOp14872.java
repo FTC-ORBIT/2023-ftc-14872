@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.Drivetrain;
 import org.firstinspires.ftc.teamcode.utils.Vector;
 
-@TeleOp(name = "TeleOp14872")
+@TeleOp(name = "TeleOp")
 public class TeleOp14872 extends OpMode {
 
     private final ElapsedTime timer = new ElapsedTime();

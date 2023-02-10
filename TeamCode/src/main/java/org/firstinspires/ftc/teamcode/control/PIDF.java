@@ -11,10 +11,12 @@ public class PIDF {
     private final double iZone = 0;
 
     private double wanted = 0;
-    private double integral = 0;
-    private double prevError = 0;
+    private double integral;
+    private double prevError;
+    private double preTime;
+    private double deltaTime;
 
-    private final double deltaTime = 1;
+    private final ElapsedTime time = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 
     /**
      * all of the pid values
@@ -22,6 +24,10 @@ public class PIDF {
      */
     public PIDF(PIDFCoefficients coefficients) {
         this.coefficients = coefficients;
+        time.reset();
+        prevError = 0;
+        integral = 0;
+        preTime = 0;
     }
 
     /**
@@ -38,6 +44,7 @@ public class PIDF {
      * @return returns the controller output
      */
     public double update(double current) {
+        deltaTime = time.time() - preTime;
         final double currentError = wanted - current;
         if (Math.signum(currentError) != Math.signum(prevError)){
             integral = 0;
@@ -48,6 +55,7 @@ public class PIDF {
         double derivative = (currentError -  prevError) / deltaTime;
 
         prevError = currentError;
+        preTime = time.time();
         return currentError * coefficients.p + coefficients.f * wanted + derivative * coefficients.d + integral * coefficients.i;
     }
 }

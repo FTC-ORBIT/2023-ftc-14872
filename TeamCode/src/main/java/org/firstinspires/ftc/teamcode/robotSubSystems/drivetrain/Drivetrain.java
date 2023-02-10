@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -112,15 +113,18 @@ public class Drivetrain {
     public void turn(double wantedAngle) {
         PIDF anglePIDF = new PIDF(DrivetrainConstants.turnPIDCoefficients);
         anglePIDF.setWanted(wantedAngle);
+
+        ElapsedTime timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+
         double power;
-        while (!(Gyro.getAngle() >= wantedAngle - 0.1 && Gyro.getAngle() <= wantedAngle + 0.1) && opMode.opModeIsActive()) {
+        while (!(Gyro.getAngle() >= wantedAngle - 0.1 && Gyro.getAngle() <= wantedAngle + 0.1) && timer.time() > 0.1 && opMode.opModeIsActive()) {
             power = anglePIDF.update(Gyro.getAngle());
             drive(Vector.zero(), power);
 
-            packet.put("power", power);
-            packet.put("angle", Gyro.getAngle());
+            if (!(Gyro.getAngle() >= wantedAngle - 0.1 && Gyro.getAngle() <= wantedAngle + 0.1)){timer.reset();}
 
-            FtcDashboard.getInstance().sendTelemetryPacket(packet);
+            telemetry.addData("angle", Gyro.getAngle());
+            telemetry.update();
         }
 
         stop();
@@ -133,11 +137,16 @@ public class Drivetrain {
      */
     public void driveToDirection(double distInCM, double angle, double speed) {
 
+        for (DcMotorEx motor:motors
+             ) {
+            motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
+
+
         double turn;
         distInCM = Math.abs(distInCM);
-        double beginPosition = Math.abs(avgWheelPosInCM());
         double velocity;
-        double distanceDrove = Math.abs(avgWheelPosInCM() - beginPosition);
+        double distanceDrove = avgWheelPosInCM();
         Vector vector;
 
         PIDF angleControl = new PIDF(new PIDFCoefficients(0.01, 0, 0, 0));
@@ -145,7 +154,7 @@ public class Drivetrain {
 
         while (Math.abs(distInCM) >= Math.abs(distanceDrove) && opMode.opModeIsActive()){
             turn = angleControl.update(Gyro.getAngle());
-            distanceDrove = Math.abs(avgWheelPosInCM() - beginPosition);
+            distanceDrove = avgWheelPosInCM();
 
             if(5 >= Math.abs(distanceDrove)) {
                 telemetry.addData("speed mode", "accelerating");

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.imageprocessing.aprilTags.AprilTagDetection;
@@ -13,6 +14,7 @@ import org.firstinspires.ftc.teamcode.sensors.Gyro;
 import org.firstinspires.ftc.teamcode.sensors.RevDistanceSensor;
 import org.firstinspires.ftc.teamcode.utils.Vector;
 
+@Autonomous(name = "AutonomousRight")
 public class AutonomousRight extends LinearOpMode {
     RevDistanceSensor revDistanceSensor = new RevDistanceSensor();
     Drivetrain drivetrain = new Drivetrain();
@@ -29,33 +31,60 @@ public class AutonomousRight extends LinearOpMode {
         revDistanceSensor.init(hardwareMap);
         AprilTagDetection.init(camera);
         FtcDashboard.getInstance().startCameraStream(camera.get(), 60);
-
+        claw.operate(false);
 
         waitForStart();
 
-        claw.operate(false);
         autonomousRight();
-        parkingDeciderRight(AprilTagDetection.findTag(telemetry));
+        //parkingDeciderRight(AprilTagDetection.findTag(telemetry));
     }
     public void autonomousRight() {
         claw.operate(false);
         claw.operate(false);
-        this.sleep(500);
-        elevator.coneStackLevel(3);
-        drivetrain.driveToDirection(5, 0, 0.4);
-        drivetrain.driveToDirection(55, 90, 0.4);
-        drivetrain.driveToDirection(85, 0, 0.4);
+        this.sleep(300);
+        elevator.coneStackLevel(5);
+        drivetrain.driveToDirection(130,0,0.8);
         elevator.operate(4);
-        this.sleep(100);
-        travelTillDistRight(80,70);
-        this.sleep(500);
-        drivetrain.driveToDirection(revDistanceSensor.findDistanceB() - 15,7,0.3);
-        elevator.operate(5);
+        drivetrain.driveToDirection(15,180,0.5);
+        drivetrain.driveToDirection(31.5,90,0.7);
         this.sleep(200);
+        drivetrain.driveToDirection(25,0,0.4);
+        drivetrain.driveToDirection(2,180,0.2);
+        elevator.coneStackLevel(5);
         claw.operate(true);
+        drivetrain.turn(0);
+        drivetrain.driveToDirection(11,180,0.3);
+        drivetrain.turn(-90);
+        drivetrain.driveToDirection(100,-90,0.7);
+        claw.operate(false);
         this.sleep(200);
+        elevator.operate(2);
+        this.sleep(200);
+        drivetrain.driveToDirection(85,90,0.8);
         elevator.operate(4);
-        drivetrain.driveToDirection(5, 180, 0.4);
+        drivetrain.turn(0);
+        drivetrain.driveToDirection(25,0,0.4);
+        drivetrain.driveToDirection(1,180,0.2);
+        elevator.coneStackLevel(4);
+        claw.operate(true);
+        drivetrain.turn(0);
+        drivetrain.driveToDirection(11,180,0.3);
+        drivetrain.turn(-90);
+        drivetrain.driveToDirection(100,-90,0.7);
+        claw.operate(false);
+        this.sleep(200);
+        elevator.operate(2);
+        this.sleep(200);
+        drivetrain.driveToDirection(85,90,0.8);
+        elevator.operate(4);
+        drivetrain.turn(0);
+        drivetrain.driveToDirection(25,0,0.4);
+        drivetrain.driveToDirection(1,180,0.2);
+        elevator.coneStackLevel(4);
+        claw.operate(true);
+        drivetrain.turn(0);
+        drivetrain.driveToDirection(11,180,0.3);
+
 
     }
 

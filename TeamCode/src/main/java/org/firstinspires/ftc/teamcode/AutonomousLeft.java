@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.sensors.RevDistanceSensor;
 import org.firstinspires.ftc.teamcode.utils.Vector;
 
 //need to do autonomous to the Right side too
-@Autonomous(name = "Autonomous14872Left")
+@Autonomous(name = "AutonomousLeft")
 public class AutonomousLeft extends LinearOpMode {
     RevDistanceSensor revDistanceSensor = new RevDistanceSensor();
     Drivetrain drivetrain = new Drivetrain();
