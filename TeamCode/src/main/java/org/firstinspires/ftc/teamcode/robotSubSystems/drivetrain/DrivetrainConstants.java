@@ -15,5 +15,5 @@ public class DrivetrainConstants {
     public static final double wheelCircumferenceInCM = 9.6 * Math.PI;
     public static final double ticksToCM = wheelCircumferenceInCM / ticksPerRev;
     public static final double cmPerWheelRev = 0f;
-    public static PIDFCoefficients turnPIDCoefficients = new PIDFCoefficients(0.033, 0, 0.002, 0);
+    public static PIDFCoefficients turnPIDCoefficients = new PIDFCoefficients(0.03, 0, 0, 0);
 }

@@ -18,18 +18,14 @@ public class AutonomousTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        drivetrain.init(hardwareMap, telemetry);
+        drivetrain.init(this);
         Gyro.init(hardwareMap);
         revDistanceSensor.init(hardwareMap);
         elevator.init(hardwareMap);
         waitForStart();
-        elevator.coneStackLevel(5);
+        Gyro.resetGyro();
 
-        while (opModeIsActive()) {
-            telemetry.addData("distance BACK: ", revDistanceSensor.findDistanceB());
-            telemetry.addData("distance FRONT: ", revDistanceSensor.findDistanceF());
-            telemetry.update();
-        }
-
+        drivetrain.operate(new Vector(0, 1).scale(0.6), 0);
+        while (opModeIsActive()){}
     }
 }

@@ -92,7 +92,6 @@ public class TeleOp14872 extends OpMode {
         telemetry.addData("stick left y", gamepad1.left_stick_y);
         telemetry.addData("elevator level", elevator.getLevel());
 
-        telemetry.update();
     }
 
     private void useGoByLevel(){
@@ -108,7 +107,7 @@ public class TeleOp14872 extends OpMode {
     }
 
     private void useDrive(double powerMultiplier){
-        drivetrain.operate(new Vector(gamepad1.left_stick_x - gamepad1LeftStickOffsetX, -(gamepad1.left_stick_y - gamepad1LeftStickOffsetY )).scale(powerMultiplier), (gamepad1.left_trigger - gamepad1.right_trigger) * powerMultiplier * 1.4);
+        drivetrain.operate(new Vector(gamepad1.left_stick_x - gamepad1LeftStickOffsetX, -(gamepad1.left_stick_y - gamepad1LeftStickOffsetY)).scale(powerMultiplier), (gamepad1.left_trigger - gamepad1.right_trigger) * powerMultiplier * 1.4);
     }
 
     private void useClaw(){

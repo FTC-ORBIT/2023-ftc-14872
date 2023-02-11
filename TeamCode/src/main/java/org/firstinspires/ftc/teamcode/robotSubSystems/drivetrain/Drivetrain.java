@@ -33,7 +33,7 @@ public class Drivetrain {
         motors[2] = (DcMotorEx) hardwareMap.get(DcMotor.class, "rf");
         motors[3] = (DcMotorEx) hardwareMap.get(DcMotor.class, "rb");
 
-        motors[2].setDirection(DcMotorSimple.Direction.REVERSE);
+        motors[1].setDirection(DcMotorSimple.Direction.REVERSE);
         motors[0].setDirection(DcMotorSimple.Direction.REVERSE);
 
         for (final DcMotorEx motor : motors) {
@@ -54,7 +54,7 @@ public class Drivetrain {
         motors[2] = (DcMotorEx) hardwareMap.get(DcMotor.class, "rf");
         motors[3] = (DcMotorEx) hardwareMap.get(DcMotor.class, "rb");
 
-        motors[2].setDirection(DcMotorSimple.Direction.REVERSE);
+        motors[1].setDirection(DcMotorSimple.Direction.REVERSE);
         motors[0].setDirection(DcMotorSimple.Direction.REVERSE);
 
         for (final DcMotorEx motor : motors) {
@@ -68,7 +68,7 @@ public class Drivetrain {
     }
 
     public void operate(Vector velocity_W, double rotation) {
-        final double robotAngle = Angle.wrapAnglePlusMinusPI(Math.toRadians(Gyro.getAngle()) + Math.PI * 1.5);
+        final double robotAngle = Math.toRadians(Gyro.getAngle());
         drive(velocity_W.rotate(-robotAngle), rotation);
     }
 
@@ -96,16 +96,21 @@ public class Drivetrain {
      * @param rotation which direction to rotate and at what speed.
      */
     private void drive(Vector directionNPower, double rotation) {
-        final double lfPower = directionNPower.y - directionNPower.x - rotation;
-        final double rfPower = directionNPower.y + directionNPower.x + rotation;
-        final double lbPower = directionNPower.y + directionNPower.x - rotation;
-        final double rbPower = directionNPower.y - directionNPower.x + rotation;
+        final double lfPower = directionNPower.y + directionNPower.x - rotation;
+        final double rfPower = directionNPower.y - directionNPower.x + rotation;
+        final double lbPower = directionNPower.y - directionNPower.x - rotation;
+        final double rbPower = directionNPower.y + directionNPower.x + rotation;
         final double max = Math.max(1,Math.max(Math.abs(lfPower),
                 Math.max(Math.abs(lbPower), Math.max(Math.abs(rfPower), Math.abs(rbPower)))));
         motors[0].setVelocity((lfPower / max) * DrivetrainConstants.maxSpeed * DrivetrainConstants.ticksPerRev);
-        motors[1].setVelocity((rfPower / max) * DrivetrainConstants.maxSpeed * DrivetrainConstants.ticksPerRev);
-        motors[2].setVelocity((lbPower / max) * DrivetrainConstants.maxSpeed * DrivetrainConstants.ticksPerRev);
+        motors[1].setVelocity((lbPower / max) * DrivetrainConstants.maxSpeed * DrivetrainConstants.ticksPerRev);
+        motors[2].setVelocity((rfPower / max) * DrivetrainConstants.maxSpeed * DrivetrainConstants.ticksPerRev);
         motors[3].setVelocity((rbPower / max) * DrivetrainConstants.maxSpeed * DrivetrainConstants.ticksPerRev);
+
+        telemetry.addData("lf velocity", motors[0].getCurrentPosition());
+        telemetry.addData("lb velocity", motors[1].getCurrentPosition());
+        telemetry.addData("rf velocity", motors[2].getCurrentPosition());
+        telemetry.addData("rb encoder", motors[3].getCurrentPosition());
     }
 
     TelemetryPacket packet = new TelemetryPacket();
@@ -113,19 +118,27 @@ public class Drivetrain {
     public void turn(double wantedAngle) {
         PIDF anglePIDF = new PIDF(DrivetrainConstants.turnPIDCoefficients);
         anglePIDF.setWanted(wantedAngle);
+        double angle;
 
         ElapsedTime timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 
         double power;
-        while (!(Gyro.getAngle() >= wantedAngle - 0.1 && Gyro.getAngle() <= wantedAngle + 0.1) && timer.time() > 0.1 && opMode.opModeIsActive()) {
+        while ((!(Gyro.getAngle() >= wantedAngle - 1 && Gyro.getAngle() <= wantedAngle + 1) || timer.milliseconds() <= 35) && opMode.opModeIsActive()) {
+
             power = anglePIDF.update(Gyro.getAngle());
             drive(Vector.zero(), power);
 
-            if (!(Gyro.getAngle() >= wantedAngle - 0.1 && Gyro.getAngle() <= wantedAngle + 0.1)){timer.reset();}
+            if (!(Gyro.getAngle() >= wantedAngle - 1 && Gyro.getAngle() <= wantedAngle + 1)){timer.reset();}
 
             telemetry.addData("angle", Gyro.getAngle());
+            telemetry.addData("time" , timer.milliseconds());
             telemetry.update();
         }
+
+        telemetry.addData("op active", opMode.opModeIsActive());
+        telemetry.addData("angle", Gyro.getAngle());
+        telemetry.addData("time" , timer.time());
+        telemetry.addLine("finished turn");
 
         stop();
     }
@@ -174,6 +187,7 @@ public class Drivetrain {
             telemetry.addData("velocity", getVelocity_FieldCS());
             telemetry.addData("distance drove", distanceDrove);
             telemetry.addData("power", velocity * DrivetrainConstants.maxSpeed);
+            telemetry.addData("angle", Gyro.getAngle());
             telemetry.addData("turn power", turn);
 
         }

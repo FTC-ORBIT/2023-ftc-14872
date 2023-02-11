@@ -15,7 +15,7 @@ public class Gyro {
     private static final float heading = 0;
     private static final float omega = 0;
     public static BNO055IMU imu;
-    private static double  lastAngle;
+    private static double lastAngle;
     static double currentAngle = 0;
 
     public static void init(HardwareMap hardwareMap){
@@ -35,7 +35,7 @@ public class Gyro {
     }
     public static double getAngle() {
 //        telemetry.addData("angle", imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngle );
-        return imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngle;
+        return imu.getAngularOrientation(AxesReference.INTRINSIC , AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngle;
     }
 
     public static double getDAngle(){

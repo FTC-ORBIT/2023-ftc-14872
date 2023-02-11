@@ -18,14 +18,15 @@ import org.firstinspires.ftc.teamcode.sensors.Gyro;
 import org.firstinspires.ftc.teamcode.sensors.RevDistanceSensor;
 import org.firstinspires.ftc.teamcode.utils.Vector;
 
-//need to do autonomous to the Right side too
 @Autonomous(name = "AutonomousLeft")
 public class AutonomousLeft extends LinearOpMode {
+
     RevDistanceSensor revDistanceSensor = new RevDistanceSensor();
     Drivetrain drivetrain = new Drivetrain();
     Claw claw = new Claw();
     Elevator elevator = new Elevator();
     @Override
+
     public void runOpMode() {
         drivetrain.init(this);
         Gyro.init(hardwareMap);
@@ -35,64 +36,68 @@ public class AutonomousLeft extends LinearOpMode {
         revDistanceSensor.init(hardwareMap);
         AprilTagDetection.init(camera);
         FtcDashboard.getInstance().startCameraStream(camera.get(), 60);
+        claw.operate(false);
 
         waitForStart();
 
-        claw.operate(false);
         autonomousLeft();
         parkingDeciderLeft(AprilTagDetection.findTag(telemetry));
     }
 
-
-
-
     public void autonomousLeft() {
         claw.operate(false);
         claw.operate(false);
-        this.sleep(500);
-        elevator.coneStackLevel(3);
-        drivetrain.driveToDirection(5, 0, 0.4);
-        drivetrain.driveToDirection(55, -90, 0.4);
-        drivetrain.driveToDirection(85, 0, 0.4);
-        elevator.operate(4);
-        this.sleep(100);
-        travelTillDistLeft(80,70);
-        this.sleep(500);
-        drivetrain.driveToDirection(revDistanceSensor.findDistanceB() - 15,7,0.3);
-        elevator.operate(5);
         this.sleep(200);
+        elevator.coneStackLevel(5);
+        elevator.operate(2);
+        drivetrain.driveToDirection(140,0,0.8);
+        elevator.operate(4);
+        drivetrain.driveToDirection(15,180,0.6);
+        drivetrain.driveToDirection(32,-90,0.5);
+        drivetrain.driveToDirection(23,0,0.4);
+        drivetrain.driveToDirection(3,180,0.2);
+        elevator.coneStackLevel(5);
         claw.operate(true);
-        this.sleep(200);
-        elevator.operate(4);
-        drivetrain.driveToDirection(5, 180, 0.4);
-        elevator.operate(1);
+        sleep(200);
 
+        coneCyclesLeft(1);
     }
 
     public void parkingDeciderLeft(ParkingSpot parkingSpot) {
 
         switch (parkingSpot) {
             case LEFT:
-                drivetrain.driveToDirection(22, 90, 0.4);
+                drivetrain.driveToDirection(80, 90, 0.4);
                 break;
             case MIDDLE:
-                drivetrain.driveToDirection(6, 90, 0.3);
+                drivetrain.driveToDirection(25, 90, 0.3);
                 break;
             case RIGHT:
-                drivetrain.driveToDirection(9, -90, 0.4);
+                drivetrain.driveToDirection(25, -90, 0.4);
                 break;
             default:
                 parkingDeciderLeft(ParkingSpot.MIDDLE);
         }
     }
 
-    public void travelTillDistLeft(double dist, int limit) {
-        for (int i = 0; i < limit; i++) {
-            if (revDistanceSensor.findDistanceF() <= dist) {
-                drivetrain.stop();
-            } else {
-                drivetrain.operate(new Vector(-0.3, 0), 0);
-            }
+    public void coneCyclesLeft(int amountOfCycles){
+        for(int i = 4; i >= amountOfCycles; i--){
+            drivetrain.driveToDirection(16,180,0.4);
+            drivetrain.turn(90);
+            drivetrain.driveToDirection(90,90,0.8);
+            claw.operate(false);
+            this.sleep(200);
+            elevator.operate(2);
+            this.sleep(200);
+            drivetrain.driveToDirection(90,-90,0.7);
+            elevator.operate(4);
+            drivetrain.turn(0);
+            drivetrain.driveToDirection(23,0,0.4);
+            drivetrain.driveToDirection(3,180,0.2);
+            elevator.coneStackLevel(i);
+            claw.operate(true);
         }
     }
+
+
 }
