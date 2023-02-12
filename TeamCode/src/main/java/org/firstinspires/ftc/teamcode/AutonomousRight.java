@@ -29,18 +29,23 @@ public class AutonomousRight extends LinearOpMode {
         claw.init(hardwareMap);
         elevator.init(hardwareMap);
         AprilTagDetection.init(camera);
-        claw.operate(false);
 
         waitForStart();
 
+        ParkingSpot parkingSpot =  AprilTagDetection.findTag(telemetry);
+        telemetry.addData("parking spot", parkingSpot);
+        telemetry.update();
+
+
         autonomousRight();
         drivetrain.driveToDirection(15,180,0.4);
-        parkingDeciderRight(AprilTagDetection.findTag(telemetry));
+        elevator.operate(1);
+        parkingDeciderRight(parkingSpot);
+        while (opModeIsActive()){}
     }
     public void autonomousRight() {
         claw.operate(false);
-        claw.operate(false);
-        this.sleep(200);
+        this.sleep(350);
         elevator.coneStackLevel(5);
         elevator.operate(2);
         drivetrain.driveToDirection(140,0,0.8);
@@ -49,8 +54,11 @@ public class AutonomousRight extends LinearOpMode {
         drivetrain.driveToDirection(32,90,0.5);
         drivetrain.driveToDirection(23,0,0.4);
         drivetrain.driveToDirection(3,180,0.2);
-        elevator.coneStackLevel(5);
         claw.operate(true);
+        elevator.operate(5);
+        sleep(200);
+        elevator.operate(4);
+        elevator.coneStackLevel(5);
         sleep(200);
 
 
@@ -63,6 +71,8 @@ public class AutonomousRight extends LinearOpMode {
         telemetry.addData("parking spot", parkingSpot);
         telemetry.update();
 
+
+
         switch (parkingSpot) {
             case LEFT:
                 drivetrain.driveToDirection(25, 90, 0.8);
@@ -71,7 +81,7 @@ public class AutonomousRight extends LinearOpMode {
                 drivetrain.driveToDirection(25, -90, 0.8);
                 break;
             case RIGHT:
-                drivetrain.driveToDirection(80, -90, 0.8);
+                drivetrain.driveToDirection(90, -90, 0.8);
                 break;
             default:
                 parkingDeciderRight(ParkingSpot.MIDDLE);
@@ -92,8 +102,12 @@ public class AutonomousRight extends LinearOpMode {
             drivetrain.turn(0);
             drivetrain.driveToDirection(23,0,0.4);
             drivetrain.driveToDirection(3,180,0.2);
-            elevator.coneStackLevel(i);
             claw.operate(true);
+            elevator.operate(5);
+            sleep(200);
+            elevator.operate(4);
+            elevator.coneStackLevel(i);
+
         }
     }
 }

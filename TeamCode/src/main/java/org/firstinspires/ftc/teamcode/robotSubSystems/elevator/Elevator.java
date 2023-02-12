@@ -46,9 +46,9 @@ public class Elevator {
      */
     public void operate(int level) {
         MotorL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        MotorL.setPower(1);
+        MotorL.setPower(ElevatorConstants.elevatorSpeed);
         MotorR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        MotorR.setPower(1);
+        MotorR.setPower(ElevatorConstants.elevatorSpeed);
 
         if ((MotorL.getCurrentPosition() < 0 || MotorR.getCurrentPosition() < 0) || (MotorL.getCurrentPosition() > ElevatorConstants.maxEncoderTick || MotorR.getCurrentPosition() > ElevatorConstants.maxEncoderTick)) {
             stop();
@@ -118,9 +118,9 @@ public class Elevator {
     //gets elevator to the right level according to cone stack for autonomous
     public void coneStackLevel(int wantedConeStackLevel) {
         MotorL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        MotorL.setPower(1);
+        MotorL.setPower(ElevatorConstants.elevatorSpeed);
         MotorR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        MotorR.setPower(1);
+        MotorR.setPower(ElevatorConstants.elevatorSpeed);
         if ((MotorL.getCurrentPosition() < 0 || MotorR.getCurrentPosition() < 0) || (MotorL.getCurrentPosition() > ElevatorConstants.maxEncoderTick || MotorR.getCurrentPosition() > ElevatorConstants.maxEncoderTick)) {
             stop();
             return;

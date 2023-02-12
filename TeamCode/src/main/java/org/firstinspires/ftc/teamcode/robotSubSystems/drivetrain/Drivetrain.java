@@ -123,7 +123,7 @@ public class Drivetrain {
         ElapsedTime timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 
         double power;
-        while ((!(Gyro.getAngle() >= wantedAngle - 1 && Gyro.getAngle() <= wantedAngle + 1) || timer.milliseconds() <= 35) && opMode.opModeIsActive()) {
+        while ((!(Gyro.getAngle() >= wantedAngle - 1 && Gyro.getAngle() <= wantedAngle + 1) || timer.milliseconds() <= 80) && opMode.opModeIsActive()) {
 
             power = anglePIDF.update(Gyro.getAngle());
             drive(Vector.zero(), power);

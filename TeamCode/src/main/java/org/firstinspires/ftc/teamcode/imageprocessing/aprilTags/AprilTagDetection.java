@@ -32,7 +32,7 @@ public class AprilTagDetection {
                     break;
                 }
             }
-            telemetry.update();
+
         }
 
         if (tagOfInterest == null){

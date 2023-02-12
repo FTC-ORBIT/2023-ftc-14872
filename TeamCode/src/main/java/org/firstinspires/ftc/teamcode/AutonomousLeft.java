@@ -42,6 +42,7 @@ public class AutonomousLeft extends LinearOpMode {
 
         autonomousLeft();
         parkingDeciderLeft(AprilTagDetection.findTag(telemetry));
+        elevator.operate(1);
     }
 
     public void autonomousLeft() {
@@ -61,10 +62,12 @@ public class AutonomousLeft extends LinearOpMode {
         sleep(200);
 
         coneCyclesLeft(1);
+
     }
 
     public void parkingDeciderLeft(ParkingSpot parkingSpot) {
-
+        telemetry.addData("parking spot", parkingSpot);
+        telemetry.update();
         switch (parkingSpot) {
             case LEFT:
                 drivetrain.driveToDirection(80, 90, 0.4);
