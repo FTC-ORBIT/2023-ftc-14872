@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -41,6 +42,7 @@ public class TeleOp14872 extends OpMode {
         GlobalData.robotState = RobotState.TRAVEL;
         GlobalData.isAutonomous = false;
         //Servo servo = hardwareMap.get(Servo.class, "servoArm");
+
 
         gamepad1RightStickOffsetX = gamepad1.right_stick_x;
         gamepad1RightStickOffsetY = gamepad1.right_stick_y;

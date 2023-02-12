@@ -35,14 +35,20 @@ public class AutonomousLeft extends LinearOpMode {
         elevator.init(hardwareMap);
         revDistanceSensor.init(hardwareMap);
         AprilTagDetection.init(camera);
-        FtcDashboard.getInstance().startCameraStream(camera.get(), 60);
         claw.operate(false);
+
+        FtcDashboard.getInstance().startCameraStream(camera.get(), 20);
 
         waitForStart();
 
+        ParkingSpot parkingSpot = AprilTagDetection.findTag(telemetry);
+        telemetry.addData("parking spot", parkingSpot);
+        telemetry.update();
+
         autonomousLeft();
-        parkingDeciderLeft(AprilTagDetection.findTag(telemetry));
+        drivetrain.driveToDirection(15,180,0.4);
         elevator.operate(1);
+        parkingDeciderLeft(parkingSpot);
     }
 
     public void autonomousLeft() {
@@ -55,11 +61,15 @@ public class AutonomousLeft extends LinearOpMode {
         elevator.operate(4);
         drivetrain.driveToDirection(15,180,0.6);
         drivetrain.driveToDirection(32,-90,0.5);
-        drivetrain.driveToDirection(23,0,0.4);
-        drivetrain.driveToDirection(3,180,0.2);
-        elevator.coneStackLevel(5);
+        drivetrain.driveToDirection(23,0,0.5);
+        drivetrain.driveToDirection(5,180,0.2);
+        elevator.operate(3);
         claw.operate(true);
         sleep(200);
+        elevator.operate(4);
+        sleep(400);
+        drivetrain.driveToDirection(16,180,0.4);
+        elevator.coneStackLevel(5);
 
         coneCyclesLeft(1);
 
@@ -70,13 +80,13 @@ public class AutonomousLeft extends LinearOpMode {
         telemetry.update();
         switch (parkingSpot) {
             case LEFT:
-                drivetrain.driveToDirection(80, 90, 0.4);
+                drivetrain.driveToDirection(95, 90, 0.4);
                 break;
             case MIDDLE:
-                drivetrain.driveToDirection(25, 90, 0.3);
+                drivetrain.driveToDirection(35, 90, 0.3);
                 break;
             case RIGHT:
-                drivetrain.driveToDirection(25, -90, 0.4);
+                drivetrain.driveToDirection(35, -90, 0.4);
                 break;
             default:
                 parkingDeciderLeft(ParkingSpot.MIDDLE);
@@ -84,21 +94,25 @@ public class AutonomousLeft extends LinearOpMode {
     }
 
     public void coneCyclesLeft(int amountOfCycles){
-        for(int i = 4; i >= amountOfCycles; i--){
-            drivetrain.driveToDirection(16,180,0.4);
+        for(int i = 0, y = 4; i < amountOfCycles; i++, y--){
             drivetrain.turn(90);
             drivetrain.driveToDirection(90,90,0.8);
             claw.operate(false);
-            this.sleep(200);
+            sleep(200);
             elevator.operate(2);
-            this.sleep(200);
-            drivetrain.driveToDirection(90,-90,0.7);
+            sleep(200);
+            drivetrain.driveToDirection(88,-90,0.7);
             elevator.operate(4);
             drivetrain.turn(0);
             drivetrain.driveToDirection(23,0,0.4);
-            drivetrain.driveToDirection(3,180,0.2);
-            elevator.coneStackLevel(i);
+            drivetrain.driveToDirection(5,180,0.2);
+            elevator.operate(3);
             claw.operate(true);
+            sleep(200);
+            elevator.operate(y);
+            sleep(400);
+            elevator.coneStackLevel(amountOfCycles);
+
         }
     }
 

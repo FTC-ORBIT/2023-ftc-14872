@@ -36,12 +36,12 @@ public class AutonomousRight extends LinearOpMode {
         telemetry.addData("parking spot", parkingSpot);
         telemetry.update();
 
+        FtcDashboard.getInstance().startCameraStream(camera.get(), 20);
 
         autonomousRight();
         drivetrain.driveToDirection(15,180,0.4);
         elevator.operate(1);
         parkingDeciderRight(parkingSpot);
-        while (opModeIsActive()){}
     }
     public void autonomousRight() {
         claw.operate(false);
