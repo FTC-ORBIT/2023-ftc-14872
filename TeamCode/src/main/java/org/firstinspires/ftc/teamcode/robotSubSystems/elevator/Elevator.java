@@ -22,11 +22,11 @@ public class Elevator {
 
         MotorL = (DcMotorEx) hardwareMap.get(DcMotor.class, "elevMotorL");
         MotorL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        MotorL.setDirection(DcMotorSimple.Direction.REVERSE);
         MotorL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         MotorR = (DcMotorEx) hardwareMap.get(DcMotor.class, "elevMotorR");
         MotorR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        MotorR.setDirection(DcMotorSimple.Direction.REVERSE);
         MotorR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         level = 0;
@@ -92,8 +92,8 @@ public class Elevator {
             return;
         }
 
-        MotorL.setPower(power * 0.8);
-        MotorR.setPower(power * 0.8);
+        MotorL.setPower(power * 0.3);
+        MotorR.setPower(power * 0.3);
     }
 
     public int getLevel(){return level;}
