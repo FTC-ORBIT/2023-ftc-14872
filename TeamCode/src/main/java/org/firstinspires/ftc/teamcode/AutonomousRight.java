@@ -41,11 +41,11 @@ public class AutonomousRight extends LinearOpMode {
         autonomousRight();
         drivetrain.driveToDirection(15,180,0.4);
         elevator.operate(1);
-        parkingDeciderRight(parkingSpot);
+        autonomousRight();
     }
     public void autonomousRight() {
         claw.operate(false);
-        this.sleep(350);
+        sleep(350);
         elevator.coneStackLevel(5);
         elevator.operate(2);
         drivetrain.driveToDirection(140,0,0.8);
