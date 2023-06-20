@@ -45,9 +45,9 @@ public class AutonomousLeft extends LinearOpMode {
         telemetry.addData("parking spot", parkingSpot);
         telemetry.update();
 
-        autonomousLeft();
-        drivetrain.driveToDirection(15,180,0.4);
-        elevator.operate(1);
+        //autonomousLeft();
+        //drivetrain.driveToDirection(15,180,0.4);
+        //elevator.operate(1);
         parkingDeciderLeft(parkingSpot);
     }
 

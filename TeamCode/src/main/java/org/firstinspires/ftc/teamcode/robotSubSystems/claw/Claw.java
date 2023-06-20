@@ -11,6 +11,7 @@ public class Claw {
     public void init(HardwareMap hardwareMap) {
         clawServo = hardwareMap.get(Servo.class, "clawServo");
     }
+
     public void operate(boolean openClaw) {
 
         if (openClaw) {

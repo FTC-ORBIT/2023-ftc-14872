@@ -92,18 +92,17 @@ public class Elevator {
             return;
         }
 
-        MotorL.setPower(power * 0.3);
-        MotorR.setPower(power * 0.3);
+        MotorL.setPower(power);
+        MotorR.setPower(power);
     }
 
     public int getLevel(){return level;}
 
     public void goToPosition(DcMotor leftMotor,DcMotor rightMotor, int target) {
-
-        leftMotor.setTargetPosition(target);
         rightMotor.setTargetPosition(target);
-        leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftMotor.setTargetPosition(target);
         rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     public double getPosition(){

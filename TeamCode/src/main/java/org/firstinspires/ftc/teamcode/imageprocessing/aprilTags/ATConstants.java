@@ -17,9 +17,9 @@ public class ATConstants {
 
     public static double tagsize = 0.2025;
     //tag id from the 36h11 family
-    public static int leftTagNum = 9;
-    public static int middleTagNum = 10;
-    public static int rightTagNum = 11;
+    public static int leftTagNum = 0;
+    public static int middleTagNum = 1;
+    public static int rightTagNum = 2;
 
 
     public static Point tlRoi = new Point(130,75);

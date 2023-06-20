@@ -79,14 +79,15 @@ public class TeleOp14872 extends OpMode {
 
                 useDrive(0.6);
                 useClaw();
-                elevator.setElevatorPower((-gamepad1.right_stick_y - gamepad1RightStickOffsetY) * 0.95 + 0.1);
+                elevator.setElevatorPower((-gamepad1.right_stick_y - gamepad1RightStickOffsetY));
 
                 break;
         }
 
         lastState = GlobalData.robotState;
 
-
+        telemetry.addData("elvEncoderR",elevator.MotorR.getCurrentPosition());
+        telemetry.addData("elvEncoderL",elevator.MotorL.getCurrentPosition());
         telemetry.addData("robotState", GlobalData.robotState.toString());
         telemetry.addData("stick right x", gamepad1.right_stick_x);
         telemetry.addData("stick right y", gamepad1.right_stick_y);
@@ -109,7 +110,7 @@ public class TeleOp14872 extends OpMode {
     }
 
     private void useDrive(double powerMultiplier){
-        drivetrain.operate(new Vector(gamepad1.left_stick_x - gamepad1LeftStickOffsetX, -(gamepad1.left_stick_y - gamepad1LeftStickOffsetY)).scale(powerMultiplier), (gamepad1.left_trigger - gamepad1.right_trigger) * powerMultiplier * 1.4);
+        drivetrain.operate(new Vector(-gamepad1.left_stick_x + gamepad1LeftStickOffsetX, -(gamepad1.left_stick_y - gamepad1LeftStickOffsetY)).scale(powerMultiplier), (gamepad1.right_trigger - gamepad1.left_trigger) * powerMultiplier * 1.4);
     }
 
     private void useClaw(){

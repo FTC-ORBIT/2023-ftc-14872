@@ -33,14 +33,16 @@ public class Drivetrain {
         motors[2] = (DcMotorEx) hardwareMap.get(DcMotor.class, "rf");
         motors[3] = (DcMotorEx) hardwareMap.get(DcMotor.class, "rb");
 
-        motors[1].setDirection(DcMotorSimple.Direction.REVERSE);
-        motors[0].setDirection(DcMotorSimple.Direction.REVERSE);
-
         for (final DcMotorEx motor : motors) {
             motor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-            motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
             motor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+            motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         }
+
+        motors[2].setDirection(DcMotorSimple.Direction.REVERSE);
+        motors[3].setDirection(DcMotorSimple.Direction.REVERSE);
+
+
 
         this.telemetry = telemetry;
     }
@@ -54,8 +56,8 @@ public class Drivetrain {
         motors[2] = (DcMotorEx) hardwareMap.get(DcMotor.class, "rf");
         motors[3] = (DcMotorEx) hardwareMap.get(DcMotor.class, "rb");
 
-        motors[1].setDirection(DcMotorSimple.Direction.REVERSE);
-        motors[0].setDirection(DcMotorSimple.Direction.REVERSE);
+        motors[2].setDirection(DcMotorSimple.Direction.REVERSE);
+        motors[3].setDirection(DcMotorSimple.Direction.REVERSE);
 
         for (final DcMotorEx motor : motors) {
             motor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
@@ -69,7 +71,7 @@ public class Drivetrain {
 
     public void operate(Vector velocity_W, double rotation) {
         final double robotAngle = Math.toRadians(Gyro.getAngle());
-        drive(velocity_W.rotate(-robotAngle), rotation);
+        drive(velocity_W.rotate(robotAngle), rotation);
     }
 
 
@@ -173,7 +175,7 @@ public class Drivetrain {
                 telemetry.addData("speed mode", "accelerating");
                 velocity = MathFuncs.smootherStep(0,5,distanceDrove + 1.5) * (speed);
 
-            } else if (Math.abs(distInCM) - 35 * speed <= Math.abs(distanceDrove)) {
+            } else if (Math.abs(distInCM) - 20 * speed <= Math.abs(distanceDrove)) {
                 telemetry.addData("speed mode", "decelerating");
                 velocity = (1 - MathFuncs.smootherStep(0,20, distanceDrove - (distInCM - 20) - 7 * speed)) * (speed);
 
