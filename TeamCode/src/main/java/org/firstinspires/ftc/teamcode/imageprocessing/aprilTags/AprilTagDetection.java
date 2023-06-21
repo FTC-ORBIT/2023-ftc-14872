@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.imageprocessing.aprilTags;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.imageprocessing.ImgprocConstants;
 import org.firstinspires.ftc.teamcode.imageprocessing.camera.Camera;
@@ -25,7 +28,9 @@ public class AprilTagDetection {
 
         if (currentDetections.size() != 0) {
             for (org.openftc.apriltag.AprilTagDetection tag : currentDetections){
-                telemetry.addData("id" + tag.id,tag.id );
+                TelemetryPacket packet = new TelemetryPacket();
+                telemetry.addData("tag id" ,tag.id);
+                FtcDashboard.getInstance().sendTelemetryPacket(packet);
 
                 if (tag.id == ATConstants.leftTagNum || tag.id == ATConstants.middleTagNum || tag.id == ATConstants.rightTagNum) {
                     tagOfInterest = tag;

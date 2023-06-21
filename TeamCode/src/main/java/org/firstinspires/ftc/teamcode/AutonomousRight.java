@@ -30,39 +30,37 @@ public class AutonomousRight extends LinearOpMode {
         elevator.init(hardwareMap);
         AprilTagDetection.init(camera);
 
+        FtcDashboard.getInstance().startCameraStream(camera.get(), 20);
+
+        telemetry.addLine("init complete");
+        telemetry.update();
+
         waitForStart();
 
         ParkingSpot parkingSpot =  AprilTagDetection.findTag(telemetry);
         telemetry.addData("parking spot", parkingSpot);
         telemetry.update();
 
-        FtcDashboard.getInstance().startCameraStream(camera.get(), 20);
+        claw.operate(false);
+        sleep(500);
+        elevator.coneStackLevel(3);
+        sleep(2000);
 
-        autonomousRight();
-        drivetrain.driveToDirection(15,180,0.4);
-        elevator.operate(1);
         autonomousRight();
     }
     public void autonomousRight() {
-        claw.operate(false);
-        sleep(350);
-        elevator.coneStackLevel(5);
-        elevator.operate(2);
         drivetrain.driveToDirection(140,0,0.8);
         elevator.operate(4);
         drivetrain.driveToDirection(15,180,0.6);
         drivetrain.driveToDirection(32,90,0.5);
         drivetrain.driveToDirection(23,0,0.4);
         drivetrain.driveToDirection(3,180,0.2);
-        claw.operate(true);
         elevator.operate(5);
+        claw.operate(true);
         sleep(200);
         elevator.operate(4);
         elevator.coneStackLevel(5);
         sleep(200);
-
-
-        coneCyclesRight(1);
     }
 
     public void parkingDeciderRight(ParkingSpot parkingSpot) {

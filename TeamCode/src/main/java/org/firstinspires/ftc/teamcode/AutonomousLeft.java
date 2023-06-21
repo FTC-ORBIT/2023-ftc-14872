@@ -35,9 +35,11 @@ public class AutonomousLeft extends LinearOpMode {
         elevator.init(hardwareMap);
         revDistanceSensor.init(hardwareMap);
         AprilTagDetection.init(camera);
-        claw.operate(false);
 
         FtcDashboard.getInstance().startCameraStream(camera.get(), 20);
+
+        telemetry.addLine("init finished");
+        telemetry.update();
 
         waitForStart();
 
@@ -45,22 +47,20 @@ public class AutonomousLeft extends LinearOpMode {
         telemetry.addData("parking spot", parkingSpot);
         telemetry.update();
 
-        //autonomousLeft();
-        //drivetrain.driveToDirection(15,180,0.4);
-        //elevator.operate(1);
-        parkingDeciderLeft(parkingSpot);
+        claw.operate(false);
+        sleep(500);
+        elevator.coneStackLevel(3);
+        sleep(1000);
+
+        autonomousLeft();
+
     }
 
     public void autonomousLeft() {
-        claw.operate(false);
-        claw.operate(false);
-        this.sleep(200);
-        elevator.coneStackLevel(5);
-        elevator.operate(2);
-        drivetrain.driveToDirection(140,0,0.8);
+        drivetrain.driveToDirection(90,0,0.8);
         elevator.operate(4);
         drivetrain.driveToDirection(15,180,0.6);
-        drivetrain.driveToDirection(32,-90,0.5);
+        drivetrain.driveToDirection(32,90,0.5);
         drivetrain.driveToDirection(23,0,0.5);
         drivetrain.driveToDirection(5,180,0.2);
         elevator.operate(3);
@@ -70,9 +70,6 @@ public class AutonomousLeft extends LinearOpMode {
         sleep(400);
         drivetrain.driveToDirection(16,180,0.4);
         elevator.coneStackLevel(5);
-
-        coneCyclesLeft(1);
-
     }
 
     public void parkingDeciderLeft(ParkingSpot parkingSpot) {

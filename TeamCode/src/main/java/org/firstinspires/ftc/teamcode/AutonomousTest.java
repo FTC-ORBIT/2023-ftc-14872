@@ -40,18 +40,26 @@ public class AutonomousTest extends LinearOpMode {
         waitForStart();
 
         claw.operate(false);
-        sleep(3000);
-        elevator.operate(2);
-        sleep(2000);
+        sleep(1000);
+        elevator.coneStackLevel(3);
+        sleep(1000);
 
         Gyro.resetGyro();
 
-        parking(AprilTagDetection.findTag(telemetry));
+        parking(findParkingSpot());
+
+        elevator.operate(1);
+
+        while (opModeIsActive());
     }
 
     private ParkingSpot findParkingSpot(){
         TelemetryPacket packet = new TelemetryPacket();
-        ParkingSpot parkingSpot = AprilTagDetection.findTag(telemetry);
+        ParkingSpot parkingSpot = ParkingSpot.NONE;
+        for (int i = 0; (parkingSpot == ParkingSpot.NONE || i < 20) && opModeIsActive(); i++){
+            parkingSpot = AprilTagDetection.findTag(telemetry);
+            sleep(100);
+        }
         packet.put("parking spot", parkingSpot.name());
         FtcDashboard.getInstance().sendTelemetryPacket(packet);
         return parkingSpot;
@@ -60,7 +68,7 @@ public class AutonomousTest extends LinearOpMode {
     public void parking(ParkingSpot parkingSpot) {
         telemetry.addData("parking spot", parkingSpot);
         telemetry.update();
-        drivetrain.driveToDirection(62, 0, 0.5);
+        drivetrain.driveToDirection(55, 0, 0.5);
         switch (parkingSpot) {
             case LEFT:
                 drivetrain.driveToDirection(55, -90, 0.8);

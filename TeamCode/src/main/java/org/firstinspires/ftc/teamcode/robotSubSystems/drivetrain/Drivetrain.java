@@ -175,11 +175,11 @@ public class Drivetrain {
                 telemetry.addData("speed mode", "accelerating");
                 velocity = MathFuncs.smootherStep(0,5,distanceDrove + 1.5) * (speed);
 
-            } else if (Math.abs(distInCM) - 20 * speed <= Math.abs(distanceDrove)) {
+            }/* else if (Math.abs(distInCM) -  * speed <= Math.abs(distanceDrove)) {
                 telemetry.addData("speed mode", "decelerating");
                 velocity = (1 - MathFuncs.smootherStep(0,20, distanceDrove - (distInCM - 20) - 7 * speed)) * (speed);
 
-            } else {
+            }*/ else {
                 telemetry.addData("speed mode", "normal");
                 velocity = speed;
             }
